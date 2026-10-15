@@ -1694,9 +1694,19 @@ window.__reader={CNT:()=>CNT,CAL:()=>CAL,CUR,S,D,calibrate,next,prev,go,relayout
 </script>
 <script>
 /* Installed as an app (from a web address), keep a copy of everything on the device so it opens without signal,
-   and ask the browser to keep this app's saved readings and notes even when the phone runs low on space. */
+   and ask the browser to keep this app's saved readings and notes even when the phone runs low on space.
+   When a newer version has been put online, a small bar offers to reload into it. */
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
-  addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(e=>console.warn('offline copy not set up',e)); });
+  const af=()=>(document.documentElement.lang||'af').slice(0,2)==='af';
+  const updateBar=()=>{ if(document.getElementById('updbar')) return;
+    const d=document.createElement('div'); d.id='updbar'; d.setAttribute('role','status');
+    d.style.cssText='position:fixed;left:50%;bottom:calc(56px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:100;display:flex;gap:14px;align-items:center;background:#1f1d1a;color:#f6f4ee;padding:10px 12px 10px 16px;border-radius:10px;font:14px system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:calc(100vw - 24px)';
+    d.innerHTML='<span>'+(af()?'\u2019n Nuwe weergawe is gereed.':'A new version is ready.')+'</span><button type="button" style="background:none;border:0;color:#f6f4ee;font:600 14px system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 6px">'+(af()?'Herlaai':'Reload')+'</button>';
+    d.querySelector('button').onclick=()=>location.reload(); document.body.appendChild(d); };
+  const hadController=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{ if(hadController) updateBar(); });
+  navigator.serviceWorker.addEventListener('message',e=>{ if(e.data&&e.data.type==='updated') updateBar(); });
+  addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').then(r=>r.update()).catch(e=>console.warn('offline copy not set up',e)); });
   if(navigator.storage&&navigator.storage.persist) navigator.storage.persist().catch(()=>{});
 }
 </script>
