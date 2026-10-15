@@ -347,6 +347,9 @@ body.phone #regbtn span{display:none}
 #markbar [data-x]{color:var(--soft)} #markbar [data-x] svg{width:16px;height:16px}
 .msep{width:1px;height:20px;background:var(--line);margin:0 3px}
 body.phone #markbar button{width:36px;height:36px}
+@media (pointer:coarse){ #flow{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none} }
+::highlight(pick){background-color:rgba(70,130,220,.32)}
+body.phone #book{touch-action:none}
 .npass{flex:1;color:var(--soft);font-family:var(--serif);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nbtn{background:none;border:1px solid transparent;border-radius:7px;padding:4px 6px;cursor:pointer;color:var(--soft)}
 .nbtn:hover{color:var(--ink);border-color:var(--line)}
@@ -789,6 +792,7 @@ function range(i,j){
   return bookName(b)+' '+a.c+':'+a.v+'\u2013'+z.c+':'+z.v;
 }
 function show(s,dir){
+  if(typeof clearPick==='function'&&PICK.range){ clearPick(); hideMarkbar(); }
   s=Math.max(0,Math.min(CUR.spreads-1,s)); CUR.spread=s;
   const G=CUR.G, p0=s*G.ppv;
   flow.style.transform='translateX('+(-p0*G.cpp*G.pitch)+'px)';
@@ -1492,9 +1496,13 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>nBody.q
 const markbar=$('#markbar');
 const rwText=rw=>{ const x=rw.querySelector('.xm'); return x?rw.textContent.slice(0,-x.textContent.length):rw.textContent; };
 function offsetIn(rw,node,off){ const r=document.createRange(); r.setStart(rw,0); r.setEnd(node,off); return r.toString().length; }
-function selectedWords(){
+function pickedRange(){
+  if(PICK.range&&PICK.range.startContainer.isConnected) return PICK.range;
   const sel=getSelection(); if(!sel.rangeCount||sel.isCollapsed) return null;
-  const rg=sel.getRangeAt(0); if(!flow.contains(rg.commonAncestorContainer)) return null;
+  const rg=sel.getRangeAt(0); return flow.contains(rg.commonAncestorContainer)?rg:null;
+}
+function selectedWords(){
+  const rg=pickedRange(); if(!rg) return null;
   const out=[];
   for(const rw of flow.querySelectorAll('.rw')){
     if(!rg.intersectsNode(rw)) continue;
@@ -1521,18 +1529,62 @@ function applyMark(kind,val){
     if(!Object.keys(m).length) delete M[r];
     for(const el of flow.querySelectorAll('.rw[data-r="'+r+'"]')) el.outerHTML=rowHTML(t,r,S.xref==='on');   // colour never moves the text, so no re-paging
   }
-  saveMarks(); getSelection().removeAllRanges(); hideMarkbar();
+  saveMarks(); getSelection().removeAllRanges(); clearPick(); hideMarkbar();
 }
 function hideMarkbar(){ markbar.classList.remove('on'); }
 let mbT=0;
-document.addEventListener('selectionchange',()=>{ clearTimeout(mbT); mbT=setTimeout(()=>{
-  const sel=getSelection();
-  if(!sel.rangeCount||sel.isCollapsed||!flow.contains(sel.getRangeAt(0).commonAncestorContainer)||!selectedWords()){ hideMarkbar(); return; }
-  const r=sel.getRangeAt(0).getBoundingClientRect(); markbar.classList.add('on');
+function placeMarkbar(){
+  const rg=pickedRange(); if(!rg||!selectedWords()){ hideMarkbar(); return; }
+  const r=rg.getBoundingClientRect(); markbar.classList.add('on');
   const w=markbar.offsetWidth, h=markbar.offsetHeight, coarse=matchMedia('(pointer: coarse)').matches;
   let y=coarse? r.bottom+14 : r.top-h-10; if(y<8) y=r.bottom+10; if(y+h>innerHeight-8) y=Math.max(8,r.top-h-10);
   markbar.style.left=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8)+'px'; markbar.style.top=y+'px';
-},140); });
+}
+document.addEventListener('selectionchange',()=>{ if(PICK.range) return; clearTimeout(mbT); mbT=setTimeout(placeMarkbar,140); });
+
+/* On a touch screen the phone's own text selection is switched off (it brings up Copy, Select all and
+   Web search). Instead: hold a word, then slide to take in more words; the marking bar appears on release.
+   Tap anywhere else to let go of the selection. */
+const PICK={range:null,a:null,b:null,hold:0,drag:false,swallow:false,x:0,y:0};
+function textNodesOf(rw){ const out=[]; let acc=0;
+  const tw=document.createTreeWalker(rw,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest('.xm')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  let n; while((n=tw.nextNode())){ out.push([n,acc]); acc+=n.data.length; } return out; }
+function rangeAt(nodes,a,z){ const r=document.createRange();
+  const at=(pos,end)=>{ for(let i=0;i<nodes.length;i++){ const [n,o]=nodes[i]; if(pos<o+n.data.length||(end&&pos===o+n.data.length)) return [n,pos-o]; } const [n,o]=nodes[nodes.length-1]; return [n,n.data.length]; };
+  r.setStart(...at(a,false)); r.setEnd(...at(z,true)); return r; }
+function wordAt(x,y){
+  const el=document.elementFromPoint(x,y); const rw=el&&el.closest&&el.closest('#flow .rw'); if(!rw) return null;
+  const nodes=textNodesOf(rw), txt=nodes.map(([n])=>n.data).join(''), re=/\S+/g; let m, w=0;
+  while((m=re.exec(txt))){ const r=rangeAt(nodes,m.index,m.index+m[0].length);
+    for(const q of r.getClientRects()) if(x>=q.left-3&&x<=q.right+3&&y>=q.top-2&&y<=q.bottom+2) return {rw,w,r};
+    w++; }
+  return null;
+}
+function paintPick(){
+  const all=[...flow.querySelectorAll('.rw')], ia=all.indexOf(PICK.a.rw), ib=all.indexOf(PICK.b.rw);
+  const [p,q]=(ia<ib||(ia===ib&&PICK.a.w<=PICK.b.w))?[PICK.a,PICK.b]:[PICK.b,PICK.a];
+  const rg=document.createRange(); rg.setStart(p.r.startContainer,p.r.startOffset); rg.setEnd(q.r.endContainer,q.r.endOffset);
+  PICK.range=rg;
+  if(window.CSS&&CSS.highlights&&window.Highlight) CSS.highlights.set('pick',new Highlight(rg));
+  else { const s=getSelection(); s.removeAllRanges(); s.addRange(rg); }
+}
+function clearPick(){ PICK.range=PICK.a=PICK.b=null; PICK.drag=false; clearTimeout(PICK.hold);
+  if(window.CSS&&CSS.highlights) CSS.highlights.delete('pick'); }
+book.addEventListener('pointerdown',e=>{
+  if(e.pointerType!=='touch') return;
+  PICK.x=e.clientX; PICK.y=e.clientY; clearTimeout(PICK.hold);
+  PICK.hold=setTimeout(()=>{ const w=wordAt(PICK.x,PICK.y); if(!w) return;
+    hideMarkbar(); PICK.a=PICK.b=w; PICK.drag=true; paintPick(); if(navigator.vibrate) navigator.vibrate(12); },450);
+});
+book.addEventListener('pointermove',e=>{
+  if(e.pointerType!=='touch') return;
+  if(!PICK.drag){ if(Math.hypot(e.clientX-PICK.x,e.clientY-PICK.y)>10) clearTimeout(PICK.hold); return; }
+  const w=wordAt(e.clientX,e.clientY); if(w&&(w.rw!==PICK.b.rw||w.w!==PICK.b.w)){ PICK.b=w; paintPick(); }
+});
+const endPick=e=>{ if(e.pointerType!=='touch') return; clearTimeout(PICK.hold);
+  if(PICK.drag){ PICK.drag=false; PICK.swallow=true; placeMarkbar(); } };
+book.addEventListener('pointerup',endPick); book.addEventListener('pointercancel',endPick);
+book.addEventListener('contextmenu',e=>{ if(matchMedia('(pointer: coarse)').matches||PICK.range) e.preventDefault(); });
 markbar.addEventListener('pointerdown',e=>e.preventDefault());       // keep the selection while a colour is chosen
 markbar.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
   if(b.dataset.h) applyMark('h',b.dataset.h); else if(b.dataset.c) applyMark('c',b.dataset.c); else applyMark('x'); });
@@ -1578,11 +1630,13 @@ notesEl.querySelector('.nhead').addEventListener('pointerdown',startGrab);
 let downX=0,downY=0,swiped=false;
 book.addEventListener('pointerdown',e=>{ downX=e.clientX; downY=e.clientY; swiped=false; });
 book.addEventListener('pointerup',e=>{
-  if(e.pointerType!=='touch') return;
+  if(e.pointerType!=='touch'||PICK.range) return;
   const dx=e.clientX-downX, dy=e.clientY-downY;
   if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3){ swiped=true; dx<0?next():prev(); }
 });
 book.addEventListener('click',e=>{
+  if(PICK.swallow){ PICK.swallow=false; return; }
+  if(PICK.range){ clearPick(); hideMarkbar(); return; }
   if(swiped){ swiped=false; return; }
   const xa=e.target.closest('.xa'); if(xa){ e.stopPropagation(); openPop(xa); return; }
   if(Math.hypot(e.clientX-downX,e.clientY-downY)>6) return;
