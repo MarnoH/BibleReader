@@ -19,7 +19,7 @@
   --desk:#d3d0c8; --page:#f6f4ee; --page2:#ece9e1; --ink:#1f1d1a; --soft:#6d675d; --faint:#a29c91;
   --rule:#cfcac0; --panel:#fbfaf7; --line:#dcd8cf; --sel:#2a2724; --sel-ink:#f6f4ee;
   --rubric:#a2392a; --shadow:rgba(46,36,24,.20); --fold:rgba(70,52,30,.13);
-  --case:#e4ddd0; --plank:#8d6239; --plank-hi:#b07d4c; --plank-lo:#5e3f22;
+  --edgeln:#dcd6ca; --case:#e4ddd0; --plank:#8d6239; --plank-hi:#b07d4c; --plank-lo:#5e3f22;
   --serif:"SS4","Iowan Old Style","Palatino Linotype",Georgia,serif;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
@@ -28,7 +28,7 @@
   --desk:#131211; --page:#1c1b19; --page2:#242220; --ink:#e5e0d5; --soft:#9a948a; --faint:#69645c;
   --rule:#302d2a; --panel:#22201e; --line:#393633; --sel:#d8d1c2; --sel-ink:#1c1b19;
   --rubric:#d8806a; --shadow:rgba(0,0,0,.5); --fold:rgba(0,0,0,.38);
-  --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
+  --edgeln:#33302c; --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
 }
 @media (prefers-color-scheme:dark){
   [data-theme=auto]{
@@ -36,7 +36,7 @@
     --desk:#131211; --page:#1c1b19; --page2:#242220; --ink:#e5e0d5; --soft:#9a948a; --faint:#69645c;
     --rule:#302d2a; --panel:#22201e; --line:#393633; --sel:#d8d1c2; --sel-ink:#1c1b19;
     --rubric:#d8806a; --shadow:rgba(0,0,0,.5); --fold:rgba(0,0,0,.38);
-    --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
+    --edgeln:#33302c; --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
   }
 }
 *{box-sizing:border-box}
@@ -72,9 +72,13 @@ body.phone .lbl{display:none}
 #book{position:relative;touch-action:pan-y pinch-zoom;filter:drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 1px 1px var(--shadow))}
 body.phone #book{touch-action:none;filter:none}
 .pg{position:absolute;top:0;background:var(--page)}
-.pg.l{left:0;border-radius:4px 0 0 4px;background:linear-gradient(to left,var(--fold),transparent 6%),var(--page);box-shadow:-3px 0 0 -1px var(--page2),-5px 1px 0 -2px var(--page2)}
-.pg.r{border-radius:0 4px 4px 0;background:linear-gradient(to right,var(--fold),transparent 6%),var(--page);box-shadow:3px 0 0 -1px var(--page2),5px 1px 0 -2px var(--page2)}
-#book.single .pg.l{border-radius:4px;background:var(--page);box-shadow:0 1px 3px var(--shadow)}
+.pg.l{left:0;border-radius:4px 0 0 4px;background:linear-gradient(to left,var(--fold),transparent 6%),var(--page);}
+.pg.r{border-radius:0 4px 4px 0;background:linear-gradient(to right,var(--fold),transparent 6%),var(--page);}
+/* page edges beside the open book: the left stack grows and the right one shrinks as you read on */
+.edge{position:absolute;width:var(--w,4px);z-index:-1;top:var(--sag,0);bottom:var(--sag,0);
+  background:repeating-linear-gradient(to right,var(--page2) 0 1px,var(--edgeln) 1px 2px)}
+.edge.l{right:100%;border-radius:3px 0 0 3px}.edge.r{left:100%;border-radius:0 3px 3px 0}
+#book.single .pg.l{border-radius:4px;background:var(--page)}
 #book.single .pg.r{display:none}
 .rh,.fo{position:absolute;font-family:var(--serif);font-size:calc(var(--fs) * .78);color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 2 * var(--mo))}
 .rh{top:calc(var(--mt) * .36);text-transform:uppercase;letter-spacing:.08em}
@@ -196,6 +200,7 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
 </header>
 <main id="stage">
   <div id="book">
+    <i class="edge l"></i><i class="edge r"></i>
     <div class="pg l"><div class="rh"></div><div class="fo"></div></div>
     <div class="pg r"><div class="rh"></div><div class="fo"></div></div>
     <div id="vp"><div id="flow" class="flow"></div></div>
@@ -379,6 +384,9 @@ function show(s,dir){
   const reached=Math.round(CUR.bk._cum[Math.min(bk.b.length,lastI+1)]/bk._total*100);
   ST.far[bk.id]=Math.max(ST.far[bk.id]||0,reached); persist();
   const h=headBefore(bk,CUR.idx[fv]||0);
+  { const f=bk._cum[first]/bk._total, T=isPhone()?7:Math.max(7,Math.min(22,G.P*.034)), pc=Math.round(f*100);
+    for(const [el,w] of [[book.querySelector('.edge.l'),1.5+T*f],[book.querySelector('.edge.r'),1.5+T*(1-f)]]){
+      el.style.setProperty('--w',w+'px'); el.style.setProperty('--sag',(w*.12)+'px'); el.title=pc+'% \u00b7 '+(100-pc)+'%'; } }
   $('#status').innerHTML='<span class="st">'+esc(h>=0?bk.b[h][1]:bk.title)+'</span><span class="pc">'+pctAt(first)+'%</span><span class="pc">'+fmtMin(todayTime(bk.id))+' '+(ST.s.lang==='af'?'vandag':'today')+'</span>';
   if(dir&&!reduceMotion) vp.animate([{opacity:.15,transform:'translateX('+(dir*18)+'px)'},{opacity:1,transform:'none'}],{duration:190,easing:'cubic-bezier(.2,.7,.2,1)'});
 }

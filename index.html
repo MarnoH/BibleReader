@@ -90,10 +90,19 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .pg{position:absolute;top:0;background:var(--page)}
 .pg.l{left:0;border-radius:4px 0 0 4px;
   background:linear-gradient(to left,var(--fold),transparent 6%) ,var(--page);
-  box-shadow:-3px 0 0 -1px var(--page2),-5px 1px 0 -2px var(--page2)}
+  box-shadow:none}
 .pg.r{border-radius:0 4px 4px 0;
   background:linear-gradient(to right,var(--fold),transparent 6%) ,var(--page);
-  box-shadow:3px 0 0 -1px var(--page2),5px 1px 0 -2px var(--page2)}
+  box-shadow:none}
+/* The edges of the pages beside the open book: as in a printed Bible, the stack on the left grows and the one
+   on the right shrinks as you read on, so you can feel how far into the Bible you are. A thin gold line in the
+   stack marks where the New Testament begins. */
+.edge{position:absolute;top:0;bottom:0;width:var(--w,4px);z-index:-1;
+  background:repeating-linear-gradient(to right,var(--page2) 0 1px,var(--edgeln) 1px 2px)}
+.edge.l{right:100%;border-radius:3px 0 0 3px;top:var(--sag,0);bottom:var(--sag,0)}
+.edge.r{left:100%;border-radius:0 3px 3px 0;top:var(--sag,0);bottom:var(--sag,0)}
+.edge .nt{position:absolute;top:0;bottom:0;width:1px;background:#c9a04a;opacity:.85}
+.edge.l .nt{right:var(--at)}.edge.r .nt{left:var(--at)}
 #book.single .pg.l{border-radius:4px;background:var(--page);box-shadow:none}
 #book.single .pg.r{display:none}
 .rh,.fo{position:absolute;font-family:var(--serif);font-size:calc(var(--fs) * .8);color:var(--soft);
@@ -329,9 +338,9 @@ body.phone #regbtn span,body.phone #libbtn span{display:none}
 .nstore{margin:12px 0 0;font-size:11.5px;color:var(--faint)}
 .nstore.warn{color:var(--rubric)}
 /* ---------- word marks ---------- */
-:root{--hy:rgba(255,212,0,.42);--hg:rgba(90,190,110,.36);--hb:rgba(90,160,240,.33);--hp:rgba(240,110,170,.32);--ho:rgba(255,150,40,.36);--hv:rgba(155,95,220,.30);--cr:#b3261e;--cb:#1f4fa3;--cg:#2e7d32;--cy:#a07800;--co:#c25400;--cv:#7b3fa0}
-[data-theme=dark]{--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}
-@media (prefers-color-scheme:dark){[data-theme=auto]{--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}}
+:root{--edgeln:#dcd6ca;--hy:rgba(255,212,0,.42);--hg:rgba(90,190,110,.36);--hb:rgba(90,160,240,.33);--hp:rgba(240,110,170,.32);--ho:rgba(255,150,40,.36);--hv:rgba(155,95,220,.30);--cr:#b3261e;--cb:#1f4fa3;--cg:#2e7d32;--cy:#a07800;--co:#c25400;--cv:#7b3fa0}
+[data-theme=dark]{--edgeln:#33302c;--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}
+@media (prefers-color-scheme:dark){[data-theme=auto]{--edgeln:#33302c;--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}}
 .h-y,.h-g,.h-b,.h-p{border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .h-y{background:var(--hy)}.h-g{background:var(--hg)}.h-b{background:var(--hb)}.h-p{background:var(--hp)}.h-o{background:var(--ho)}.h-v{background:var(--hv)}
 .c-r{color:var(--cr)}.c-b{color:var(--cb)}.c-g{color:var(--cg)}.c-y{color:var(--cy)}.c-o{color:var(--co)}.c-v{color:var(--cv)}
@@ -446,6 +455,7 @@ body.phone .nbody{padding:10px 10px 16px}
 <div id="work">
 <main id="stage">
   <div id="book">
+    <i class="edge l"><b class="nt"></b></i><i class="edge r"><b class="nt"></b></i>
     <div class="pg l"><div class="rh"></div><div class="fo"></div></div>
     <div class="pg r"><div class="rh"></div><div class="fo"></div></div>
     <div id="vp"><div id="flow" class="flowcss"></div></div>
@@ -502,7 +512,7 @@ const UI={
   ot:'Old Testament',nt:'New Testament',books:'Books',chooseBook:'Go to',
   backTo:'Back to',a5:'A5 p. ',xrefs:'Cross references',
   opening:'Opening the Bible\u2026',fitting:'Fitting the pages to your A5\u2026',
-  library:'Library',
+  library:'Library',depth:'{p}% of the Bible behind you \u00b7 {q}% ahead',
   a5tip:'Your A5 Bible\u2019s density \u2014 click to return to it',settings:'Settings',
   loadingTr:'Fetching the {x}\u2026',loadingX:'Fetching the cross-references\u2026',
   notSaved:'The {x} is not on this device yet. Connect to the internet once and choose it again; after that it works offline.',
@@ -538,7 +548,7 @@ const UI={
   ot:'Ou Testament',nt:'Nuwe Testament',books:'Boeke',chooseBook:'Gaan na',
   backTo:'Terug na',a5:'A5 bl. ',xrefs:'Kruisverwysings',
   opening:'Die Bybel word oopgemaak\u2026',fitting:'Die bladsye word by jou A5 gepas\u2026',
-  library:'Biblioteek',
+  library:'Biblioteek',depth:'{p}% van die Bybel agter jou \u00b7 {q}% nog voor',
   a5tip:'Die digtheid van jou A5-Bybel \u2014 klik om terug te keer',settings:'Instellings',
   loadingTr:'Die {x} word gehaal\u2026',loadingX:'Die kruisverwysings word gehaal\u2026',
   notSaved:'Die {x} is nog nie op hierdie toestel nie. Koppel een keer aan die internet en kies dit weer; daarna werk dit sonder internet.',
@@ -855,8 +865,28 @@ function show(s,dir){
   if(dir&&!reduceMotion) vp.animate([{opacity:.15,transform:'translateX('+(dir*18)+'px)'},{opacity:1,transform:'none'}],
                                     {duration:190,easing:'cubic-bezier(.2,.7,.2,1)'});
 }
+// How far into the whole Bible the open page is, measured by the amount of text before it (so a long book
+// counts for as much as it does in print).
+const DEPTH={t:null,cum:null};
+function depthOf(r){
+  const t=S.tr, n=NUM[t]; if(!n||!n.t) return 0;
+  if(DEPTH.t!==t){ const c=new Float64Array(N+1); for(let i=0;i<N;i++) c[i+1]=c[i]+(n.t[i]?n.t[i].length:0); DEPTH.t=t; DEPTH.cum=c; }
+  return DEPTH.cum[r]/DEPTH.cum[N];
+}
+function setDepth(r){
+  const f=depthOf(r), nt=depthOf(D.bs[39]), G=CUR.G, T=isPhone()?7:Math.max(7,Math.min(22,G.P*.034));
+  const el=book.querySelector('.edge.l'), er=book.querySelector('.edge.r'), wl=1.5+T*f, wr=1.5+T*(1-f);
+  el.style.setProperty('--w',wl+'px'); er.style.setProperty('--w',wr+'px');
+  el.style.setProperty('--sag',(wl*.12)+'px'); er.style.setProperty('--sag',(wr*.12)+'px');
+  const ln=el.firstChild, rn=er.firstChild;
+  ln.hidden=f<=nt; rn.hidden=f>nt;
+  ln.parentNode.style.setProperty('--at',(1.5+T*(f-nt))+'px'); rn.parentNode.style.setProperty('--at',(T*(nt-f))+'px');
+  const pc=Math.round(f*100), tip=L.depth.replace('{p}',pc).replace('{q}',100-pc);
+  el.title=tip; er.title=tip;
+}
 // The status bar names the spread and offers a tick for every chapter that ends on it.
 function setStatus(fv,lv,s){
+  setDepth(CUR.V[fv].r);
   const G=CUR.G, c0=s*G.ppv*G.cpp, c1=c0+G.ppv*G.cpp-1, today=todayISO();
   const a=a5page(CUR.V[fv].r), z=a5page(CUR.V[lv].r);
   let marks='';
