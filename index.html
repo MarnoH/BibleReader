@@ -94,6 +94,13 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .pg.r{border-radius:0 4px 4px 0;
   background:linear-gradient(to right,var(--fold) 0,var(--fold2) 2.5%,transparent 8%,var(--sheen) 12%,transparent 19%) ,var(--page);
   box-shadow:none}
+/* the hard cover the pages lie on: a board in the book's cloth colour, a little larger than the pages */
+.cover{position:absolute;z-index:-2;display:none;pointer-events:none;top:calc(-1 * var(--bd,7px));bottom:calc(-1 * var(--bd,7px));
+  left:calc(-1 * (var(--wl,0px) + var(--bd,7px)));right:calc(-1 * (var(--wr,0px) + var(--bd,7px)));border-radius:6px;
+  background:linear-gradient(to right,rgba(0,0,0,.38),rgba(255,255,255,.07) 1.2%,transparent 3.5%,transparent 96.5%,rgba(255,255,255,.07) 98.8%,rgba(0,0,0,.38)),
+    linear-gradient(rgba(255,255,255,.09),transparent 25%,transparent 75%,rgba(0,0,0,.2)),var(--cv,#5a1f22);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.14)}
+#book.covered .cover{display:block}
 /* the crease where the two pages meet in the binding */
 #book:not(.single)::before{content:"";position:absolute;left:calc(50% - 1.5px);top:var(--dip,0);bottom:0;width:3px;z-index:2;pointer-events:none;
   background:linear-gradient(to right,transparent,var(--fold) 40%,var(--fold) 60%,transparent)}
@@ -175,6 +182,8 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .seg button{flex:1;border:0;border-left:1px solid var(--line);background:transparent;padding:7px 4px;cursor:pointer;white-space:nowrap}
 .seg button:first-child{border-left:0}
 .seg button:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.seg .cvsw{min-width:0;padding:0;flex:.6;background:linear-gradient(var(--c),var(--c)) center/14px 14px no-repeat}
+.seg .cvsw[aria-pressed=true]{background:linear-gradient(var(--c),var(--c)) center/18px 18px no-repeat,var(--sel)}
 .seg button[aria-pressed=true]{background:var(--sel);color:var(--sel-ink)}
 .sep{height:8px}
 .cred{font-size:11.5px;color:var(--faint);margin:12px 0 0;line-height:1.45}
@@ -458,6 +467,7 @@ body.phone .nbody{padding:10px 10px 16px}
 <div id="work">
 <main id="stage">
   <div id="book">
+    <i class="cover"></i>
     <i class="edge l"><b class="nt"></b></i><i class="edge r"><b class="nt"></b></i>
     <div class="pg l"><div class="rh"></div><div class="fo"></div></div>
     <div class="pg r"><div class="rh"></div><div class="fo"></div></div>
@@ -515,7 +525,7 @@ const UI={
   ot:'Old Testament',nt:'New Testament',books:'Books',chooseBook:'Go to',
   backTo:'Back to',a5:'A5 p. ',xrefs:'Cross references',
   opening:'Opening the Bible\u2026',fitting:'Fitting the pages to your A5\u2026',
-  library:'Library',depth:'{p}% of the Bible behind you \u00b7 {q}% ahead',
+  cover:'Cover',cvBook:'Book',library:'Library',depth:'{p}% of the Bible behind you \u00b7 {q}% ahead',
   a5tip:'Your A5 Bible\u2019s density \u2014 click to return to it',settings:'Settings',
   loadingTr:'Fetching the {x}\u2026',loadingX:'Fetching the cross-references\u2026',
   notSaved:'The {x} is not on this device yet. Connect to the internet once and choose it again; after that it works offline.',
@@ -551,7 +561,7 @@ const UI={
   ot:'Ou Testament',nt:'Nuwe Testament',books:'Boeke',chooseBook:'Gaan na',
   backTo:'Terug na',a5:'A5 bl. ',xrefs:'Kruisverwysings',
   opening:'Die Bybel word oopgemaak\u2026',fitting:'Die bladsye word by jou A5 gepas\u2026',
-  library:'Biblioteek',depth:'{p}% van die Bybel agter jou \u00b7 {q}% nog voor',
+  cover:'Band',cvBook:'Boek',library:'Biblioteek',depth:'{p}% van die Bybel agter jou \u00b7 {q}% nog voor',
   a5tip:'Die digtheid van jou A5-Bybel \u2014 klik om terug te keer',settings:'Instellings',
   loadingTr:'Die {x} word gehaal\u2026',loadingX:'Die kruisverwysings word gehaal\u2026',
   notSaved:'Die {x} is nog nie op hierdie toestel nie. Koppel een keer aan die internet en kies dit weer; daarna werk dit sonder internet.',
@@ -584,7 +594,7 @@ const UI={
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={cover:'book',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -879,10 +889,13 @@ function depthOf(r){
   if(DEPTH.t!==t){ const c=new Float64Array(N+1); for(let i=0;i<N;i++) c[i+1]=c[i]+(n.t[i]?n.t[i].length:0); DEPTH.t=t; DEPTH.cum=c; }
   return DEPTH.cum[r]/DEPTH.cum[N];
 }
+const coverOn=()=>S.cover!=='off'&&!isPhone();
 function setDepth(r){
-  const f=depthOf(r), nt=depthOf(D.bs[39]), G=CUR.G, room=($('#stage').clientWidth-G.ppv*G.P)/2-4, T=isPhone()?7:Math.max(7,Math.min(48,G.P*.075,room));
+  const f=depthOf(r), nt=depthOf(D.bs[39]), G=CUR.G, bd=coverOn()?Math.max(6,G.P*.016):0, room=($('#stage').clientWidth-G.ppv*G.P)/2-4-bd, T=isPhone()?7:Math.max(7,Math.min(48,G.P*.075,room));
   const el=book.querySelector('.edge.l'), er=book.querySelector('.edge.r'), wl=1.5+T*f, wr=1.5+T*(1-f);
   el.style.setProperty('--w',wl+'px'); er.style.setProperty('--w',wr+'px');
+  book.style.setProperty('--wl',wl+'px'); book.style.setProperty('--wr',wr+'px'); book.style.setProperty('--bd',bd+'px');
+  book.classList.toggle('covered',!!bd); book.style.setProperty('--cv',S.cover==='book'?CLOTH[GROUP[CUR.b]]:S.cover);
   el.style.setProperty('--sag',(wl*.12)+'px'); er.style.setProperty('--sag',(wr*.12)+'px');
   const ln=el.firstChild, rn=er.firstChild;
   ln.hidden=f<=nt; rn.hidden=f>nt;
@@ -1039,11 +1052,13 @@ pop.addEventListener('click',e=>{
 });
 
 /* ---------------- settings panel ---------------- */
+const COVERS=['#1d1b1a','#5a1f22','#4a3020','#1f2b44','#22382c'];
 const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['size'],['-'],
  ['verses',[['off','off'],['dim','dim'],['on','on']]],['chapters',[['off','off'],['dim','dim'],['on','on']]],
  ['headings',[['off','off'],['dim','dim'],['on','on']]],['folio',[['book','fBook'],['testament','fTest'],['both','fBoth']]],['-'],
  ['cols',[[1,'1'],[2,'2']]],['layout',[['lines','lines'],['para','para']]],['gap',[['off','off'],['on','on']]],['-'],
- ['xref',[['off','off'],['on','on']]],['status',[['off','off'],['on','on']]],['-'],
+ ['xref',[['off','off'],['on','on']]],['status',[['off','off'],['on','on']]],
+ ['cover',[['off','off'],['book','cvBook'],...COVERS.map(c=>[c,c])]],['-'],
  ['tr',CAT.bibles.map(b=>[b.id,b.label])],['lang',[['en','English'],['af','Afrikaans']]]];
 const setEl=$('#set');
 function buildSettings(){
@@ -1057,7 +1072,7 @@ function buildSettings(){
       h+='<button type="button" data-act="smaller">A\u2212</button><button type="button" data-act="a5" title="'+L.a5tip+'"'+(atA5?' aria-pressed="true"':'')+'>'
         +(atA5?'A5':Math.round(CUR.G?CUR.G.fs:0))+'</button><button type="button" data-act="bigger">A+</button>';
     } else for(const [v,lab] of opts)
-      h+='<button type="button" data-k="'+key+'" data-v="'+v+'" aria-pressed="'+(String(S[key])===String(v))+'"'+(key==='tr'?' title="'+esc(BIB[v].name)+'"':'')+'>'+(L[lab]||lab)+(key==='tr'&&!NUM[v].t?' \u2193':'')+'</button>';
+      h+=key==='cover'&&v[0]==='#'?'<button type="button" class="cvsw" style="--c:'+v+'" data-k="cover" data-v="'+v+'" aria-pressed="'+(S.cover===v)+'" title="'+v+'"></button>':'<button type="button" data-k="'+key+'" data-v="'+v+'" aria-pressed="'+(String(S[key])===String(v))+'"'+(key==='tr'?' title="'+esc(BIB[v].name)+'"':'')+'>'+(L[lab]||lab)+(key==='tr'&&!NUM[v].t?' \u2193':'')+'</button>';
     h+='</div></div>';
   }
   setEl.innerHTML=h+'<p class="cred">'+L.cred+'</p>';
@@ -1070,6 +1085,7 @@ async function setSetting(k,v){
   else if(k==='lang'){ L=UI[v]; document.documentElement.lang=v; show(CUR.spread,0); updateBack(); labelChrome(); labelNotes(); labelMarkbar(); renderNotes(true); }
   else if(k==='folio'){ updateFolios(); scheduleCounts(); }
   else if(k==='status'){ $('#status').hidden=v==='off'; await relayout(false); }
+  else if(k==='cover'){ await relayout(false); }
   else await relayout(k==='xref'||k==='tr');
   if(k==='tr') updateBack();
   if(shelfOpen()){ buildShelf(); chromeForShelf(true); }

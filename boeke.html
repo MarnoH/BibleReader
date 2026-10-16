@@ -74,6 +74,13 @@ body.phone #book{touch-action:none;filter:none}
 .pg{position:absolute;top:0;background:var(--page)}
 .pg.l{left:0;border-radius:4px 0 0 4px;background:linear-gradient(to left,var(--fold) 0,var(--fold2) 2.5%,transparent 8%,var(--sheen) 12%,transparent 19%),var(--page);}
 .pg.r{border-radius:0 4px 4px 0;background:linear-gradient(to right,var(--fold) 0,var(--fold2) 2.5%,transparent 8%,var(--sheen) 12%,transparent 19%),var(--page);}
+/* the hard cover the pages lie on: a board in the book's cloth colour, a little larger than the pages */
+.cover{position:absolute;z-index:-2;display:none;pointer-events:none;top:calc(-1 * var(--bd,7px));bottom:calc(-1 * var(--bd,7px));
+  left:calc(-1 * (var(--wl,0px) + var(--bd,7px)));right:calc(-1 * (var(--wr,0px) + var(--bd,7px)));border-radius:6px;
+  background:linear-gradient(to right,rgba(0,0,0,.38),rgba(255,255,255,.07) 1.2%,transparent 3.5%,transparent 96.5%,rgba(255,255,255,.07) 98.8%,rgba(0,0,0,.38)),
+    linear-gradient(rgba(255,255,255,.09),transparent 25%,transparent 75%,rgba(0,0,0,.2)),var(--cv,#5a1f22);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.14)}
+#book.covered .cover{display:block}
 /* the crease where the two pages meet in the binding */
 #book:not(.single)::before{content:"";position:absolute;left:calc(50% - 1.5px);top:var(--dip,0);bottom:0;width:3px;z-index:2;pointer-events:none;
   background:linear-gradient(to right,transparent,var(--fold) 40%,var(--fold) 60%,transparent)}
@@ -203,6 +210,7 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
 </header>
 <main id="stage">
   <div id="book">
+    <i class="cover"></i>
     <i class="edge l"></i><i class="edge r"></i>
     <div class="pg l"><div class="rh"></div><div class="fo"></div></div>
     <div class="pg r"><div class="rh"></div><div class="fo"></div></div>
@@ -390,7 +398,9 @@ function show(s,dir){
   const reached=Math.round(CUR.bk._cum[Math.min(bk.b.length,lastI+1)]/bk._total*100);
   ST.far[bk.id]=Math.max(ST.far[bk.id]||0,reached); persist();
   const h=headBefore(bk,CUR.idx[fv]||0);
-  { const f=bk._cum[first]/bk._total, T=isPhone()?7:Math.max(7,Math.min(48,G.P*.075,($('#stage').clientWidth-G.ppv*G.P)/2-4)), pc=Math.round(f*100);
+  { const bd=isPhone()?0:Math.max(6,G.P*.016), f=bk._cum[first]/bk._total, T=isPhone()?7:Math.max(7,Math.min(48,G.P*.075,($('#stage').clientWidth-G.ppv*G.P)/2-4-bd)), pc=Math.round(f*100);
+    book.style.setProperty('--wl',(1.5+T*f)+'px'); book.style.setProperty('--wr',(1.5+T*(1-f))+'px'); book.style.setProperty('--bd',bd+'px');
+    book.classList.toggle('covered',!!bd); book.style.setProperty('--cv',clothOf(CUR.meta));
     for(const [el,w] of [[book.querySelector('.edge.l'),1.5+T*f],[book.querySelector('.edge.r'),1.5+T*(1-f)]]){
       el.style.setProperty('--w',w+'px'); el.style.setProperty('--sag',(w*.12)+'px'); el.title=pc+'% \u00b7 '+(100-pc)+'%'; } }
   $('#status').innerHTML='<span class="st">'+esc(h>=0?bk.b[h][1]:bk.title)+'</span><span class="pc">'+pctAt(first)+'%</span><span class="pc">'+fmtMin(todayTime(bk.id))+' '+(ST.s.lang==='af'?'vandag':'today')+'</span>';
