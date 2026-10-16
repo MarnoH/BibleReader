@@ -18,24 +18,24 @@
   color-scheme:light;
   --desk:#d3d0c8; --page:#f6f4ee; --page2:#ece9e1; --ink:#1f1d1a; --soft:#6d675d; --faint:#a29c91;
   --rule:#cfcac0; --panel:#fbfaf7; --line:#dcd8cf; --sel:#2a2724; --sel-ink:#f6f4ee;
-  --rubric:#a2392a; --shadow:rgba(46,36,24,.20); --fold:rgba(70,52,30,.13);
+  --rubric:#a2392a; --shadow:rgba(46,36,24,.20); --fold:rgba(70,52,30,.24); --fold2:rgba(70,52,30,.07); --sheen:rgba(255,255,255,.5); --edgebg:#f1eee7; --edgeln2:#d3ccbe;
   --edgeln:#dcd6ca; --case:#e4ddd0; --plank:#8d6239; --plank-hi:#b07d4c; --plank-lo:#5e3f22;
   --serif:"SS4","Iowan Old Style","Palatino Linotype",Georgia,serif;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 [data-theme=dark]{
   color-scheme:dark;
-  --desk:#131211; --page:#1c1b19; --page2:#242220; --ink:#e5e0d5; --soft:#9a948a; --faint:#69645c;
+  --desk:#0e0d0c; --page:#211f1c; --page2:#2b2926; --ink:#e5e0d5; --soft:#9a948a; --faint:#69645c;
   --rule:#302d2a; --panel:#22201e; --line:#393633; --sel:#d8d1c2; --sel-ink:#1c1b19;
-  --rubric:#d8806a; --shadow:rgba(0,0,0,.5); --fold:rgba(0,0,0,.38);
+  --rubric:#d8806a; --shadow:rgba(0,0,0,.5); --fold:rgba(0,0,0,.6); --fold2:rgba(0,0,0,.2); --sheen:rgba(255,255,255,.04); --edgebg:#5e574d; --edgeln2:#37332e;
   --edgeln:#33302c; --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
 }
 @media (prefers-color-scheme:dark){
   [data-theme=auto]{
     color-scheme:dark;
-    --desk:#131211; --page:#1c1b19; --page2:#242220; --ink:#e5e0d5; --soft:#9a948a; --faint:#69645c;
+    --desk:#0e0d0c; --page:#211f1c; --page2:#2b2926; --ink:#e5e0d5; --soft:#9a948a; --faint:#69645c;
     --rule:#302d2a; --panel:#22201e; --line:#393633; --sel:#d8d1c2; --sel-ink:#1c1b19;
-    --rubric:#d8806a; --shadow:rgba(0,0,0,.5); --fold:rgba(0,0,0,.38);
+    --rubric:#d8806a; --shadow:rgba(0,0,0,.5); --fold:rgba(0,0,0,.6); --fold2:rgba(0,0,0,.2); --sheen:rgba(255,255,255,.04); --edgebg:#5e574d; --edgeln2:#37332e;
     --edgeln:#33302c; --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
   }
 }
@@ -72,11 +72,14 @@ body.phone .lbl{display:none}
 #book{position:relative;touch-action:pan-y pinch-zoom;filter:drop-shadow(0 14px 28px var(--shadow)) drop-shadow(0 1px 1px var(--shadow))}
 body.phone #book{touch-action:none;filter:none}
 .pg{position:absolute;top:0;background:var(--page)}
-.pg.l{left:0;border-radius:4px 0 0 4px;background:linear-gradient(to left,var(--fold),transparent 6%),var(--page);}
-.pg.r{border-radius:0 4px 4px 0;background:linear-gradient(to right,var(--fold),transparent 6%),var(--page);}
+.pg.l{left:0;border-radius:4px 0 0 4px;background:linear-gradient(to left,var(--fold) 0,var(--fold2) 2.5%,transparent 8%,var(--sheen) 12%,transparent 19%),var(--page);}
+.pg.r{border-radius:0 4px 4px 0;background:linear-gradient(to right,var(--fold) 0,var(--fold2) 2.5%,transparent 8%,var(--sheen) 12%,transparent 19%),var(--page);}
+/* the crease where the two pages meet in the binding */
+#book:not(.single)::before{content:"";position:absolute;left:calc(50% - 1.5px);top:var(--dip,0);bottom:0;width:3px;z-index:2;pointer-events:none;
+  background:linear-gradient(to right,transparent,var(--fold) 40%,var(--fold) 60%,transparent)}
 /* page edges beside the open book: the left stack grows and the right one shrinks as you read on */
 .edge{position:absolute;width:var(--w,4px);z-index:-1;top:var(--sag,0);bottom:var(--sag,0);
-  background:repeating-linear-gradient(to right,var(--page2) 0 1px,var(--edgeln) 1px 2px)}
+  background:repeating-linear-gradient(to right,var(--edgebg) 0 1px,var(--edgeln2) 1px 2px);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.18)}
 .edge.l{right:100%;border-radius:3px 0 0 3px}.edge.r{left:100%;border-radius:0 3px 3px 0}
 #book.single .pg.l{border-radius:4px;background:var(--page)}
 #book.single .pg.r{display:none}
@@ -349,6 +352,9 @@ const CUR={bk:null,meta:null,u:-1,col:null,end:null,idx:null,pages:0,spreads:0,s
 function applyGeom(G){
   book.style.width=(G.ppv*G.P)+'px'; book.style.height=G.H+'px'; book.classList.toggle('single',G.ppv===1);
   for(const p of pgs){ p.style.width=G.P+'px'; p.style.height=G.H+'px'; } pgs[1].style.left=G.P+'px';
+  { const P=G.P, H=G.H, d=G.ppv===2?Math.max(3,P*.014):0; book.style.setProperty('--dip',d+'px');
+    pgs[0].style.clipPath=d?`path('M0 0 L${P*.72} 0 Q${P*.93} 0 ${P} ${d} L${P} ${H-d*.35} Q${P*.93} ${H} ${P*.72} ${H} L0 ${H} Z')`:'none';
+    pgs[1].style.clipPath=d?`path('M0 ${d} Q${P*.07} 0 ${P*.28} 0 L${P} 0 L${P} ${H} L${P*.28} ${H} Q${P*.07} ${H} 0 ${H-d*.35} Z')`:'none'; }
   vp.style.left=G.mo+'px'; vp.style.top=G.mt+'px'; vp.style.width=G.vw+'px'; vp.style.height=G.h+'px';
   for(const [k,v] of [['--fs',G.fs],['--mo',G.mo],['--mt',G.mt],['--mb',G.mb]]) book.style.setProperty(k,v+'px');
 }
@@ -384,7 +390,7 @@ function show(s,dir){
   const reached=Math.round(CUR.bk._cum[Math.min(bk.b.length,lastI+1)]/bk._total*100);
   ST.far[bk.id]=Math.max(ST.far[bk.id]||0,reached); persist();
   const h=headBefore(bk,CUR.idx[fv]||0);
-  { const f=bk._cum[first]/bk._total, T=isPhone()?7:Math.max(7,Math.min(22,G.P*.034)), pc=Math.round(f*100);
+  { const f=bk._cum[first]/bk._total, T=isPhone()?7:Math.max(7,Math.min(48,G.P*.075,($('#stage').clientWidth-G.ppv*G.P)/2-4)), pc=Math.round(f*100);
     for(const [el,w] of [[book.querySelector('.edge.l'),1.5+T*f],[book.querySelector('.edge.r'),1.5+T*(1-f)]]){
       el.style.setProperty('--w',w+'px'); el.style.setProperty('--sag',(w*.12)+'px'); el.title=pc+'% \u00b7 '+(100-pc)+'%'; } }
   $('#status').innerHTML='<span class="st">'+esc(h>=0?bk.b[h][1]:bk.title)+'</span><span class="pc">'+pctAt(first)+'%</span><span class="pc">'+fmtMin(todayTime(bk.id))+' '+(ST.s.lang==='af'?'vandag':'today')+'</span>';
