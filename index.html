@@ -98,7 +98,7 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .cover{position:absolute;z-index:-2;display:none;pointer-events:none;top:calc(-1 * var(--bd,7px));bottom:calc(-1 * var(--bd,7px));
   left:calc(-1 * (var(--wl,0px) + var(--bd,7px)));right:calc(-1 * (var(--wr,0px) + var(--bd,7px)));border-radius:6px;
   background:linear-gradient(to right,rgba(0,0,0,.38),rgba(255,255,255,.07) 1.2%,transparent 3.5%,transparent 96.5%,rgba(255,255,255,.07) 98.8%,rgba(0,0,0,.38)),
-    linear-gradient(rgba(255,255,255,.09),transparent 25%,transparent 75%,rgba(0,0,0,.2)),var(--cv,#5a1f22);
+    linear-gradient(rgba(255,255,255,.09),transparent 25%,transparent 75%,rgba(0,0,0,.2)),var(--coverc,#5a1f22);
   box-shadow:inset 0 0 0 1px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.14)}
 #book.covered .cover{display:block}
 /* the crease where the two pages meet in the binding */
@@ -188,10 +188,10 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .sep{height:8px}
 .cred{font-size:11.5px;color:var(--faint);margin:12px 0 0;line-height:1.45}
 
-#nav{position:absolute;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding:14px;
+#nav,#find{position:absolute;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding:14px;
   background:color-mix(in srgb,var(--desk) 82%,transparent);backdrop-filter:blur(3px)}
-#nav.on{display:flex}
-#nav .box{width:100%;max-width:880px;max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);
+#nav.on,#find.on{display:flex}
+#nav .box,#find .box{width:100%;max-width:880px;max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);
   border-radius:12px;padding:14px 20px 18px;box-shadow:0 22px 50px -12px var(--shadow)}
 .navh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .navh b{font-family:var(--serif);font-size:19px;font-weight:600}
@@ -324,7 +324,7 @@ body.phone #regbtn span,body.phone #libbtn span{display:none}
 
 /* ---------- notes ---------- */
 #notesbtn{position:relative}
-#notesbtn svg{width:20px;height:20px;display:block}
+#notesbtn svg,#findbtn svg{width:20px;height:20px;display:block}
 #notesbtn[aria-pressed=true]{background:color-mix(in srgb,var(--ink) 10%,transparent)}
 #notesbtn .dot{position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--rubric)}
 #notes{position:absolute;top:0;right:0;bottom:0;width:min(420px,92vw);z-index:45;display:flex;flex-direction:column;
@@ -429,7 +429,7 @@ body.phone #top{position:absolute;left:0;right:0;top:0;z-index:58;height:auto;mi
   border-bottom:1px solid var(--line);transform:translateY(-105%);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
 body.phone.chrome #top{transform:none}
 body.phone #shelf{padding-top:58px}
-body.phone #nav{padding-top:60px}
+body.phone #nav,body.phone #find{padding-top:60px}
 body.phone #set{top:58px;right:8px;max-height:calc(100% - 66px)}
 body.phone #book{filter:none}
 body.phone .flowcss{text-align:left;hyphens:manual}
@@ -449,6 +449,56 @@ body.phone .ntools{padding:2px 12px 8px;gap:6px}
 body.phone .nbody{padding:10px 10px 16px}
 @media (prefers-reduced-motion:reduce){.flash{animation:none}.sp{transition:none}#notes,#notes.open{transition:none}body.phone #top{transition:none}}
 @media print{#top,#status,#set,#nav,#pop{display:none!important}}
+
+/* ---------- stronger contrast, for screens that wash out the shading ---------- */
+[data-contrast=strong]:not([data-theme=dark]){--desk:#b3ada0;--page:#fdfcf8;--page2:#e0dbcf;--ink:#100e0b;--soft:#4a443a;--rule:#b0a99b;--line:#c2bbad;
+  --fold:rgba(60,40,15,.45);--fold2:rgba(60,40,15,.15);--sheen:rgba(255,255,255,.7);--edgebg:#fffdf8;--edgeln2:#9e937e;--shadow:rgba(30,20,10,.38)}
+[data-contrast=strong][data-theme=dark]{--desk:#000;--page:#2b2824;--page2:#37332e;--ink:#f5f0e6;--soft:#bcb4a6;--rule:#45403a;--line:#4b4640;
+  --fold:rgba(0,0,0,.85);--fold2:rgba(0,0,0,.32);--sheen:rgba(255,255,255,.06);--edgebg:#958b78;--edgeln2:#3e3933;--shadow:rgba(0,0,0,.8)}
+@media (prefers-color-scheme:dark){[data-contrast=strong][data-theme=auto]{--desk:#000;--page:#2b2824;--page2:#37332e;--ink:#f5f0e6;--soft:#bcb4a6;--rule:#45403a;--line:#4b4640;
+  --fold:rgba(0,0,0,.85);--fold2:rgba(0,0,0,.32);--sheen:rgba(255,255,255,.06);--edgebg:#958b78;--edgeln2:#3e3933;--shadow:rgba(0,0,0,.8)}}
+
+/* ---------- search ---------- */
+.fq{display:flex;gap:8px;margin:2px 0 10px}
+.fq input{flex:1;min-width:0;font:16px var(--serif);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
+.fq input:focus{outline:2px solid color-mix(in srgb,var(--rubric) 55%,transparent);outline-offset:0}
+#find .seg{margin-bottom:10px}
+.fsum{color:var(--soft);font-size:13px;margin:4px 0 6px}
+.fbooks{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 10px}
+.fbooks button{border:1px solid var(--line);background:none;border-radius:999px;padding:2px 9px;font-size:12.5px;cursor:pointer;color:var(--soft)}
+.fbooks button[aria-pressed=true]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.fres button.hit{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:8px 6px;cursor:pointer;
+  font-family:var(--serif);font-size:15px;line-height:1.4;color:var(--ink)}
+.fres button.hit:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.fres .rf{display:block;font-family:var(--sans);font-size:12px;color:var(--soft);margin-bottom:1px;letter-spacing:.02em}
+.fres mark{background:color-mix(in srgb,#ffd400 45%,transparent);color:inherit;border-radius:2px}
+.fres button.go{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:9px;background:none;padding:8px 10px;margin-bottom:8px;cursor:pointer;font-family:var(--serif);font-size:15px}
+.fres .more{margin:10px auto 0;display:block}
+
+/* ---------- ribbon markers ---------- */
+#ribs{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.rbn{position:absolute;width:9px;pointer-events:auto;cursor:pointer;border:0;padding:0;
+  background:linear-gradient(to right,rgba(0,0,0,.25),rgba(255,255,255,.22) 40%,rgba(0,0,0,.18)),var(--rc);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 7px),0 100%);box-shadow:0 1px 2px rgba(0,0,0,.3);transition:filter .15s}
+.rbn:hover{filter:brightness(1.15)}
+.rbn.unset{opacity:.55}
+#ribmenu{position:fixed;z-index:95;display:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;
+  box-shadow:0 16px 36px -10px var(--shadow);width:250px}
+#ribmenu.on{display:block}
+#ribmenu input{width:100%;font:15px var(--serif);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:7px;padding:6px 8px;margin:4px 0 8px}
+#ribmenu .w{font-size:12.5px;color:var(--soft)}
+#ribmenu .acts{display:flex;gap:6px}
+#ribmenu .acts button{flex:1;border:1px solid var(--line);background:none;border-radius:7px;padding:6px;cursor:pointer;color:var(--ink)}
+#ribmenu .acts button.main{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+
+/* ---------- two translations side by side ---------- */
+.pside{position:absolute;top:0}
+.pu{display:flow-root}
+.pu.cs{padding-top:.45em}
+.pu.cs.first{padding-top:0}
+.ptl{display:flow-root}
+.flowcss .pside .bt{font-size:1.45em}
+.ptr{font-family:var(--sans);font-size:.72em;letter-spacing:.08em;color:var(--soft);text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -461,6 +511,7 @@ body.phone .nbody{padding:10px 10px 16px}
   <a id="libbtn" class="tb" href="boeke.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h3v12H3zM7.5 6h3v10h-3zM12.3 5.2l2.8-.9 3.2 11-2.9.8z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 16.6h17" stroke="currentColor" stroke-width="1.3"/></svg><span></span></a>
   <a id="regbtn" class="tb" href="leesregister.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h4v4H3zM8 3h4v4H8zM13 3h4v4h-4zM3 8h4v4H3zM8 8h4v4H8zM3 13h4v4H3z" fill="currentColor" opacity=".85"/><path d="M13 8h4v4h-4zM8 13h4v4H8zM13 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1"/></svg><span></span></a>
   <button id="resume" class="tb" type="button" hidden></button>
+  <button id="findbtn" class="tb" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12.4 12.4l4.6 4.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   <button id="notesbtn" class="tb" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3.5h9l3 3V16.5H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 8h7M6.5 10.8h7M6.5 13.6h4.5" stroke="currentColor" stroke-width="1.1"/></svg><i class="dot" hidden></i></button>
   <button id="aa" class="tb" type="button" aria-haspopup="dialog">Aa</button>
 </header>
@@ -469,12 +520,14 @@ body.phone .nbody{padding:10px 10px 16px}
   <div id="book">
     <i class="cover"></i>
     <i class="edge l"><b class="nt"></b></i><i class="edge r"><b class="nt"></b></i>
+    <div id="ribs"></div>
     <div class="pg l"><div class="rh"></div><div class="fo"></div></div>
     <div class="pg r"><div class="rh"></div><div class="fo"></div></div>
     <div id="vp"><div id="flow" class="flowcss"></div></div>
   </div>
   <div id="set" role="dialog"></div>
   <div id="nav" role="dialog"><div class="box"></div></div>
+  <div id="find" role="dialog"><div class="box"></div></div>
   <section id="shelf" aria-label="Bookshelf"><div class="case"></div><p class="shelfnote"></p></section>
   <div id="busy" class="on"><span>…</span></div>
 </main>
@@ -500,6 +553,7 @@ body.phone .nbody{padding:10px 10px 16px}
 <footer id="status" role="button" tabindex="0" aria-live="polite"></footer>
 <div id="pop" role="dialog"></div>
 <div id="hA" class="hdl" aria-hidden="true"></div><div id="hB" class="hdl" aria-hidden="true"></div>
+<div id="ribmenu" role="dialog"></div>
 <div id="markbar" role="toolbar"><div class="mg"><button type="button" data-h="y"></button><button type="button" data-h="o"></button><button type="button" data-h="g"></button><button type="button" data-h="b"></button><button type="button" data-h="p"></button><button type="button" data-h="v"></button></div><i class="msep top"></i><div class="mg"><button type="button" data-c="r">A</button><button type="button" data-c="o">A</button><button type="button" data-c="y">A</button><button type="button" data-c="v">A</button><button type="button" data-c="b">A</button><button type="button" data-c="g">A</button><i class="msep"></i><button type="button" data-x="1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6"/></svg></button></div></div>
 <div id="chap" role="dialog"></div>
 <input type="file" id="regfile" accept=".json,application/json" hidden>
@@ -525,6 +579,9 @@ const UI={
   ot:'Old Testament',nt:'New Testament',books:'Books',chooseBook:'Go to',
   backTo:'Back to',a5:'A5 p. ',xrefs:'Cross references',
   opening:'Opening the Bible\u2026',fitting:'Fitting the pages to your A5\u2026',
+  find:'Search',findPh:'Word or phrase \u2014 use "quotes" for an exact phrase',fAll:'Whole Bible',fOT:'Old Testament',fNT:'New Testament',fAllS:'Bible',fOTS:'OT',fNTS:'NT',fBook:'This book',fCount:'{n} verses',fNone:'Nothing found.',fMore:'Show more',fGo:'Go to {x}',
+  contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',par:'Side by side',
+  ribbon:'Ribbon',ribHere:'Place here',ribRemove:'Take out',ribName:'Name',ribGo:'Go there',ribEmpty:'not placed yet \u2014 click to place it on this page',ribTip:'click: go there \u00b7 right-click or hold: move or name it',
   cover:'Cover',cvBook:'Book',library:'Library',depth:'{p}% of the Bible behind you \u00b7 {q}% ahead',
   a5tip:'Your A5 Bible\u2019s density \u2014 click to return to it',settings:'Settings',
   loadingTr:'Fetching the {x}\u2026',loadingX:'Fetching the cross-references\u2026',
@@ -561,6 +618,9 @@ const UI={
   ot:'Ou Testament',nt:'Nuwe Testament',books:'Boeke',chooseBook:'Gaan na',
   backTo:'Terug na',a5:'A5 bl. ',xrefs:'Kruisverwysings',
   opening:'Die Bybel word oopgemaak\u2026',fitting:'Die bladsye word by jou A5 gepas\u2026',
+  find:'Soek',findPh:'Woord of frase \u2014 gebruik "aanhalingstekens" vir \u2019n presiese frase',fAll:'Hele Bybel',fOT:'Ou Testament',fNT:'Nuwe Testament',fAllS:'Bybel',fOTS:'OT',fNTS:'NT',fBook:'Hierdie boek',fCount:'{n} verse',fNone:'Niks gevind nie.',fMore:'Wys meer',fGo:'Gaan na {x}',
+  contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',par:'Langs mekaar',
+  ribbon:'Lint',ribHere:'Plaas hier',ribRemove:'Haal uit',ribName:'Naam',ribGo:'Gaan soontoe',ribEmpty:'nog nie geplaas nie \u2014 klik om dit op hierdie bladsy te plaas',ribTip:'klik: gaan soontoe \u00b7 regskliek of hou vas: skuif of benoem',
   cover:'Band',cvBook:'Boek',library:'Biblioteek',depth:'{p}% van die Bybel agter jou \u00b7 {q}% nog voor',
   a5tip:'Die digtheid van jou A5-Bybel \u2014 klik om terug te keer',settings:'Instellings',
   loadingTr:'Die {x} word gehaal\u2026',loadingX:'Die kruisverwysings word gehaal\u2026',
@@ -594,7 +654,7 @@ const UI={
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={cover:'book',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -604,7 +664,7 @@ let saveT=0;
 function persist(){ clearTimeout(saveT); saveT=setTimeout(()=>{
   try{ localStorage.setItem(KEY,JSON.stringify({s:S,pos:POS,cal:CAL})); }catch(e){} },250); }
 let L=UI[S.lang]||UI.en;
-document.documentElement.dataset.theme=S.theme;
+document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast||'normal';
 document.documentElement.lang=S.lang;
 
 const busyEl=$('#busy');
@@ -817,7 +877,9 @@ function applyGeom(G){
   for(const [k,v] of [['--fs',G.fs],['--mo',G.mo],['--mt',G.mt],['--mb',G.mb]]) book.style.setProperty(k,v+'px');
   book.className=(G.ppv===1?'single ':'')+'hd-'+S.headings;
 }
+function layoutBook(b){ if(parOn()) parRender(b); else { render(b); paginate(); } }
 function render(b){
+  CUR.par=null;
   const t=S.tr, xs=S.xref==='on', r=bookHTML(t,b,xs);
   flow.innerHTML=r.h; flow.lang=t==='aov'?'af':'en';
   Object.assign(CUR,{b,t,xs,V:r.V});
@@ -863,13 +925,14 @@ function show(s,dir){
   if(typeof clearPick==='function'&&PICK.range){ clearPick(); hideMarkbar(); }
   s=Math.max(0,Math.min(CUR.spreads-1,s)); CUR.spread=s;
   const G=CUR.G, p0=s*G.ppv;
-  flow.style.transform='translateX('+(-p0*G.cpp*G.pitch)+'px)';
+  if(CUR.par) parPaint(s);
+  flow.style.transform=CUR.par?'none':'translateX('+(-p0*G.cpp*G.pitch)+'px)';
   for(let k=0;k<G.ppv;k++){
     const p=p0+k, rh=pgs[k].querySelector('.rh'), fo=pgs[k].querySelector('.fo');
     if(p>=CUR.pages){ rh.textContent=''; fo.textContent=''; continue; }
     const f=firstOnPage(p), l=lastOnPage(p);
-    rh.textContent= p===0? '' : runningHead(f,l);   // the opening page carries the title instead, as in print
-    fo.innerHTML=folioHTML(p);
+    rh.textContent= p===0||(CUR.par&&s===0)? '' : runningHead(f,l);   // the opening page carries the title instead, as in print
+    fo.innerHTML=CUR.par?'<span class="ptr">'+esc(BIB[k?CUR.par:CUR.t].label)+'</span> \u00b7 '+(s+1):folioHTML(p);
   }
   const fv=firstOnPage(p0), lv=lastOnPage(Math.min(CUR.pages-1,p0+G.ppv-1));
   const an=startsOnSpread(s); CUR.anchor=CUR.V[an]?CUR.V[an].r:D.bs[CUR.b];
@@ -878,6 +941,7 @@ function show(s,dir){
   if(typeof renderNotes==='function') renderNotes(false);
   $('#bookname').textContent=bookName(CUR.b);
   $('#bookbtn').style.setProperty('--c',CLOTH[GROUP[CUR.b]]);
+  drawRibbons();
   if(dir&&!reduceMotion) vp.animate([{opacity:.15,transform:'translateX('+(dir*18)+'px)'},{opacity:1,transform:'none'}],
                                     {duration:190,easing:'cubic-bezier(.2,.7,.2,1)'});
 }
@@ -895,7 +959,7 @@ function setDepth(r){
   const el=book.querySelector('.edge.l'), er=book.querySelector('.edge.r'), wl=1.5+T*f, wr=1.5+T*(1-f);
   el.style.setProperty('--w',wl+'px'); er.style.setProperty('--w',wr+'px');
   book.style.setProperty('--wl',wl+'px'); book.style.setProperty('--wr',wr+'px'); book.style.setProperty('--bd',bd+'px');
-  book.classList.toggle('covered',!!bd); book.style.setProperty('--cv',S.cover==='book'?CLOTH[GROUP[CUR.b]]:S.cover);
+  book.classList.toggle('covered',!!bd); book.style.setProperty('--coverc',S.cover==='book'?CLOTH[GROUP[CUR.b]]:S.cover);
   el.style.setProperty('--sag',(wl*.12)+'px'); er.style.setProperty('--sag',(wr*.12)+'px');
   const ln=el.firstChild, rn=er.firstChild;
   ln.hidden=f<=nt; rn.hidden=f>nt;
@@ -930,27 +994,28 @@ function regToggle(b,c){
   try{ localStorage.setItem(REGKEY,JSON.stringify(cur)); }catch(e){ alert(L.saveFail); return; }
   REG=cur; setStatus(firstOnPage(CUR.spread*CUR.G.ppv),lastOnPage(Math.min(CUR.pages-1,CUR.spread*CUR.G.ppv+CUR.G.ppv-1)),CUR.spread);
 }
-function next(){ closePop(); hideChrome(); if(CUR.spread<CUR.spreads-1) show(CUR.spread+1,1); else if(CUR.b<65){ render(CUR.b+1); paginate(); show(0,1); } }
-function prev(){ closePop(); hideChrome(); if(CUR.spread>0) show(CUR.spread-1,-1); else if(CUR.b>0){ render(CUR.b-1); paginate(); show(CUR.spreads-1,-1); } }
+function next(){ closePop(); hideChrome(); if(CUR.spread<CUR.spreads-1) show(CUR.spread+1,1); else if(CUR.b<65){ layoutBook(CUR.b+1); show(0,1); } }
+function prev(){ closePop(); hideChrome(); if(CUR.spread>0) show(CUR.spread-1,-1); else if(CUR.b>0){ layoutBook(CUR.b-1); show(CUR.spreads-1,-1); } }
 function go(b,row,o={}){
   closePop();
   if(o.push&&CUR.b>=0){ HIST.push({b:CUR.b,row:CUR.anchor}); }
-  if(b!==CUR.b||CUR.t!==S.tr||CUR.xs!==(S.xref==='on')){ render(b); paginate(); }
+  if(b!==CUR.b||CUR.t!==S.tr||CUR.xs!==(S.xref==='on')||(CUR.par||'')!==(parOn()?S.par:'')) layoutBook(b);
   const i=verseOfRow(row); show(spreadOfVerse(i),0); updateBack();
-  if(o.flash){ const el=flow.querySelector('.vs[data-i="'+i+'"]');
-    if(el){ el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } }
+  if(o.flash){ for(const el of flow.querySelectorAll('.vs[data-i="'+i+'"]')){ el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } }
 }
 async function relayout(rerender){
   if(!await ensureTr(S.tr)){ S.tr=Object.keys(NUM).find(t=>NUM[t].t)||'aov'; persist(); if(!await ensureTr(S.tr)) return; }
   if(S.xref==='on'&&!await ensureX()){ S.xref='off'; persist(); }
-  const k=await calibrate(S.tr,S.cols,S.layout);
   const z=stageSize();
-  CUR.G=geomFor(z.P,z.ppv,S.cols,k,S.scale,z.ratio);
+  if(parWanted()&&z.ppv===2&&!await ensureTr(S.par)){ S.par='off'; persist(); }
+  const par=parWanted()&&z.ppv===2, cpp=par?1:S.cols;
+  const k=await calibrate(S.tr,cpp,par?'lines':S.layout);
+  CUR.G=geomFor(z.P,z.ppv,cpp,k,S.scale,z.ratio);
   applyGeom(CUR.G);
   const b=CUR.b<0?(POS?POS.b:0):CUR.b;
   const anchor=CUR.anchor!=null?CUR.anchor:(POS?POS.row:D.bs[b]);
-  if(rerender||CUR.b<0||CUR.t!==S.tr) render(b);
-  paginate();
+  if(par) parRender(b);
+  else { if(rerender||CUR.b<0||CUR.t!==S.tr||CUR.par) render(b); paginate(); }
   show(spreadOfVerse(verseOfRow(anchor)),0);
   scheduleCounts();
   busy(null);
@@ -972,7 +1037,7 @@ function folioHTML(p){
   if(!tp) return '<span class="fb">'+bp+'</span>';                     // still counting: the book's own number, faintly
   return S.folio==='testament'? String(tp) : tp+'<span class="fb"> \u00b7 '+bp+'</span>';
 }
-function updateFolios(){ if(!CUR.G) return; const p0=CUR.spread*CUR.G.ppv;
+function updateFolios(){ if(!CUR.G||CUR.par) return; const p0=CUR.spread*CUR.G.ppv;
   for(let k=0;k<CUR.G.ppv;k++){ const p=p0+k, fo=pgs[k].querySelector('.fo'); fo.innerHTML=p<CUR.pages?folioHTML(p):''; } }
 function scheduleCounts(){
   if(!CUR.G||S.folio==='book') return;
@@ -1053,13 +1118,13 @@ pop.addEventListener('click',e=>{
 
 /* ---------------- settings panel ---------------- */
 const COVERS=['#1d1b1a','#5a1f22','#4a3020','#1f2b44','#22382c'];
-const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['size'],['-'],
+const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['contrast',[['normal','cNormal'],['strong','cStrong']]],['size'],['-'],
  ['verses',[['off','off'],['dim','dim'],['on','on']]],['chapters',[['off','off'],['dim','dim'],['on','on']]],
  ['headings',[['off','off'],['dim','dim'],['on','on']]],['folio',[['book','fBook'],['testament','fTest'],['both','fBoth']]],['-'],
  ['cols',[[1,'1'],[2,'2']]],['layout',[['lines','lines'],['para','para']]],['gap',[['off','off'],['on','on']]],['-'],
  ['xref',[['off','off'],['on','on']]],['status',[['off','off'],['on','on']]],
  ['cover',[['off','off'],['book','cvBook'],...COVERS.map(c=>[c,c])]],['-'],
- ['tr',CAT.bibles.map(b=>[b.id,b.label])],['lang',[['en','English'],['af','Afrikaans']]]];
+ ['tr',CAT.bibles.map(b=>[b.id,b.label])],['par',[['off','off'],...CAT.bibles.map(b=>[b.id,b.label])]],['lang',[['en','English'],['af','Afrikaans']]]];
 const setEl=$('#set');
 function buildSettings(){
   let h='<div class="seth"><button class="lnk" type="button" data-act="reset">'+L.reset+'</button>'+
@@ -1071,8 +1136,10 @@ function buildSettings(){
       const atA5=Math.abs(S.scale-1)<1e-6;
       h+='<button type="button" data-act="smaller">A\u2212</button><button type="button" data-act="a5" title="'+L.a5tip+'"'+(atA5?' aria-pressed="true"':'')+'>'
         +(atA5?'A5':Math.round(CUR.G?CUR.G.fs:0))+'</button><button type="button" data-act="bigger">A+</button>';
-    } else for(const [v,lab] of opts)
-      h+=key==='cover'&&v[0]==='#'?'<button type="button" class="cvsw" style="--c:'+v+'" data-k="cover" data-v="'+v+'" aria-pressed="'+(S.cover===v)+'" title="'+v+'"></button>':'<button type="button" data-k="'+key+'" data-v="'+v+'" aria-pressed="'+(String(S[key])===String(v))+'"'+(key==='tr'?' title="'+esc(BIB[v].name)+'"':'')+'>'+(L[lab]||lab)+(key==='tr'&&!NUM[v].t?' \u2193':'')+'</button>';
+    } else for(const [v,lab] of opts){
+      if(key==='par'&&v===S.tr) continue;
+      const on=key==='par'?(v==='off'?!parWanted():S.par===v):null;
+      h+=key==='cover'&&v[0]==='#'?'<button type="button" class="cvsw" style="--c:'+v+'" data-k="cover" data-v="'+v+'" aria-pressed="'+(S.cover===v)+'" title="'+v+'"></button>':'<button type="button" data-k="'+key+'" data-v="'+v+'" aria-pressed="'+(on!==null?on:String(S[key])===String(v))+'"'+(key==='tr'?' title="'+esc(BIB[v].name)+'"':'')+'>'+(L[lab]||lab)+(key==='tr'&&!NUM[v].t?' \u2193':'')+'</button>'; }
     h+='</div></div>';
   }
   setEl.innerHTML=h+'<p class="cred">'+L.cred+'</p>';
@@ -1086,6 +1153,8 @@ async function setSetting(k,v){
   else if(k==='folio'){ updateFolios(); scheduleCounts(); }
   else if(k==='status'){ $('#status').hidden=v==='off'; await relayout(false); }
   else if(k==='cover'){ await relayout(false); }
+  else if(k==='contrast'){ document.documentElement.dataset.contrast=v; }
+  else if(k==='par'){ await relayout(true); }
   else await relayout(k==='xref'||k==='tr');
   if(k==='tr') updateBack();
   if(shelfOpen()){ buildShelf(); chromeForShelf(true); }
@@ -1096,7 +1165,7 @@ setEl.addEventListener('click',async e=>{
   if(b.dataset.k){ await setSetting(b.dataset.k,b.dataset.v); return; }
   const a=b.dataset.act;
   if(a==='close') setEl.classList.remove('on');
-  else if(a==='reset'){ S=Object.assign({},DEF,{tr:S.tr,lang:S.lang}); document.documentElement.dataset.theme=S.theme;
+  else if(a==='reset'){ S=Object.assign({},DEF,{tr:S.tr,lang:S.lang}); document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast;
     $('#status').hidden=false; persist(); await relayout(true); buildSettings(); }
   else if(a==='smaller'||a==='bigger'||a==='a5'){
     S.scale= a==='a5'?1 : Math.min(4,Math.max(.6,S.scale*(a==='bigger'?1.08:1/1.08)));
@@ -1147,7 +1216,7 @@ navEl.addEventListener('click',e=>{
 $('#bookbtn').onclick=e=>{ e.stopPropagation(); navEl.classList.contains('on')?closeNav():openNav(); };
 $('#status').onclick=e=>{ const mk=e.target.closest('.mk'); if(mk){ regToggle(CUR.b,+mk.dataset.c); return; } openNav(); };
 $('#status').onkeydown=e=>{ if(e.target.closest('.mk')) return; if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openNav(); } };
-function labelChrome(){ $('#aa').title=L.settings; $('#aa').setAttribute('aria-label',L.settings);
+function labelChrome(){ $('#aa').title=L.settings; $('#aa').setAttribute('aria-label',L.settings); $('#findbtn').title=L.find; $('#findbtn').setAttribute('aria-label',L.find);
   $('#regbtn span').textContent=L.register; $('#regbtn').title=L.register;
   $('#libbtn span').textContent=L.library; $('#libbtn').title=L.library;
   $('#home').title=L.home; $('#home').setAttribute('aria-label',L.home);
@@ -1607,24 +1676,24 @@ function selectedWords(){
     let a=0, b=words.length-1;
     if(rw.contains(rg.startContainer)){ const p=offsetIn(rw,rg.startContainer,rg.startOffset); a=words.findIndex(w=>w[1]>p); if(a<0) continue; }
     if(rw.contains(rg.endContainer)){ const p=offsetIn(rw,rg.endContainer,rg.endOffset); b=-1; words.forEach((w,i)=>{ if(w[0]<p) b=i; }); }
-    if(a>=0&&a<=b) out.push({r:+rw.dataset.r,a,b});
+    if(a>=0&&a<=b) out.push({r:+rw.dataset.r,a,b,t:rw.dataset.t||S.tr});
   }
   return out.length?out:null;
 }
 function applyMark(kind,val){
   const ws=selectedWords(); if(!ws) return;
-  const t=S.tr, M=MARKS[t]||(MARKS[t]={}), slot=kind==='h'?0:1;
+  const slot=kind==='h'?0:1, Mof=t=>MARKS[t]||(MARKS[t]={});
   // the same colour on words that all have it already takes it off again
-  const all=kind!=='x'&&ws.every(({r,a,b})=>{ for(let w=a;w<=b;w++){ const c=(M[r]||{})[w]; if(!c||c[slot]!==val) return false; } return true; });
-  for(const {r,a,b} of ws){
-    const m=M[r]||(M[r]={});
+  const all=kind!=='x'&&ws.every(({r,a,b,t})=>{ const M=Mof(t); for(let w=a;w<=b;w++){ const c=(M[r]||{})[w]; if(!c||c[slot]!==val) return false; } return true; });
+  for(const {r,a,b,t} of ws){
+    const M=Mof(t), m=M[r]||(M[r]={});
     for(let w=a;w<=b;w++){
       let c=m[w]||'--';
       if(kind==='x') c='--'; else c=slot===0?(all?'-':val)+c[1]:c[0]+(all?'-':val);
       if(c==='--') delete m[w]; else m[w]=c;
     }
     if(!Object.keys(m).length) delete M[r];
-    for(const el of flow.querySelectorAll('.rw[data-r="'+r+'"]')) el.outerHTML=rowHTML(t,r,S.xref==='on');   // colour never moves the text, so no re-paging
+    for(const el of flow.querySelectorAll('.rw[data-r="'+r+'"]')){ if((el.dataset.t||S.tr)!==t) continue; el.outerHTML=el.dataset.t?sideRow(t,r):rowHTML(t,r,S.xref==='on'); }   // colour never moves the text, so no re-paging
   }
   saveMarks(); getSelection().removeAllRanges(); clearPick(); hideMarkbar();
 }
@@ -1721,7 +1790,7 @@ function labelMarkbar(){
 
 /* ---------------- phone ---------------- */
 let chromeT=0;
-function overlaysOpen(){ return shelfOpen()||setEl.classList.contains('on')||navEl.classList.contains('on')||chap.classList.contains('on')||
+function overlaysOpen(){ return shelfOpen()||setEl.classList.contains('on')||navEl.classList.contains('on')||findEl.classList.contains('on')||chap.classList.contains('on')||
   (document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#top')); }
 function armChromeHide(){ clearTimeout(chromeT);
   chromeT=setTimeout(function tick(){ if(!isPhone()) return; if(overlaysOpen()){ chromeT=setTimeout(tick,1500); return; }
@@ -1785,10 +1854,14 @@ $('#stage').addEventListener('wheel',e=>{
   if(Math.abs(wAcc)>40){ (wAcc>0?next:prev)(); wAcc=0; wLock=now+380; }
 },{passive:false});
 document.addEventListener('keydown',e=>{
-  if(e.target.closest&&e.target.closest('textarea,input,select,[contenteditable]')){ if(e.key==='Escape') e.target.blur(); return; }
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='f'){ e.preventDefault(); openFind(); return; }
+  if(e.target.closest&&e.target.closest('textarea,input,select,[contenteditable]')){ if(e.key==='Escape'){ if(findEl.classList.contains('on')) closeFind(); else e.target.blur(); } return; }
+  if(e.key==='/'&&!shelfOpen()){ e.preventDefault(); openFind(); return; }
+  if(e.key==='Escape'&&(findEl.classList.contains('on')||ribMenu.classList.contains('on'))){ closeFind(); closeRibMenu(); return; }
   if(e.key==='Escape'){ if(chap.classList.contains('on')){ closeChap(); return; } closePop(); setEl.classList.remove('on'); closeNav(); return; }
   if(shelfOpen()) return;
   if(navEl.classList.contains('on')||e.altKey||e.ctrlKey||e.metaKey) return;
+  if(findEl.classList.contains('on')) return;
   const k=e.key;
   if(k==='ArrowRight'||k==='PageDown'||(k===' '&&!e.shiftKey)){ e.preventDefault(); next(); }
   else if(k==='ArrowLeft'||k==='PageUp'||(k===' '&&e.shiftKey)){ e.preventDefault(); prev(); }
@@ -1800,6 +1873,207 @@ let rzT=0, lastStage='';
 new ResizeObserver(()=>{ if(grabbing) return; const st=$('#stage'), key=st.clientWidth+'x'+st.clientHeight; if(key===lastStage) return; lastStage=key;
   clearTimeout(rzT); rzT=setTimeout(()=>{ if(CUR.G) relayout(false); if(shelfOpen()){ closeChap(); buildShelf(); } },120); }).observe($('#stage'));
 addEventListener('resize',()=>{ if(notesOpen()) setTimeout(()=>nBody.querySelectorAll('.sheet').forEach(sizeSheet),150); });
+
+
+/* ---------------- two translations side by side ----------------
+   On a two-page spread the left page carries the translation you read and the right page a second one,
+   verse beside verse: each verse gets the height of the taller of the two, so they stay level down the page. */
+const parWanted=()=>S.par&&S.par!=='off'&&S.par!==S.tr&&!!BIB[S.par];
+const parOn=()=>parWanted()&&CUR.G&&CUR.G.ppv===2&&CUR.G.cpp===1&&!!(NUM[S.par]&&NUM[S.par].t);
+const sideRow=(t,r)=>rowHTML(t,r,false).replace('<span class="rw"','<span class="rw" data-t="'+t+'"');
+function parUnits(b){
+  const A=S.tr, nA=NUM[A], nB=NUM[S.par], ord=orderOf(A,b), V=[]; let i=0;
+  while(i<ord.length){ const r0=ord[i], c=nA.c[r0], v=nA.v[r0], rows=[r0]; i++;
+    while(i<ord.length&&nA.c[ord[i]]===c&&nA.v[ord[i]]===v){ rows.push(ord[i]); i++; }
+    if(rows.some(r=>nA.t[r]||nB.t[r])) V.push({r:r0,rows,c,v}); }
+  return V;
+}
+function parSide(t,b,V,k,xs){
+  const n=NUM[t], u=V[k], r0=u.rows[0], c=n.c[r0], isPs=b===18;
+  const prevC=k?n.c[V[k-1].rows[0]]:-1, cs=c!==prevC;
+  let h='<div class="pu'+(cs?' cs':'')+'" data-k="'+k+'"'+(t===S.tr?'':' data-side="b"')+'>';
+  if(cs&&isPs) h+='<div class="psh">Psalm '+c+'</div>';
+  const cn=cs&&!isPs;
+  h+='<span class="vs'+(cn?' hascn':'')+'"'+(t===S.tr?' data-i="'+k+'"':'')+'>'+(cn?'<span class="cn">'+c+'</span>':'');
+  let lastV=null;   // a verse this translation already began in the line above is not numbered again
+  if(k){ for(const r of V[k-1].rows) if(n.t[r]) lastV=n.c[r]+':'+n.v[r]; }
+  for(const r of u.rows){ if(!n.t[r]) continue; const vv=n.c[r]+':'+n.v[r];
+    if(vv!==lastV){ h+='<span class="vn">'+n.v[r]+'</span>'; lastV=vv; }
+    h+=(t===S.tr?rowHTML(t,r,xs):sideRow(t,r))+' '; }
+  return h+'</span></div>';
+}
+const parTitle=(t,b)=>'<div class="ptl"><h1 class="bt">'+esc(bookName(b,t))+'</h1></div>';
+function parRender(b){
+  const G=CUR.G, A=S.tr, B=S.par, xs=S.xref==='on', V=parUnits(b);
+  const m=document.createElement('div');
+  m.className=flowClasses(Object.assign({},S,{layout:'lines'}));
+  m.style.cssText='position:fixed;left:-9999px;top:0;visibility:hidden;width:'+G.cw+'px;font-size:'+G.fs+'px;height:auto;column-count:auto';
+  document.body.appendChild(m);
+  const heights=t=>{ let h=parTitle(t,b); for(let k=0;k<V.length;k++) h+=parSide(t,b,V,k,t===A&&xs); m.innerHTML=h;
+    const els=m.querySelectorAll('.pu'), out=new Float64Array(V.length); els.forEach((e,i)=>{ out[i]=e.getBoundingClientRect().height; });
+    return {u:out,t:m.querySelector('.ptl').getBoundingClientRect().height}; };
+  const ha=heights(A), hb=heights(B); m.remove();
+  const H=V.map((_,k)=>Math.ceil(Math.max(ha.u[k],hb.u[k]))), TH=Math.ceil(Math.max(ha.t,hb.t)), cap=G.h-2;
+  const pages=[]; let cur=[], used=TH;
+  for(let k=0;k<V.length;k++){ if(cur.length&&used+H[k]>cap){ pages.push(cur); cur=[]; used=0; } cur.push(k); used+=H[k]; }
+  pages.push(cur);
+  const col=new Int32Array(V.length);
+  pages.forEach((pg,i)=>pg.forEach(k=>{ col[k]=2*i; }));
+  const rm=new Map(); V.forEach((x,i)=>{ for(const row of x.rows) rm.set(row,i); });
+  Object.assign(CUR,{b,t:A,xs,V,rowMap:rm,par:B,parPages:pages,parH:H,parTH:TH,col,end:col.slice(),pages:2*pages.length,spreads:pages.length});
+  flow.className=flowClasses(Object.assign({},S,{layout:'lines'})); styleFlow(flow,G); flow.style.columnCount='1'; flow.lang=A==='aov'?'af':'en';
+}
+function parPaint(s){
+  const G=CUR.G, b=CUR.b, V=CUR.V, ks=CUR.parPages[s]||[], xs=S.xref==='on';
+  const side=(t,left)=>{ let h=s===0?'<div style="min-height:'+CUR.parTH+'px">'+parTitle(t,b)+'</div>':'';
+    for(const k of ks) h+=parSide(t,b,V,k,left&&xs).replace('<div class="pu','<div style="min-height:'+CUR.parH[k]+'px" class="pu'+(k===ks[0]?' first':''));
+    return '<div class="pside" lang="'+(t==='aov'?'af':'en')+'" style="left:'+(left?0:G.w+G.g)+'px;width:'+G.cw+'px">'+h+'</div>'; };
+  flow.innerHTML=side(CUR.t,true)+side(CUR.par,false);
+}
+
+/* ---------------- search ---------------- */
+const findEl=$('#find'), FIND={q:'',scope:'all',book:-1,hits:[],shown:0,t:''};
+const FOLD={};
+function foldText(s){ let o=''; for(let i=0;i<s.length;i++){ const ch=s[i]; let f=FOLD[ch];
+  if(f===undefined){ f=ch.normalize('NFD')[0].toLowerCase(); if(f.length!==1) f=ch; FOLD[ch]=f; } o+=f; } return o; }
+const FOLDED={};
+function folded(t){ if(!FOLDED[t]){ const n=NUM[t]; FOLDED[t]=n.t.map(x=>x?foldText(x):''); } return FOLDED[t]; }
+const reEsc=x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function termsOf(q){
+  const out=[], f=foldText(q.trim()); let m; const re=/"([^"]+)"|(\S+)/g;
+  while((m=re.exec(f))){ const ph=(m[1]||m[2]).split(/[^\p{L}\p{N}]+/u).filter(Boolean); if(!ph.length) continue;
+    out.push(new RegExp('(?<![\\p{L}\\p{N}])'+ph.map(reEsc).join('[^\\p{L}\\p{N}]+'),'gu')); }
+  return out;
+}
+function runSearch(){
+  const q=FIND.q, t=S.tr, res=findEl.querySelector('#fres'); FIND.t=t;
+  if(q.trim().length<2){ res.innerHTML=''; FIND.hits=[]; return; }
+  const terms=termsOf(q), F=folded(t), n=NUM[t];
+  const [a,z]=FIND.scope==='ot'?[0,D.bs[39]]:FIND.scope==='nt'?[D.bs[39],N]:FIND.scope==='book'&&CUR.b>=0?[D.bs[CUR.b],D.bs[CUR.b+1]]:[0,N];
+  const hits=[];
+  if(terms.length) for(let r=a;r<z;r++){ const s=F[r]; if(!s) continue; let ok=true;
+    for(const re of terms){ re.lastIndex=0; if(!re.test(s)){ ok=false; break; } } if(ok) hits.push(r); }
+  FIND.hits=hits; FIND.book=-1; FIND.shown=0; FIND.terms=terms; drawHits(true);
+}
+function snippetHTML(t,r,terms){
+  const s=NUM[t].t[r], f=folded(t)[r], mark=new Uint8Array(s.length);
+  for(const re of terms){ re.lastIndex=0; for(const m of f.matchAll(re)) mark.fill(1,m.index,m.index+m[0].length); }
+  let a=0, z=s.length; if(s.length>260){ const first=mark.indexOf(1); a=Math.max(0,first-90); a=a?s.lastIndexOf(' ',a)+1:0; z=Math.min(s.length,a+240); }
+  let h=a?'\u2026':'', on=false;
+  for(let i=a;i<z;i++){ const ch=s[i]; if(ch==='['||ch===']') continue;
+    if(mark[i]&&!on){ h+='<mark>'; on=true; } else if(!mark[i]&&on){ h+='</mark>'; on=false; }
+    h+=ch==='<'?'&lt;':ch==='>'?'&gt;':ch==='&'?'&amp;':ch; }
+  return h+(on?'</mark>':'')+(z<s.length?'\u2026':'');
+}
+function drawHits(reset){
+  const t=FIND.t, n=NUM[t], res=findEl.querySelector('#fres'), list=FIND.book>=0?FIND.hits.filter(r=>bookOf[r]===FIND.book):FIND.hits;
+  let h='';
+  if(reset){
+    const key=keyFromText(FIND.q);
+    if(key){ const [o,c]=key.split('.'), b=OSIS.indexOf(o); h+='<button type="button" class="go" data-b="'+b+'" data-c="'+c+'">'+esc(L.fGo.replace('{x}',(b===18?'Psalm':bookName(b))+' '+c))+'</button>'; }
+    if(!FIND.hits.length){ res.innerHTML=h+(FIND.terms&&FIND.terms.length&&!key?'<p class="fsum">'+L.fNone+'</p>':''); return; }
+    const per=new Map(); for(const r of FIND.hits){ const b=bookOf[r]; per.set(b,(per.get(b)||0)+1); }
+    h+='<p class="fsum">'+L.fCount.replace('{n}',FIND.hits.length.toLocaleString())+'</p>';
+    if(per.size>1) h+='<div class="fbooks">'+[...per].map(([b,c])=>'<button type="button" data-fb="'+b+'" aria-pressed="'+(FIND.book===b)+'">'+esc(bookName(b))+' '+c+'</button>').join('')+'</div>';
+    h+='<div class="fres"></div>'; res.innerHTML=h; FIND.shown=0;
+  }
+  const box=res.querySelector('.fres'); if(!box) return;
+  const more=res.querySelector('.more'); if(more) more.remove();
+  const from=FIND.shown, to=Math.min(list.length,from+150); let out='';
+  for(let i=from;i<to;i++){ const r=list[i], b=bookOf[r];
+    out+='<button type="button" class="hit" data-r="'+r+'"><span class="rf">'+esc((b===18?'Psalm':bookName(b))+' '+n.c[r]+':'+n.v[r])+'</span>'+snippetHTML(t,r,FIND.terms)+'</button>'; }
+  box.insertAdjacentHTML('beforeend',out); FIND.shown=to;
+  if(to<list.length) box.insertAdjacentHTML('afterend','<button type="button" class="btn more lnk">'+L.fMore+' ('+(list.length-to)+')</button>');
+}
+function openFind(){
+  setEl.classList.remove('on'); closeNav(); closePop();
+  const scopes=[['all','fAll'],['ot','fOT'],['nt','fNT'],['book','fBook']];
+  findEl.querySelector('.box').innerHTML='<div class="navh"><b>'+L.find+'</b><button class="x" type="button" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+
+    '<div class="fq"><input id="fqi" type="search" autocomplete="off" spellcheck="false" placeholder="'+esc(L.findPh)+'" value="'+esc(FIND.q)+'"></div>'+
+    '<div class="seg">'+scopes.map(([v,l])=>'<button type="button" data-sc="'+v+'" aria-pressed="'+(FIND.scope===v)+'">'+(v==='book'&&CUR.b>=0?esc(bookName(CUR.b)):L[l+(isPhone()?'S':'')]||L[l])+'</button>').join('')+'</div><div id="fres"></div>';
+  findEl.classList.add('on');
+  const inp=findEl.querySelector('#fqi'); setTimeout(()=>{ inp.focus(); inp.select(); },30);
+  if(FIND.q) runSearch();
+}
+const closeFind=()=>findEl.classList.remove('on');
+let fT=0;
+findEl.addEventListener('input',e=>{ if(e.target.id!=='fqi') return; FIND.q=e.target.value; clearTimeout(fT); fT=setTimeout(runSearch,220); });
+findEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target.id==='fqi'){ clearTimeout(fT); FIND.q=e.target.value; runSearch(); } });
+findEl.addEventListener('click',e=>{
+  if(e.target===findEl){ closeFind(); return; }
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.act==='close') closeFind();
+  else if(b.dataset.sc){ FIND.scope=b.dataset.sc; findEl.querySelectorAll('[data-sc]').forEach(x=>x.setAttribute('aria-pressed',x===b)); runSearch(); }
+  else if(b.dataset.fb!==undefined){ const bk=+b.dataset.fb; FIND.book=FIND.book===bk?-1:bk;
+    findEl.querySelectorAll('[data-fb]').forEach(x=>x.setAttribute('aria-pressed',+x.dataset.fb===FIND.book));
+    findEl.querySelector('.fres').innerHTML=''; FIND.shown=0; drawHits(false); }
+  else if(b.classList.contains('more')) drawHits(false);
+  else if(b.dataset.r!==undefined){ closeFind(); closeShelf(); const r=+b.dataset.r; go(bookOf[r],r,{push:true,flash:true}); }
+  else if(b.dataset.c!==undefined){ closeFind(); openAt(+b.dataset.b,+b.dataset.c); }
+});
+$('#findbtn').onclick=e=>{ e.stopPropagation(); findEl.classList.contains('on')?closeFind():openFind(); };
+
+/* ---------------- ribbon markers ----------------
+   Three silk ribbons, as in a good Bible. Each keeps a place; it hangs out at the foot of the book, and lies
+   across the page when that place is open. Kept per verse, so they stay put whatever the translation. */
+const RIBKEY='bybel-linte-v1', RIBC=['#9e1b22','#c39a3e','#27477a'];
+let RIBS=[{n:'',r:null},{n:'',r:null},{n:'',r:null}];
+try{ const p=JSON.parse(localStorage.getItem(RIBKEY)||'null'); if(Array.isArray(p)) p.slice(0,3).forEach((x,i)=>{ RIBS[i]=Object.assign({n:'',r:null},x); }); }catch(e){}
+const saveRibs=()=>{ try{ localStorage.setItem(RIBKEY,JSON.stringify(RIBS)); }catch(e){} };
+const ribsEl=$('#ribs'), ribMenu=$('#ribmenu');
+const ribName=i=>RIBS[i].n||(L.ribbon+' '+(i+1));
+function ribRef(r){ const n=NUM[S.tr], b=bookOf[r]; return (b===18?'Psalm':bookName(b))+' '+n.c[r]+':'+n.v[r]; }
+function ribHere(i){ const r=RIBS[i].r; if(r==null||bookOf[r]!==CUR.b||!CUR.rowMap) return -1;
+  const v=verseOfRow(r), pg=Math.floor(CUR.col[v]/CUR.G.cpp); return Math.floor(pg/CUR.G.ppv)===CUR.spread?pg%CUR.G.ppv:-1; }
+function drawRibbons(){
+  if(!CUR.G) return; const G=CUR.G, H=G.H, phone=isPhone(), tail=phone?0:Math.min(30,Math.max(14,($('#stage').clientHeight-H)/2-4));
+  let h='';
+  RIBS.forEach((rb,i)=>{
+    const side=ribHere(i), set=rb.r!=null;
+    const tip=esc(ribName(i)+' \u00b7 '+(set?ribRef(rb.r):L.ribEmpty)+'\n'+L.ribTip);
+    let x,top,ht;
+    if(side>=0){   // lying in the book at this page, near the inner edge
+      const inner=G.ppv===2?(side===0?G.P-G.P*.045:G.P+G.P*.045-9):G.P-G.mo*.55;
+      x=inner+(side===0?-1:1)*i*13; top=-2; ht=H+2+(phone?0:tail*.9);
+    } else {
+      const c=G.ppv===2?G.P:G.P/2; x=c-16+i*12; top=phone?H-Math.max(16,G.mb*.7):H-6; ht=phone?Math.max(16,G.mb*.7):tail+6;
+    }
+    h+='<button type="button" class="rbn'+(set?'':' unset')+'" data-rb="'+i+'" title="'+tip+'" aria-label="'+esc(ribName(i))+'" style="--rc:'+RIBC[i]+';left:'+x+'px;top:'+top+'px;height:'+ht+'px"></button>';
+  });
+  ribsEl.innerHTML=h;
+}
+function placeRibbon(i){ const p0=CUR.spread*CUR.G.ppv, v=CUR.V[startsOnSpread(CUR.spread)]||CUR.V[firstOnPage(p0)]; if(!v) return;
+  RIBS[i].r=v.r; saveRibs(); drawRibbons(); }
+function openRibMenu(i,el){
+  const rb=RIBS[i], r=el.getBoundingClientRect();
+  ribMenu.innerHTML='<div class="w">'+L.ribName+'</div><input type="text" value="'+esc(rb.n)+'" placeholder="'+esc(L.ribbon+' '+(i+1))+'">'+
+    '<div class="w" style="margin-bottom:8px">'+esc(rb.r!=null?ribRef(rb.r):L.ribEmpty)+'</div>'+
+    '<div class="acts"><button type="button" class="main" data-ra="here">'+L.ribHere+'</button>'+(rb.r!=null?'<button type="button" data-ra="go">'+L.ribGo+'</button><button type="button" data-ra="out">'+L.ribRemove+'</button>':'')+'</div>';
+  ribMenu.dataset.i=i; ribMenu.classList.add('on');
+  const w=ribMenu.offsetWidth, hh=ribMenu.offsetHeight;
+  ribMenu.style.left=Math.min(innerWidth-w-10,Math.max(10,r.left+r.width/2-w/2))+'px';
+  ribMenu.style.top=Math.max(10,Math.min(innerHeight-hh-10,r.top-hh-8))+'px';
+}
+const closeRibMenu=()=>{ if(!ribMenu.classList.contains('on')) return; const i=+ribMenu.dataset.i, inp=ribMenu.querySelector('input');
+  if(inp&&RIBS[i]){ RIBS[i].n=inp.value.trim(); saveRibs(); drawRibbons(); } ribMenu.classList.remove('on'); };
+ribMenu.addEventListener('click',e=>{ const b=e.target.closest('[data-ra]'); if(!b) return; const i=+ribMenu.dataset.i;
+  if(b.dataset.ra==='here') placeRibbon(i); else if(b.dataset.ra==='out'){ RIBS[i].r=null; saveRibs(); }
+  else if(b.dataset.ra==='go'){ closeRibMenu(); const r=RIBS[i].r; go(bookOf[r],r,{push:true,flash:true}); return; }
+  closeRibMenu(); drawRibbons(); });
+ribMenu.addEventListener('keydown',e=>{ if(e.key==='Enter') closeRibMenu(); e.stopPropagation(); });
+document.addEventListener('pointerdown',e=>{ if(!e.target.closest('#ribmenu,.rbn')) closeRibMenu(); },true);
+let ribT=0, ribLong=false;
+ribsEl.addEventListener('pointerdown',e=>{ const el=e.target.closest('.rbn'); if(!el) return; e.stopPropagation(); ribLong=false;
+  clearTimeout(ribT); ribT=setTimeout(()=>{ ribLong=true; openRibMenu(+el.dataset.rb,el); if(navigator.vibrate) navigator.vibrate(10); },480); });
+['pointerup','pointercancel','pointerleave'].forEach(t=>ribsEl.addEventListener(t,()=>clearTimeout(ribT)));
+ribsEl.addEventListener('contextmenu',e=>{ const el=e.target.closest('.rbn'); if(!el) return; e.preventDefault(); e.stopPropagation(); ribLong=true; openRibMenu(+el.dataset.rb,el); });
+ribsEl.addEventListener('click',e=>{ const el=e.target.closest('.rbn'); if(!el) return; e.stopPropagation(); e.preventDefault();
+  if(ribLong){ ribLong=false; return; }
+  const i=+el.dataset.rb, rb=RIBS[i];
+  if(rb.r==null) placeRibbon(i);
+  else if(ribHere(i)>=0) openRibMenu(i,el);
+  else go(bookOf[rb.r],rb.r,{push:true,flash:true});
+});
 
 /* ---------------- open ---------------- */
 $('#status').hidden=S.status==='off';
