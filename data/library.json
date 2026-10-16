@@ -1,0 +1,20 @@
+{
+ "v": 1,
+ "shelves": [],
+ "books": [
+  {
+   "id": "baxter-quakers-catechism",
+   "title": "The Quakers' Catechism",
+   "short": "Quakers' Catechism",
+   "subtitle": "Or, the Quakers Questioned, their Questions Answered, and both Published",
+   "author": "Richard Baxter",
+   "year": "1655",
+   "shelf": "puritans",
+   "cloth": "#59683a",
+   "words": 19396,
+   "source": "Crowdedship Publishing, Nov. 2024; draft by Project Puritas (Logan West, David Jonescue, Alex Sarrouf) from the University of Michigan Library, supplemented by Aaron Sturgill",
+   "license": "CC BY-NC-ND 4.0 (shared unaltered, for non-commercial use)",
+   "file": "data/books/baxter-quakers-catechism.v1.json"
+  }
+ ]
+}

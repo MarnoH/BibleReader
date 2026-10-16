@@ -1,14 +1,18 @@
-/* Keeps a copy of the whole app on the device so it opens without signal.
-   It always opens from that copy straight away. When there is signal it asks the server, in the background,
-   whether a file has changed (an unchanged file costs almost no data). A changed page is saved for next time
-   and the open page is told, so it can offer to reload. */
+/* Keeps the app on the device so it opens without signal.
+   - The program files open from the device straight away; when there is signal the server is asked in the
+     background whether one has changed (an unchanged file costs almost no data). A changed page is kept for
+     next time and the open page is told, so it can offer to reload.
+   - Bible texts, library books, cross-references and fonts never change once published (a new edition gets a new file
+     name), so they are fetched once, the first time they are used, and then always read from the device. */
 const CACHE = 'bybel-app';
-const FILES = ['./', 'index.html', 'leesregister.html', 'manifest.webmanifest',
-               'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png'];
+const CORE = ['./', 'index.html', 'leesregister.html', 'manifest.webmanifest',
+              'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png',
+              'fonts/SourceSerif4-Regular.woff2', 'fonts/SourceSerif4-It.woff2', 'fonts/SourceSerif4-Semibold.woff2',
+              'data/catalog.json', 'data/base.v1.json', 'data/aov.v1.json', 'boeke.html', 'data/library.json'];
+const FIXED = /\/(data\/.+\.v\d+\.json|fonts\/[^/]+\.woff2)$/;
 
 self.addEventListener('install', e => {
-  // fetched past the browser's own short-term cache, so a fresh upload is really what gets kept
-  e.waitUntil(caches.open(CACHE).then(c => Promise.all(FILES.map(u =>
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all(CORE.map(u =>
     fetch(new Request(u, { cache: 'reload' })).then(r => r.ok ? c.put(u, r) : null).catch(() => null))))
     .then(() => self.skipWaiting()));
 });
@@ -19,10 +23,16 @@ self.addEventListener('activate', e => {
 });
 const stamp = r => r && (r.headers.get('etag') || r.headers.get('last-modified'));
 self.addEventListener('fetch', e => {
-  const req = e.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  const req = e.request, url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== location.origin) return;
   e.respondWith(caches.open(CACHE).then(async cache => {
     const kept = await cache.match(req, { ignoreSearch: true });
+    if (FIXED.test(url.pathname)) {
+      if (kept) return kept;
+      const res = await fetch(req);
+      if (res.ok) await cache.put(req, res.clone());
+      return res;
+    }
     const ask = req.mode === 'navigate' ? fetch(req.url, { cache: 'no-cache' }) : fetch(req, { cache: 'no-cache' });
     const fresh = ask.then(async res => {
       if (res.ok) {

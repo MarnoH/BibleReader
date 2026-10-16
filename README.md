@@ -3,9 +3,37 @@
 Die Bybel as 'n boek om deur te blaai (AOV, KJV, BSB), met kruisverwysings, notas, preke en 'n leesregister.
 Werk sonder internet sodra dit een keer oopgemaak is.
 
+## What is in here
+
+```
+index.html            the reader (the program only)
+leesregister.html     the reading register
+sw.js, manifest.webmanifest, icons   what makes it installable and offline
+fonts/                the typeface
+data/catalog.json     the list of translations
+data/base.v1.json     book names, chapter and verse numbering
+data/aov.v1.json      one file per translation
+data/kjv.v1.json
+data/bsb.v1.json
+data/xrefs.v1.json    the cross-references
+boeke.html            the library: other Christian books on their own shelves
+data/library.json     the books in the online library
+data/books/           one file per online book
+```
+
+A phone downloads the program, the numbering and the AOV when it is installed. Another translation or the
+cross-references are downloaded the first time they are chosen, and kept on the phone after that.
+
+## The library
+
+`boeke.html` has its own bookshelves, reader and reading-time log, kept apart from the Bible and its register.
+Only books that may be shared go in `data/library.json` and `data/books/` (public domain, or a licence that allows it,
+like the Quakers' Catechism under CC BY-NC-ND). Books you own as PDFs are converted to a `.json` file and added on
+each device with **Add books**; they stay on that device and must not be uploaded here.
+
 ## Put it online (GitHub Pages)
 
-1. Upload all the files in this folder to a public repository (**Add file → Upload files**, then **Commit changes**).
+1. Upload all files and both folders to a public repository (**Add file → Upload files**; folders can be dragged in), then **Commit changes**.
 2. **Settings → Pages**: source **Deploy from a branch**, branch **main**, folder **/ (root)**, **Save**.
 3. After a minute or two the address shows at the top of that page, e.g. `https://yourname.github.io/bybel/`.
 
@@ -16,8 +44,8 @@ Open the address in Chrome, tap **⋮** and choose **Install app** or **Add to H
 
 ## Updating
 
-Upload the new files over the old ones. Phones pick up the new version by themselves:
-it is fetched in the background when there is signal and used from the next opening.
+- Program changes: upload the new `index.html` / `leesregister.html`. Phones show "’n Nuwe weergawe is gereed · Herlaai".
+- Texts never change in place: a corrected text gets a new name (`aov.v2.json`) and a new line in `data/catalog.json`.
 
 ## Your data
 
