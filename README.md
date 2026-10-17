@@ -25,6 +25,7 @@ data/tags-grk.v1.json Greek words with Strong's numbers and parsing (BSB interli
 data/defs.v1.json     BDB outlines and short definitions (BSB interlinear)
 data/tags-bsb.v1.json each BSB word linked to the Hebrew or Greek word it renders
 data/tags-hbsb.v1.json Strong's numbers and parsing of the BSB's Hebrew words
+data/tags-aov.v1.json first-draft links of each AOV word to the Hebrew or Greek (machine alignment, to be corrected)
 boeke.html            the library: other Christian books on their own shelves
 data/library.json     the books in the online library
 data/books/           one file per online book
