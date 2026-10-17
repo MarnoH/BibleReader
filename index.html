@@ -528,6 +528,95 @@ body.sg #flow .rw{cursor:help}
 .wfilter{width:100%;font:14px var(--sans);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:2px 0 10px}
 #notes[data-view=w] .ntools{display:none}
 
+
+/* ---------- memory palace ---------- */
+/* a keyword's place number stands just above the word, in the leading, so nothing on the page moves */
+.kw{position:relative}
+.kw[data-n]::before{content:attr(data-n);position:absolute;inset-inline-start:0;bottom:80%;font:600 .5em/1 var(--sans);letter-spacing:0;
+  color:var(--rubric);font-feature-settings:"lnum";font-style:normal;white-space:nowrap;pointer-events:none;text-indent:0}
+.kw[data-n]:not(.pw){text-decoration:underline dotted color-mix(in srgb,var(--rubric) 60%,transparent);text-decoration-thickness:1px;text-underline-offset:.22em}
+body.kwmode #flow .rw{cursor:pointer}
+/* practice: covered words leave a faint line where they stand */
+.pw{transition:color .18s}
+.pw:not(.on){color:transparent;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--faint) 55%,transparent);text-decoration-thickness:1px;text-underline-offset:.28em}
+.pw.on,body.pm-kw .pw.kw,body.pm-fl .pw.pf{color:inherit;text-decoration:none}
+body.pm-kw .pw.kw:not(.on){color:var(--soft)}
+#palbar{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:48;display:none;flex-direction:column;gap:6px;
+  width:max-content;max-width:calc(100% - 16px);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:7px 8px 8px 12px;
+  box-shadow:0 14px 34px -12px var(--shadow);font-size:13px}
+#palbar.on{display:flex}
+.pbrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pbl{flex:1;font-family:var(--serif);font-size:15px;font-weight:600;white-space:nowrap}
+.pbl i{font-style:normal;font-weight:400;color:var(--soft)}
+.pbl small{font:12px var(--sans);color:var(--faint);font-feature-settings:"tnum"}
+.pbm button{font-size:12.5px;padding:4px 9px}
+#palbar .pbrow>button:not(.x){border:1px solid var(--line);background:none;border-radius:8px;padding:6px 11px;cursor:pointer;color:var(--ink)}
+#palbar .pbrow>button:not(.x):hover{border-color:var(--soft)}
+#palbar .pbrow>button.pbmain{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.pbhelp{color:var(--soft);font-size:12px;max-width:300px;line-height:1.35}
+.pbdone{font-family:var(--serif);font-size:15px;color:var(--ink);margin-right:4px}
+body.phone #palbar{bottom:6px;padding:5px 5px 5px 9px;gap:4px;border-radius:10px}
+body.phone .pbl{font-size:13.5px}
+body.phone .pbl i{display:none}
+body.phone .pbm button{font-size:12px;padding:3px 7px}
+body.phone #palbar .pbrow>button:not(.x){padding:4px 8px;font-size:12.5px}
+body.phone .pbhelp{display:none}
+/* the palace tab: one A5 sheet per room, the drawing above, the numbered places below */
+.ptop{display:flex;gap:6px;align-items:center;margin:0 0 10px}
+.psel{flex:1;min-width:0;font:15px var(--serif);background:var(--page);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:5px 6px}
+.rb{border:1px solid var(--line);background:none;border-radius:7px;padding:4px 9px;cursor:pointer;font-size:12.5px;color:var(--ink);white-space:nowrap}
+.rb:hover{border-color:var(--soft)}
+.rb:disabled{opacity:.35;cursor:default}
+.rb.rprac{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.pctl{display:flex;gap:8px;align-items:center;margin:0 0 10px;font-size:12.5px;color:var(--soft)}
+.pkwb{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 12px;cursor:pointer;font:15px var(--serif);color:var(--ink)}
+.pkwb::before{content:"";display:inline-block;width:.55em;height:.55em;border-radius:50%;border:1.5px solid currentColor;margin-right:.45em;vertical-align:.02em}
+.pkwb[aria-pressed=true]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.pkwb[aria-pressed=true]::before{background:var(--rubric);border-color:var(--rubric)}
+.pstep{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.pstep button{border:0;background:none;padding:3px 9px;cursor:pointer;color:var(--ink);font-size:14px}
+.pstep button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.pstep b{min-width:1.6em;text-align:center;color:var(--ink);font-feature-settings:"lnum"}
+.phelp{font-size:12.5px;color:var(--soft);margin:-2px 2px 12px;line-height:1.45}
+.phelp .rb{margin-left:4px}
+.pintro{font-family:var(--serif);font-size:15px;line-height:1.5;color:var(--soft);margin:2px 2px 12px}
+.pform{border:1px solid var(--line);border-radius:10px;padding:10px 12px 12px;margin:0 0 14px;background:var(--page)}
+.pform>b{display:block;font-family:var(--serif);font-size:15px;margin-bottom:6px}
+.pform label{display:grid;grid-template-columns:118px 1fr;align-items:center;gap:8px;margin:6px 0;font-size:12.5px;color:var(--soft)}
+.pform input{font:15px var(--serif);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 8px;min-width:0}
+.pform .psize{width:5em}
+.pprev{font-size:12.5px;color:var(--soft);margin:8px 0 10px;font-family:var(--serif);font-style:italic}
+.pprev.bad{color:var(--rubric)}
+.pfa{display:flex;gap:8px}
+.pfa .rb{font-size:13.5px;padding:6px 12px}
+.room .rhead{display:flex;align-items:center;gap:5px;margin:0 0 6px}
+.rt{flex:1;min-width:0;font:600 15px var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt i{font-style:normal;font-weight:400;color:var(--soft);margin-left:6px}
+.rt small{font:11.5px var(--sans);color:var(--faint);margin-left:8px}
+.rstep{padding:2px 8px;font-size:14px;line-height:1.2}
+.a5{background:var(--page);border:1px solid var(--line);border-radius:3px;box-shadow:0 1px 2px var(--shadow);overflow:hidden}
+.a5 .paper{border:0;border-radius:0;box-shadow:none;border-bottom:1px dashed var(--line);background-image:none!important}
+.rph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;
+  color:var(--faint);font:italic 14px/1.4 var(--serif);pointer-events:none}
+.room.inked .rph{display:none}
+.rplaces{list-style:none;margin:0;padding:6px 12px 10px;min-height:var(--half,200px);font-family:var(--serif)}
+.rplaces li{display:grid;grid-template-columns:1.7em minmax(0,auto) 1fr;align-items:baseline;gap:7px;border-bottom:1px solid var(--nline);padding:3px 0 2px}
+.rplaces li.rnone{display:block;border:0;color:var(--faint);font-style:italic;font-size:14px;line-height:1.45;padding:8px 2px}
+.pn{color:var(--rubric);font:600 13px var(--sans);text-align:right;font-feature-settings:"lnum"}
+.pkw{border:0;background:none;padding:0;font:600 15px var(--serif);color:var(--ink);cursor:pointer;text-align:left;white-space:nowrap}
+.pkw small{font:400 10.5px var(--sans);color:var(--faint);margin-left:4px;font-feature-settings:"lnum"}
+.pkw:hover{color:var(--rubric)}
+.pnote{border:0;background:transparent;font:italic 14.5px var(--serif);color:var(--ink);min-width:0;width:100%;padding:2px 0;outline:0}
+.pnote::placeholder{color:var(--faint);opacity:.55}
+.pnote:focus::placeholder{opacity:.9}
+.prooms{display:flex;flex-wrap:wrap}
+.nmore .lnkb.here{border-color:var(--soft);color:var(--ink)}
+.prooms small{color:var(--faint);font-family:var(--sans);font-size:11px}
+body.phone .ntabs button{padding:4px 8px;font-size:14px}
+#notes.nopal .ntools{display:none}
+#notes[data-view=p] .npass{visibility:hidden}
+@media print{#palbar{display:none!important}}
+
 /* ---------- the map of Strong's numbers ---------- */
 #smap .box{max-width:980px}
 .mline{display:flex;height:46px;border-radius:8px;overflow:hidden;margin:8px 0 4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);position:relative}
@@ -698,12 +787,13 @@ body.sg #flow .rw{cursor:help}
   <div id="smap" role="dialog"><div class="box"></div></div>
   <div id="amap" role="dialog"><div class="box"></div></div>
   <section id="shelf" aria-label="Bookshelf"><div class="case"></div><p class="shelfnote"></p></section>
+  <div id="palbar" role="toolbar"></div>
   <div id="busy" class="on"><span>…</span></div>
 </main>
 <aside id="notes" aria-label="Notes">
   <div class="ngrab" aria-hidden="true"></div>
   <div class="nhead">
-    <div class="seg ntabs"><button type="button" data-tab="n"></button><button type="button" data-tab="s"></button><button type="button" data-tab="w"></button></div><span class="npass"></span>
+    <div class="seg ntabs"><button type="button" data-tab="n"></button><button type="button" data-tab="s"></button><button type="button" data-tab="w"></button><button type="button" data-tab="p"></button></div><span class="npass"></span>
     <button type="button" class="nbtn" data-n="pin" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3h6l-1 5 3 3H5l3-3z M10 11v6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
     <button type="button" class="x" data-n="close">×</button>
   </div>
@@ -839,6 +929,28 @@ const UI={
   cred:'AOV-, KJV- en BSB-teks en die Treasury of Scripture Knowledge-kruisverwysings van CrossReferences.org (kruisverwysings CC BY 4.0). Geset in Source Serif 4, \u00a9 Adobe, SIL Open Font License. Hebreeus: Westminster Leningrad Codex (vrye gebruik), uit die Open Scriptures Hebrew Bible. Grieks: Scrivener se Textus Receptus van 1894 (vrye gebruik). Hebreeuse versindeling volgens TVTMS, STEPBible / Tyndale House (CC BY 4.0). Hebreeuse en Griekse letters in Noto Serif, SIL Open Font License. Grieks ook: SBL Greek New Testament, \u00a9 2010 Society of Biblical Literature en Logos Bible Software (CC BY 4.0). Strong-nommers in die KJV uit CrossWire se KJV-module (algemene openbare lisensie). Strong se woordeboek van Open Scriptures (CC BY-SA). Hebreeuse ontleding uit die Open Scriptures Hebrew Bible (CC BY 4.0). Griekse woorde en ontleding vir die KJV se Nuwe Testament, BDB-uiteensettings en kort betekenisse uit die BSB-interlineêre tabelle (Berean, vrye gebruik).'}
 };
 
+// the memory palace
+Object.assign(UI.en,{pTab:'Palace',pIntro:'A memory palace, one A5 sheet per room: the passage is split into rooms of a few verses. In each room choose 3\u20134 keywords per verse; they are numbered as places, and beside each place you note the spot and the image you put there. Draw the room on the top half of the sheet.',
+  pNew:'New palace',pPassage:'Passage',pPassPh:'e.g. Eph 1, or Eph 1:15\u20132:10',pSize:'Verses per room',pMake:'Build the palace',pCancel:'Cancel',
+  pPrev:'{ref} \u00b7 {v} verses \u00b7 {r} rooms \u00b7 {t}',pBad:'Passage not recognised \u2014 type a book and chapter, e.g. Eph 1.',
+  pKw:'Choose keywords',pKwHelp:'Tap 3\u20134 words in each verse. They are numbered as places in the order of the text; tap a word again to take it off.',
+  pRoom:'Room',pPlaces:'{n} places',pNoPlaces:'No places yet. Switch on \u201cChoose keywords\u201d and tap words in this room\u2019s verses.',pNotePh:'the spot \u00b7 the image',
+  pDraw:'Draw the room here \u2014 choose Pen above',pPractise:'Practise',pLess:'One verse fewer in this room',pMore:'One verse more in this room',
+  pNoneHere:'No room of this palace on these pages.',pAllRooms:'All rooms',pOtherTr:'This palace is in the {t}.',pReadTr:'Read the {t}',
+  pDelete:'Delete this palace',pDelConfirm:'Delete this palace with its keywords, notes and drawings?',
+  pKeywords:'Keywords',pLetters:'First letters',pWord:'Next word',pVerse:'Verse',pShowAll:'Show all',pHide:'Cover again',
+  pDone:'Room recited \u2713',pAgain:'Again',pNextRoom:'Next room',pTapHelp:'Recite, then tap the text or press Space to uncover it word by word.'});
+Object.assign(UI.af,{pTab:'Paleis',pIntro:'\u2019n Geheuepaleis, een A5-vel per kamer: die gedeelte word in kamers van \u2019n paar verse verdeel. Kies in elke kamer 3\u20134 sleutelwoorde per vers; hulle word as plekke genommer, en by elke plek skryf jy die plek en die beeld wat jy daar neersit. Teken die kamer op die boonste helfte van die vel.',
+  pNew:'Nuwe paleis',pPassage:'Gedeelte',pPassPh:'bv. Ef 1, of Ef 1:15\u20132:10',pSize:'Verse per kamer',pMake:'Bou die paleis',pCancel:'Kanselleer',
+  pPrev:'{ref} \u00b7 {v} verse \u00b7 {r} kamers \u00b7 {t}',pBad:'Gedeelte nie herken nie \u2014 tik \u2019n boek en hoofstuk, bv. Ef 1.',
+  pKw:'Kies sleutelwoorde',pKwHelp:'Tik op 3\u20134 woorde in elke vers. Hulle word as plekke genommer in die volgorde van die teks; tik weer op \u2019n woord om dit af te haal.',
+  pRoom:'Kamer',pPlaces:'{n} plekke',pNoPlaces:'Nog geen plekke nie. Skakel \u201cKies sleutelwoorde\u201d aan en tik op woorde in hierdie kamer se verse.',pNotePh:'die plek \u00b7 die beeld',
+  pDraw:'Teken die kamer hier \u2014 kies Pen hierbo',pPractise:'Oefen',pLess:'Een vers minder in hierdie kamer',pMore:'Een vers meer in hierdie kamer',
+  pNoneHere:'Geen kamer van hierdie paleis op hierdie bladsye nie.',pAllRooms:'Alle kamers',pOtherTr:'Hierdie paleis is in die {t}.',pReadTr:'Lees die {t}',
+  pDelete:'Skrap hierdie paleis',pDelConfirm:'Skrap hierdie paleis met sy sleutelwoorde, notas en tekeninge?',
+  pKeywords:'Sleutelwoorde',pLetters:'Eerste letters',pWord:'Volgende woord',pVerse:'Vers',pShowAll:'Wys alles',pHide:'Bedek weer',
+  pDone:'Kamer opges\u00ea \u2713',pAgain:'Weer',pNextRoom:'Volgende kamer',pTapHelp:'S\u00ea op, en tik dan op die teks of druk Spasie om dit woord vir woord oop te maak.'});
+
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
 const DEF={chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
@@ -937,9 +1049,9 @@ function rowHTML(t,r,xs){
   if(!NUM[t]||!NUM[t].t) return '';
   const s=NUM[t].t[r]; if(!s) return '';
   const mk=MARKS[t]&&MARKS[t][r], a0=firstX?firstX[r]:0, a1=firstX?firstX[r+1]:0, hasX=xs&&a0<a1;
-  const sw=swapsFor(t,r);
+  const sw=swapsFor(t,r), pal=palRow(t,r);
   let inner;
-  if(!hasX&&!mk&&!sw) inner=fmt(t,s,true);
+  if(!hasX&&!mk&&!sw&&!pal) inner=fmt(t,s,true);
   else {
     const n=s.length, ax=new Int32Array(n).fill(-1), mc=new Array(n).fill(''), loose=[], sc=new Int32Array(n).fill(-1); var runs=null;
     if(sw){ const re=/\S+/g; let m, w=0; const at=[];
@@ -964,14 +1076,24 @@ function rowHTML(t,r,xs){
           // the space between two marked words carries the mark too, so a highlight runs on unbroken
           if(prevEnd>=0&&prev){ const gap=prev===code?code:(code[0]!=='-'&&code[0]===prev[0]?code[0]+'-':''); if(gap) for(let i=prevEnd;i<m.index;i++) mc[i]=gap; } }
         prevEnd=m.index+m[0].length; prev=code||''; w++; } }
+    // memory palace: each keyword carries its place number; in practice every word of the room is covered, its first
+    // letter apart from the rest (so "first letters" can show just that)
+    const wk=new Int32Array(n), wp=new Int32Array(n).fill(-1), wf=new Uint8Array(n), wst=new Uint8Array(n);
+    if(pal){ const re=/\S+/g; let m, w=0;
+      while((m=re.exec(s))){ const a=m.index, z=a+m[0].length, kn=pal.kw.get(w);
+        wst[a]=1; if(kn!==undefined) wk.fill(kn||-2,a,z);
+        if(pal.base>=0){ wp.fill(pal.base+w,a,z); const f=/[\p{L}\p{N}]/u.exec(m[0]); const cut=a+(f?f.index+f[0].length:m[0].length); wf.fill(1,a,cut); wf.fill(2,cut,z); if(cut<z) wst[cut]=0; }
+        w++; } }
     let out='', i=0;
     let done=new Set();
-    while(i<n){ let j=i+1; while(j<n&&ax[j]===ax[i]&&mc[j]===mc[i]&&sc[j]===sc[i]) j++;
+    while(i<n){ let j=i+1; while(j<n&&ax[j]===ax[i]&&mc[j]===mc[i]&&sc[j]===sc[i]&&wk[j]===wk[i]&&wp[j]===wp[i]&&wf[j]===wf[i]&&!wst[j]) j++;
       let seg;
       if(sc[i]>=0){ const ru=runs[sc[i]]; if(done.has(sc[i])){ i=j; continue; } done.add(sc[i]); const g0=sw[ru.parts[0]];
         seg=ru.parts.length===1?'<span class="orw" data-g="'+g0.g+'" lang="'+g0.lang+'"'+(g0.lang==='he'?' dir="rtl"':'')+'>'+esc(g0.text)+'</span>'
           :'<span class="orw orun" lang="'+g0.lang+'"'+(g0.lang==='he'?' dir="rtl"':'')+'>'+ru.parts.map(k=>'<span class="orp" data-g="'+sw[k].g+'">'+esc(sw[k].text)+'</span>').join(' ')+'</span>'; }
       else seg=fmt(t,s.slice(i,j),false);
+      if(pal&&sc[i]<0&&(wk[i]||wp[i]>=0)){ const cl=[]; if(wk[i]) cl.push('kw'); if(wp[i]>=0){ cl.push('pw',wf[i]===1?'pf':'pr'); if(wp[i]<PR.n) cl.push('on'); }
+        seg='<span class="'+cl.join(' ')+'"'+(wp[i]>=0?' data-pw="'+wp[i]+'"':'')+(wk[i]>0&&pal.nums&&wst[i]?' data-n="'+wk[i]+'"':'')+'>'+seg+'</span>'; }
       if(mc[i]) seg='<span class="'+markCls(mc[i])+'">'+seg+'</span>';
       if(ax[i]>=0) seg='<span class="xa" data-x="'+ax[i]+'">'+seg+'</span>';
       out+=seg; i=j; }
@@ -1399,7 +1521,7 @@ async function setSetting(k,v){
   if(S[k]===v) return;
   S[k]=v; persist();
   if(k==='theme'){ document.documentElement.dataset.theme=v; nBody.querySelectorAll('.sheet').forEach(drawSheet); }
-  else if(k==='lang'){ L=UI[v]; document.documentElement.lang=v; show(CUR.spread,0); updateBack(); labelChrome(); labelNotes(); labelMarkbar(); renderNotes(true); }
+  else if(k==='lang'){ L=UI[v]; document.documentElement.lang=v; show(CUR.spread,0); updateBack(); labelChrome(); labelNotes(); labelMarkbar(); renderNotes(true); drawPalbar(); }
   else if(k==='folio'){ updateFolios(); scheduleCounts(); }
   else if(k==='chapNo'){ updateFolios(); if(CUR.G) show(CUR.spread,0); }
   else if(k==='status'){ $('#status').hidden=v==='off'; await relayout(false); }
@@ -1657,8 +1779,10 @@ function thin(p){
   const keep=new Uint8Array(pts.length); keep[0]=keep[pts.length-1]=1; const stack=[[0,pts.length-1]];
   while(stack.length){ const [a,b]=stack.pop(); if(b-a<2) continue; const A=pts[a],B=pts[b], dx=B[0]-A[0], dy=B[1]-A[1], L=Math.hypot(dx,dy)||1;
     let md=0, mi=-1;
+    // a stroke that closes on its own start (a circle, a box) has no baseline: measure from the point instead
+    const shut=Math.hypot(dx,dy)<.5;
     for(let i=a+1;i<b;i++){ const P=pts[i], t=(i-a)/(b-a);
-      const d=Math.max(Math.abs(dy*P[0]-dx*P[1]+B[0]*A[1]-B[1]*A[0])/L, Math.abs(P[2]-(A[2]+(B[2]-A[2])*t))*4);
+      const d=Math.max(shut?Math.hypot(P[0]-A[0],P[1]-A[1]):Math.abs(dy*P[0]-dx*P[1]+B[0]*A[1]-B[1]*A[0])/L, Math.abs(P[2]-(A[2]+(B[2]-A[2])*t))*4);
       if(d>md){ md=d; mi=i; } }
     if(md>.3){ keep[mi]=1; stack.push([a,mi],[mi,b]); } }
   const out=[]; pts.forEach((P,i)=>{ if(keep[i]) out.push(P[0],P[1],P[2]); }); return out; }
@@ -1668,7 +1792,7 @@ let NOTES={}; try{ NOTES=unpackInk(JSON.parse(localStorage.getItem(NKEY)||'{}')|
 let SERM={};  try{ SERM=unpackInk(JSON.parse(localStorage.getItem(SKEY)||'{}')||{}); }catch(e){ SERM={}; }
 const notesEl=$('#notes'), nBody=notesEl.querySelector('.nbody');
 let nSaveT=0, nSig='', NUNDO=[], drawing=null, sawPen=false, justMade=null;
-const storeOf=st=>st==='s'?SERM:NOTES;
+const storeOf=st=>st==='s'?SERM:st==='p'?PAL.ink:NOTES;
 const recGet=sec=>storeOf(sec.dataset.st)[sec.dataset.k]||{};
 const recOf=sec=>{ const T_=storeOf(sec.dataset.st); return T_[sec.dataset.k]||(T_[sec.dataset.k]={}); };
 const filled=n=>!!n&&!!((n.t&&n.t.trim())||(n.s&&n.s.length));
@@ -1676,7 +1800,8 @@ const hasNote=k=>filled(NOTES[k]);
 const sermFilled=n=>filled(n)||!!(n&&n.p&&n.p.trim());
 function saveNotes(){ clearTimeout(nSaveT);
   for(const k in NOTES) if(!filled(NOTES[k])) delete NOTES[k];
-  try{ localStorage.setItem(NKEY,JSON.stringify(NOTES,packInk)); localStorage.setItem(SKEY,JSON.stringify(SERM,packInk)); }catch(e){ alert(L.nFull); } }
+  try{ localStorage.setItem(NKEY,JSON.stringify(NOTES,packInk)); localStorage.setItem(SKEY,JSON.stringify(SERM,packInk)); }catch(e){ alert(L.nFull); }
+  savePal(); }
 function saveMarks(){ try{ localStorage.setItem(MKEY,JSON.stringify(MARKS)); }catch(e){ alert(L.nFull); } }
 const saveNotesSoon=()=>{ clearTimeout(nSaveT); nSaveT=setTimeout(saveNotes,350); };
 const notesOpen=()=>notesEl.classList.contains('open');
@@ -1713,11 +1838,13 @@ function makeSheet(st,k){
   return sec;
 }
 function renderNotes(force){
-  updateNotesBadge();
+  updateNotesBadge(); palSync();
   if(!notesOpen()) return;
-  notesEl.dataset.view=S.notesTab==='w'?'w':'';   // not data-tab: the tab buttons are found by that
-  if(S.notesTab==='w'){ if(nSig!=='w'||force){ saveNotes(); nSig='w'; renderWords(); } return; }
-  if(nSig==='w') nSig='';
+  notesEl.dataset.view=S.notesTab==='w'?'w':S.notesTab==='p'?'p':'';   // not data-tab: the tab buttons are found by that
+  if(S.notesTab==='w'){ notesEl.classList.remove('nopal'); if(nSig!=='w'||force){ saveNotes(); nSig='w'; renderWords(); } return; }
+  if(S.notesTab==='p'){ notesEl.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tab==='p')); renderPalace(force); return; }
+  notesEl.classList.remove('nopal');
+  if(nSig==='w'||nSig.startsWith('p|')) nSig='';
   const tab=S.notesTab==='s'?'s':'n';
   const cs=spreadChapters(), keys=cs.map(c=>OSIS[CUR.b]+'.'+c);
   if(tab==='s') for(const id in SERM) if(id!==justMade&&!sermFilled(SERM[id])) delete SERM[id];   // an empty sermon left behind is not kept
@@ -1780,6 +1907,7 @@ function newSermon(){
   if(sec){ sec.scrollIntoView({block:'nearest'}); const p=sec.querySelector('.sp'); p.focus(); p.select(); }
 }
 function sizeSheet(sec){
+  if(sec.dataset.st==='p'){ sizeRoom(sec); return; }
   const n=recGet(sec), paper=sec.querySelector('.paper'), ta=sec.querySelector('textarea'), cv=sec.querySelector('canvas');
   const W=paper.clientWidth||LW, sc=W/LW;
   ta.style.height='0px'; const th=ta.scrollHeight; ta.style.height='';
@@ -1798,6 +1926,7 @@ function drawStroke(ctx,st,from){
 }
 function drawSheet(sec){
   const strokes=recGet(sec).s;
+  sec.classList.toggle('inked',!!(strokes&&strokes.length));
   if(!(strokes&&strokes.length)&&!sec._inked) return;      // nothing drawn on this sheet yet: leave the canvas untouched
   sec._inked=true;
   const cv=sec.querySelector('canvas'), ctx=cv.getContext('2d'); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,cv.width,cv.height);
@@ -1818,7 +1947,7 @@ nBody.addEventListener('pointerdown',e=>{
   const sec=cv.closest('.sheet'), r=cv.getBoundingClientRect(), sc=r.width/LW;
   const pt=ev=>[+((ev.clientX-r.left)/sc).toFixed(1),+((ev.clientY-r.top)/sc).toFixed(1),ev.pointerType==='pen'?+((ev.pressure||.5)).toFixed(2):.5];
   if(S.notesTool==='erase'){ drawing={erase:true,sec,pt,removed:[]}; eraseAt(drawing,pt(e)); return; }
-  const st=[S.penColor,S.penSize,pt(e)], n=recOf(sec); (n.s=n.s||[]).push(st);
+  const st=[S.penColor,S.penSize,pt(e)], n=recOf(sec); (n.s=n.s||[]).push(st); sec.classList.add('inked');
   drawing={sec,pt,st,cv}; drawStroke(strokeCtx(cv),st);
 });
 nBody.addEventListener('pointermove',e=>{
@@ -1828,7 +1957,7 @@ nBody.addEventListener('pointermove',e=>{
   const p=drawing.st[2], from=p.length; for(const ev of evs) p.push(...drawing.pt(ev));
   drawStroke(strokeCtx(drawing.cv),drawing.st,from);
   const y=p[p.length-2]*(drawing.cv.clientWidth/LW);
-  if(y>drawing.cv.clientHeight-LH){ recOf(drawing.sec).h=(drawing.cv.clientHeight+LH*4)/(drawing.cv.clientWidth/LW); sizeSheet(drawing.sec); }
+  if(drawing.sec.dataset.st!=='p'&&y>drawing.cv.clientHeight-LH){ recOf(drawing.sec).h=(drawing.cv.clientHeight+LH*4)/(drawing.cv.clientWidth/LW); sizeSheet(drawing.sec); }
 });
 function endDraw(){
   if(!drawing) return; const d=drawing; drawing=null;
@@ -1856,7 +1985,7 @@ nBody.addEventListener('click',e=>{
   if(a.dataset.n==='snew') newSermon();
   else if(a.dataset.n==='sdel'){ const sec=a.closest('.sheet'); if(confirm(L.sDelConfirm)){ delete SERM[sec.dataset.k]; saveNotes(); renderNotes(true); } }
   else if(a.dataset.n==='backup'){ saveNotes();
-    const url=URL.createObjectURL(new Blob([JSON.stringify({app:'bybel-notas',v:3,saved:todayISO(),notes:NOTES,sermons:SERM,marks:MARKS},packInk)],{type:'application/json'}));
+    const url=URL.createObjectURL(new Blob([JSON.stringify({app:'bybel-notas',v:4,saved:todayISO(),notes:NOTES,sermons:SERM,marks:MARKS,palaces:PAL},packInk)],{type:'application/json'}));
     const l=document.createElement('a'); l.href=url; l.download='notas-'+todayISO()+'.json'; l.click(); setTimeout(()=>URL.revokeObjectURL(url),2000); }
   else if(a.dataset.n==='restore') $('#notesfile').click();
 });
@@ -1866,7 +1995,10 @@ $('#notesfile').onchange=e=>{
       const merge=(dst,inc)=>{ for(const k in inc||{}){ const a=dst[k], b=inc[k]; if(!a||(b.u||'')>(a.u||'')){ dst[k]=b; n++; } } };
       merge(NOTES,unpackInk(p.notes||{})); merge(SERM,unpackInk(p.sermons||{}));
       for(const t in p.marks||{}){ MARKS[t]=MARKS[t]||{}; for(const r in p.marks[t]) MARKS[t][r]=Object.assign({},p.marks[t][r],MARKS[t][r]||{}); }
-      saveNotes(); saveMarks(); renderNotes(true); if(p.marks&&CUR.b>=0) relayout(true); alert(n+L.nLoaded);
+      if(p.palaces&&p.palaces.list){ unpackInk(p.palaces.ink||{});
+        for(const id in p.palaces.list){ const a=PAL.list[id], b=p.palaces.list[id]; if(!a||(b.u||'')>(a.u||'')){ PAL.list[id]=b; n++; } }
+        merge(PAL.ink,p.palaces.ink||{}); if(!PAL.cur) PAL.cur=p.palaces.cur||Object.keys(PAL.list)[0]||''; PALV++; }
+      saveNotes(); saveMarks(); renderNotes(true); if((p.marks||p.palaces)&&CUR.b>=0) relayout(true); alert(n+L.nLoaded);
     }catch(x){ alert(L.regBad); } e.target.value=''; };
   rd.readAsText(f);
 };
@@ -1877,12 +2009,13 @@ function applyNotesUI(){
   notesEl.dataset.tool=S.notesTool;
   $('#notesbtn').setAttribute('aria-pressed',open);
   const q=(sel,attr,val)=>notesEl.querySelectorAll(sel).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[attr])===String(val)));
-  q('[data-tool]','tool',S.notesTool); q('[data-ink]','ink',S.penColor); q('[data-size]','size',S.penSize); q('[data-tab]','tab',S.notesTab==='s'||S.notesTab==='w'?S.notesTab:'n');
+  q('[data-tool]','tool',S.notesTool); q('[data-ink]','ink',S.penColor); q('[data-size]','size',S.penSize); q('[data-tab]','tab',['s','w','p'].includes(S.notesTab)?S.notesTab:'n');
   notesEl.querySelector('[data-n=pin]').setAttribute('aria-pressed',pin);
   notesEl.querySelector('[data-n=lines]').setAttribute('aria-pressed',!!S.notesLines);
+  if(typeof palSync==='function') palSync();
 }
 function labelNotes(){
-  notesEl.querySelector('[data-tab=n]').textContent=L.notes; notesEl.querySelector('[data-tab=s]').textContent=L.sermons; notesEl.querySelector('[data-tab=w]').textContent=L.wordsTab;
+  notesEl.querySelector('[data-tab=n]').textContent=L.notes; notesEl.querySelector('[data-tab=s]').textContent=L.sermons; notesEl.querySelector('[data-tab=w]').textContent=L.wordsTab; notesEl.querySelector('[data-tab=p]').textContent=L.pTab;
   const t={type:L.nType,pen:L.nPen,erase:L.nErase}; notesEl.querySelectorAll('[data-tool]').forEach(b=>b.textContent=t[b.dataset.tool]);
   const ink={ink:L.nInk,blue:L.nBlue,red:L.nRed,green:L.nGreen}; notesEl.querySelectorAll('[data-ink]').forEach(b=>{ b.title=ink[b.dataset.ink]; b.setAttribute('aria-label',ink[b.dataset.ink]); });
   const sz={'1.4':L.nFine,'2.4':L.nMed,'4':L.nBold}; notesEl.querySelectorAll('[data-size]').forEach(b=>{ b.title=sz[b.dataset.size]; b.setAttribute('aria-label',sz[b.dataset.size]); });
@@ -2996,6 +3129,315 @@ $('#findbtn').addEventListener('click',e=>{ if(CONC.id&&findEl.classList.contain
 document.addEventListener('click',e=>{ const m=e.target.closest('[data-conc]'); if(!m) return; e.preventDefault(); e.stopPropagation(); openConc(m.dataset.conc); },true);
 
 
+/* ---------------- memory palace ----------------
+   The A5-sheet method (all of Ephesians was learned this way): a passage is split into rooms of about five verses;
+   in each room 3–4 keywords per verse are numbered as places (15–20 a room) and listed on the bottom half of the
+   sheet, each with a note of the spot and the image put there; the top half is the drawing of the room.
+   Keywords are chosen by tapping words in the Bible text; their place numbers stand above them on the page while
+   the palace is open. Practice covers the room's verses on the page itself, so they stay where they are in the
+   book, showing only the keywords or each word's first letter, and uncovers them a word at a time.
+   One palace belongs to one translation. Keywords are kept by verse row and word number (as word marks are),
+   place notes by the word they belong to, so changing the rooms never loses them. */
+const PKEY='bybel-paleis-v1';
+let PAL={cur:'',list:{},ink:{}};
+try{ const p=JSON.parse(localStorage.getItem(PKEY)||'null');
+     if(p&&p.list){ PAL=Object.assign({cur:'',list:{},ink:{}},p); unpackInk(PAL.ink); } }catch(e){}
+let PALV=0, PALC=null, PR=null, palShown=false, pSaveT=0;
+const PALST={kw:false,form:false};
+const palCur=()=>PAL.list[PAL.cur]||null;
+const escA=s=>esc(String(s)).replace(/"/g,'&quot;');
+function savePal(){ clearTimeout(pSaveT); try{ localStorage.setItem(PKEY,JSON.stringify(PAL,packInk)); }catch(e){ alert(L.nFull); } }
+const savePalSoon=()=>{ clearTimeout(pSaveT); pSaveT=setTimeout(savePal,350); };
+// the verses of a book in one translation, grouped as the page groups them
+const VOF={};
+function versesOf(t,b){ const k=t+':'+b; if(VOF[k]) return VOF[k];
+  const n=NUM[t]; if(!n||!n.t) return [];
+  const ord=orderOf(t,b), V=[]; let i=0;
+  while(i<ord.length){ const r0=ord[i], c=n.c[r0], v=n.v[r0], rows=[r0]; i++;
+    while(i<ord.length&&n.c[ord[i]]===c&&n.v[ord[i]]===v){ rows.push(ord[i]); i++; }
+    const rs=rows.filter(r=>n.t[r]); if(rs.length) V.push({r:rs[0],rows:rs,c,v}); }
+  return VOF[k]=V; }
+// rooms as even as possible and close to the chosen size: 23 verses in fives give 5,5,5,4,4, not 5,5,5,5,3
+const roomCount=(n,size)=>Math.max(1,Math.round(n/size));
+const cutsFor=(n,size)=>{ const k=roomCount(n,size), a=Math.floor(n/k), x=n%k; return Array.from({length:k},(_,i)=>a+(i<x?1:0)); };
+const vRange=vs=>{ const a=vs[0], z=vs[vs.length-1]; return a.c+':'+a.v+(a===z?'':'\u2013'+(a.c===z.c?z.v:z.c+':'+z.v)); };
+// rooms, and every keyword's place number, worked out again whenever the palace changes
+function palCalc(){
+  const p=palCur(); if(!p||!NUM[p.t]||!NUM[p.t].t) return null;
+  if(PALC&&PALC.id===p.id&&PALC.v===PALV) return PALC;
+  const all=versesOf(p.t,p.b); let a=all.findIndex(x=>x.rows.includes(p.a)), z=all.findIndex(x=>x.rows.includes(p.z));
+  if(a<0) a=0; if(z<a) z=all.length-1;
+  const V=all.slice(a,z+1);
+  if(!p.cuts||p.cuts.reduce((s,n)=>s+n,0)!==V.length) p.cuts=cutsFor(V.length,p.size||5);
+  const rooms=[], rowRoom=new Map(), place=new Map(); let k=0;
+  p.cuts.forEach((n,ri)=>{ const vs=V.slice(k,k+n); k+=n; const room={i:ri,V:vs,places:[]};
+    for(const x of vs) for(const r of x.rows){ rowRoom.set(r,ri);
+      for(const w of (p.kw[r]||[])){ const pl={r,w,n:room.places.length+1,c:x.c,v:x.v}; room.places.push(pl); place.set(r+':'+w,pl); } }
+    rooms.push(room); });
+  return PALC={id:p.id,v:PALV,V,rooms,rowRoom,place};
+}
+const palShowNums=()=>!!PR||(notesOpen()&&S.notesTab==='p');
+const palKwOn=()=>PALST.kw&&!PR&&notesOpen()&&S.notesTab==='p'&&!!palCur();
+// what the typesetter needs for one verse row: its keywords' numbers, and where its words stand in the room being practised
+function palRow(t,r){
+  if(!PAL.cur) return null; const p=palCur(); if(!p||p.t!==t) return null;
+  const prac=!!(PR&&PR.rows.has(r)), nums=palShowNums();
+  if(!prac&&!nums) return null;
+  const kw=p.kw[r]||[]; if(!prac&&!kw.length) return null;
+  const C=palCalc(); if(!C||!C.rowRoom.has(r)) return null;
+  return {kw:new Map(kw.map(w=>[w,(C.place.get(r+':'+w)||{}).n||0])), base:prac?PR.base.get(r):-1, nums};
+}
+// the rows of the open palace are typeset again (numbers and covering never move the text, so no re-paging)
+function refreshPalRows(){
+  const p=palCur(); if(!p||!CUR.G||CUR.b!==p.b) return; const C=palCalc(); if(!C) return;
+  for(const el of [...flow.querySelectorAll('.rw')]){ const r=+el.dataset.r; if(!C.rowRoom.has(r)) continue;
+    const t=el.dataset.t||S.tr; if(t!==p.t) continue; el.outerHTML=el.dataset.t?sideRow(t,r):rowHTML(t,r,S.xref==='on'); }
+}
+function palSync(){
+  document.body.classList.toggle('kwmode',palKwOn());
+  const on=palShowNums(); if(on!==palShown){ palShown=on; if(palCur()) refreshPalRows(); }
+}
+const kwWord=(t,r,w)=>(((NUM[t].t[r]||'').match(/\S+/g)||[])[w]||'').replace(/[\[\]]/g,'').replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu,'');
+function toggleKw(p,r,w){
+  const a=p.kw[r]||(p.kw[r]=[]), i=a.indexOf(w);
+  if(i>=0) a.splice(i,1); else { a.push(w); a.sort((x,y)=>x-y); }
+  if(!a.length) delete p.kw[r];
+  p.u=todayISO(); PALV++; savePal(); refreshPalRows();
+  // only the sheet of that room changes
+  const C=palCalc(), ri=C&&C.rowRoom.get(r), sec=nBody.querySelector('.room[data-ri="'+ri+'"]');
+  if(sec&&C){ const room=C.rooms[ri]; sec.querySelector('.rplaces').innerHTML=placesHTML(p,room); sec.querySelector('.rt small').textContent=L.pPlaces.replace('{n}',room.places.length); }
+  for(const chip of nBody.querySelectorAll('[data-proom="'+ri+'"] small')) chip.textContent=C.rooms[ri].places.length;
+}
+
+/* finding a passage: "Ef 1", "Efesiërs 1-3", "Eph 1:15-2:10", "Psalm 23" or a whole book */
+function bookFromName(s){
+  const q=normName(s||''); if(!q) return -1;
+  for(const list of [D.names.af,D.names.en]) for(let i=0;i<66;i++){ const [n,a]=list[i]; if(normName(n)===q||normName(a)===q) return i; }
+  for(const list of [D.names.af,D.names.en]) for(let i=0;i<66;i++) if(normName(list[i][0]).startsWith(q)) return i;
+  return OSIS.findIndex(x=>x.toLowerCase()===q);
+}
+function parsePassage(txt,t){
+  const m=/^\s*(\d?\s*[^\d]+?)\s*(\d+)?(?:\s*[:.]\s*(\d+))?(?:\s*[-\u2013\u2014]\s*(\d+)(?:\s*[:.]\s*(\d+))?)?\s*$/.exec(txt||''); if(!m) return null;
+  const b=bookFromName(m[1]); if(b<0) return null;
+  const all=versesOf(t,b); if(!all.length) return null;
+  const g=i=>m[i]===undefined?null:+m[i];
+  let c1=g(2), v1=g(3), c2, v2;
+  if(g(5)!=null){ c2=g(4); v2=g(5); }
+  else if(g(4)!=null){ if(v1!=null){ c2=c1; v2=g(4); } else { c2=g(4); v2=null; } }
+  else { c2=c1; v2=v1; }
+  if(c1==null){ c1=all[0].c; c2=all[all.length-1].c; }
+  const a=all.findIndex(x=>x.c===c1&&(v1==null||x.v===v1));
+  let z=-1; for(let i=all.length-1;i>=0;i--) if(all[i].c===c2&&(v2==null||all[i].v===v2)){ z=i; break; }
+  if(a<0||z<a) return null;
+  return {b,V:all.slice(a,z+1)};
+}
+function passageName(b,t,V){
+  const a=V[0], z=V[V.length-1], all=versesOf(t,b);
+  const first=all.find(x=>x.c===a.c), last=all.filter(x=>x.c===z.c).pop();
+  const whole=first.v===a.v&&last.v===z.v;
+  return (b===18&&a.c===z.c?'Psalm':bookName(b,t))+' '+(whole?(a.c===z.c?a.c:a.c+'\u2013'+z.c):vRange(V));
+}
+function previewText(){
+  const ref=nBody.querySelector('.pref'), sz=nBody.querySelector('.psize'); if(!ref) return null;
+  const P=parsePassage(ref.value,S.tr), n=Math.max(2,Math.min(12,+sz.value||5));
+  const el=nBody.querySelector('.pprev');
+  if(!P){ el.textContent=L.pBad; el.classList.add('bad'); return null; }
+  el.classList.remove('bad');
+  el.textContent=L.pPrev.replace('{ref}',passageName(P.b,S.tr,P.V)).replace('{v}',P.V.length).replace('{r}',roomCount(P.V.length,n)).replace('{t}',BIB[S.tr].label);
+  return {P,n};
+}
+
+/* the palace tab of the notes panel */
+function roomsOnSpread(p,C){
+  if(!CUR.G||CUR.b!==p.b||CUR.t!==p.t||!CUR.V.length) return [];
+  const p0=CUR.spread*CUR.G.ppv, fv=firstOnPage(p0), lv=lastOnPage(Math.min(CUR.pages-1,p0+CUR.G.ppv-1));
+  return C.rooms.filter(room=>room.V.some(x=>{ const i=CUR.rowMap.get(x.r); return i>=fv&&i<=lv; })).map(room=>room.i);
+}
+function placesHTML(p,room){
+  if(!room.places.length) return '<li class="rnone">'+esc(L.pNoPlaces)+'</li>';
+  return room.places.map(pl=>{ const k=pl.r+':'+pl.w;
+    return '<li><b class="pn">'+pl.n+'</b><button type="button" class="pkw" data-pgo="'+pl.r+'" title="'+escA(pl.c+':'+pl.v)+'">'+esc(kwWord(p.t,pl.r,pl.w))+'<small>'+(room.V[0].c===room.V[room.V.length-1].c?pl.v:pl.c+':'+pl.v)+'</small></button>'+
+      '<input class="pnote" data-pn="'+k+'" value="'+escA(p.pn[k]||'')+'" placeholder="'+escA(L.pNotePh)+'" autocomplete="off" spellcheck="true"></li>'; }).join('');
+}
+function roomHTML(p,room,C){
+  const last=room.i===C.rooms.length-1;
+  return '<section class="sheet room" data-st="p" data-k="'+p.id+'|'+room.i+'" data-ri="'+room.i+'">'+
+    '<div class="rhead"><span class="rt">'+esc(L.pRoom)+' '+(room.i+1)+'<i>'+esc(vRange(room.V))+'</i><small>'+esc(L.pPlaces.replace('{n}',room.places.length))+'</small></span>'+
+    '<button type="button" class="rb rstep" data-pr="less" title="'+escA(L.pLess)+'" aria-label="'+escA(L.pLess)+'"'+(room.V.length<2?' disabled':'')+'>\u2212</button>'+
+    '<button type="button" class="rb rstep" data-pr="more" title="'+escA(L.pMore)+'" aria-label="'+escA(L.pMore)+'"'+(last?' disabled':'')+'>+</button>'+
+    '<button type="button" class="rb rprac" data-pr="prac">'+esc(L.pPractise)+'</button></div>'+
+    '<div class="a5"><div class="paper"><canvas></canvas><span class="rph">'+esc(L.pDraw)+'</span></div><ol class="rplaces">'+placesHTML(p,room)+'</ol></div></section>';
+}
+function formHTML(){
+  const cs=CUR.G&&CUR.b>=0?middleChapter():1, b=CUR.b>=0?CUR.b:48;
+  return '<div class="pform"><b>'+esc(L.pNew)+'</b>'+
+    '<label><span>'+esc(L.pPassage)+'</span><input class="pref" value="'+escA(bookName(b)+' '+cs)+'" placeholder="'+escA(L.pPassPh)+'" autocomplete="off"></label>'+
+    '<label><span>'+esc(L.pSize)+'</span><input class="psize" type="number" min="2" max="12" value="5" inputmode="numeric"></label>'+
+    '<p class="pprev"></p><div class="pfa"><button type="button" class="rb rprac" data-pa="make">'+esc(L.pMake)+'</button>'+
+    (Object.keys(PAL.list).length?'<button type="button" class="rb" data-pa="cancel">'+esc(L.pCancel)+'</button>':'')+'</div></div>';
+}
+function sizeRoom(sec){
+  const paper=sec.querySelector('.paper'), cv=paper.querySelector('canvas'), W=paper.clientWidth||LW, h=Math.round(W*SQ2/2);
+  paper.style.height=h+'px'; sec.style.setProperty('--half',h+'px');
+  const dpr=devicePixelRatio||1; cv.width=Math.round(W*dpr); cv.height=Math.round(h*dpr); cv.style.width=W+'px'; cv.style.height=h+'px';
+  sec._inked=false; drawSheet(sec);
+}
+function renderPalace(force){
+  const p=palCur();
+  if(p&&!(NUM[p.t]&&NUM[p.t].t)){ if(nSig!=='p|wait'){ nSig='p|wait'; nBody.innerHTML='<p class="wempty">'+esc(L.loadingTr.replace('{x}',BIB[p.t].label))+'</p>';
+      ensureTr(p.t).then(ok=>{ if(ok&&S.notesTab==='p') renderNotes(true); }); } return; }
+  const C=p?palCalc():null, here=p?roomsOnSpread(p,C):[];
+  const sig='p|'+(p?p.id:'')+'|'+PALV+'|'+here.join()+'|'+(PALST.form?1:0)+'|'+(PALST.kw?1:0)+'|'+S.tr+'|'+S.lang+'|'+(PR?PR.ri:'');
+  if(!force&&sig===nSig) return;
+  if(drawing) return;
+  saveNotes(); nSig=sig;
+  notesEl.querySelector('.npass').textContent='';
+  notesEl.classList.toggle('nopal',!p||PALST.form);
+  const ids=Object.keys(PAL.list).sort((x,y)=>(PAL.list[x].b-PAL.list[y].b)||(PAL.list[x].a-PAL.list[y].a));
+  let h='';
+  if(ids.length) h+='<div class="ptop"><select class="psel" aria-label="'+escA(L.pTab)+'">'+ids.map(id=>'<option value="'+id+'"'+(id===PAL.cur?' selected':'')+'>'+esc(PAL.list[id].name+' \u00b7 '+BIB[PAL.list[id].t].label)+'</option>').join('')+'</select>'+
+    (PALST.form?'':'<button type="button" class="rb" data-pa="new">+ '+esc(L.pNew)+'</button>')+(p?'<button type="button" class="sdel" data-pa="del" title="'+escA(L.pDelete)+'" aria-label="'+escA(L.pDelete)+'">'+TRASH+'</button>':'')+'</div>';
+  else h+='<p class="pintro">'+esc(L.pIntro)+'</p>';
+  if(!ids.length||PALST.form) h+=formHTML();
+  if(p&&!PALST.form){
+    h+='<div class="pctl"><button type="button" class="pkwb" data-pa="kw" aria-pressed="'+PALST.kw+'">'+esc(L.pKw)+'</button><span class="grow"></span>'+
+      '<span>'+esc(L.pSize)+'</span><span class="pstep"><button type="button" data-pa="smaller" aria-label="\u2212">\u2212</button><b>'+(p.size||5)+'</b><button type="button" data-pa="bigger" aria-label="+">+</button></span></div>';
+    if(p.t!==S.tr) h+='<p class="phelp">'+esc(L.pOtherTr.replace('{t}',BIB[p.t].label))+' <button type="button" class="rb" data-pa="read">'+esc(L.pReadTr.replace('{t}',BIB[p.t].label))+'</button></p>';
+    else if(PALST.kw) h+='<p class="phelp">'+esc(L.pKwHelp)+'</p>';
+    if(here.length) h+=here.map(i=>roomHTML(p,C.rooms[i],C)).join('');
+    else h+='<p class="sempty">'+esc(L.pNoneHere)+'</p>';
+    h+='<div class="nmore"><b>'+esc(L.pAllRooms)+'</b><div class="prooms">'+C.rooms.map(room=>'<button type="button" class="lnkb'+(here.includes(room.i)?' here':'')+'" data-proom="'+room.i+'">'+(room.i+1)+' \u00b7 '+esc(vRange(room.V))+' <small>'+room.places.length+'</small></button>').join('')+'</div>';
+  } else h+='<div class="nmore">';
+  h+='<div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button></div>'+storageLine()+'</div>';
+  const top=nBody.scrollTop, same=nBody.dataset.pal===sig.split('|').slice(0,4).join('|');
+  nBody.innerHTML=h; nBody.dataset.pal=sig.split('|').slice(0,4).join('|');
+  nBody.querySelectorAll('.room').forEach(sizeRoom);
+  if(nBody.querySelector('.pref')) previewText();
+  nBody.scrollTop=same?top:0;
+}
+nBody.addEventListener('input',e=>{
+  if(S.notesTab!=='p') return;
+  const pn=e.target.closest('[data-pn]');
+  if(pn){ const p=palCur(); if(!p) return; const v=pn.value; if(v.trim()) p.pn[pn.dataset.pn]=v; else delete p.pn[pn.dataset.pn]; p.u=todayISO(); savePalSoon(); return; }
+  if(e.target.closest('.pref,.psize')) previewText();
+});
+nBody.addEventListener('keydown',e=>{ if(S.notesTab==='p'&&e.key==='Enter'&&e.target.closest('.pref,.psize')){ e.preventDefault(); nBody.querySelector('[data-pa=make]').click(); } });
+nBody.addEventListener('change',async e=>{
+  const s=e.target.closest('.psel'); if(!s) return;
+  endPractice(); PAL.cur=s.value; PALV++; PALST.form=false; savePal();
+  await relayout(true); renderNotes(true);
+});
+nBody.addEventListener('click',async e=>{
+  if(S.notesTab!=='p') return;
+  const b=e.target.closest('[data-pa],[data-pr],[data-pgo],[data-proom]'); if(!b||b.disabled) return;
+  const p=palCur();
+  if(b.dataset.pgo){ const r=+b.dataset.pgo; go(bookOf[r],r,{push:true,flash:true}); return; }
+  if(b.dataset.proom){ const C=palCalc(); if(!C) return; const room=C.rooms[+b.dataset.proom]; go(p.b,room.V[0].r,{push:CUR.b>=0,flash:true}); renderNotes(true); return; }
+  const a=b.dataset.pa;
+  if(a==='new'){ PALST.form=true; renderNotes(true); const r=nBody.querySelector('.pref'); if(r){ r.focus(); r.select(); } return; }
+  if(a==='cancel'){ PALST.form=false; renderNotes(true); return; }
+  if(a==='make'){ const q=previewText(); if(!q) return; const {P,n}=q, V=P.V;
+    endPractice(); const id='p'+Date.now().toString(36);
+    PAL.list[id]={id,t:S.tr,b:P.b,a:V[0].r,z:V[V.length-1].r,size:n,cuts:cutsFor(V.length,n),kw:{},pn:{},name:passageName(P.b,S.tr,V),made:todayISO(),u:todayISO()};
+    const old=palCur(); PAL.cur=id; PALV++; PALST.form=false; PALST.kw=true; savePal();
+    if(old&&CUR.b===old.b) await relayout(true);
+    go(P.b,V[0].r,{push:CUR.b>=0}); palSync(); renderNotes(true); return; }
+  if(!p) return;
+  if(a==='del'){ if(!confirm(L.pDelConfirm)) return; endPractice();
+    delete PAL.list[p.id]; for(const k of Object.keys(PAL.ink)) if(k.startsWith(p.id+'|')) delete PAL.ink[k];
+    PAL.cur=Object.keys(PAL.list)[0]||''; PALV++; savePal(); if(CUR.b===p.b) await relayout(true); renderNotes(true); return; }
+  if(a==='kw'){ PALST.kw=!PALST.kw; palSync(); renderNotes(true); return; }
+  if(a==='read'){ await setSetting('tr',p.t); const C=palCalc(); if(C&&CUR.b!==p.b) go(p.b,C.V[0].r,{push:true}); renderNotes(true); return; }
+  if(a==='smaller'||a==='bigger'){ const n=Math.max(2,Math.min(12,(p.size||5)+(a==='bigger'?1:-1))); if(n===p.size) return;
+    endPractice(); p.size=n; p.cuts=null; p.u=todayISO(); PALV++; palCalc(); savePal(); refreshPalRows(); renderNotes(true); return; }
+  const sec=b.closest('.room'); if(!sec) return; const ri=+sec.dataset.ri;
+  if(b.dataset.pr==='prac'){ startPractice(ri); return; }
+  endPractice(); const cuts=p.cuts;
+  // move the boundary with the next room by one verse
+  if(b.dataset.pr==='less'){ if(cuts[ri]<2) return; cuts[ri]--; if(ri+1<cuts.length) cuts[ri+1]++; else cuts.push(1); }
+  else if(b.dataset.pr==='more'){ if(ri+1>=cuts.length) return; cuts[ri]++; cuts[ri+1]--; if(!cuts[ri+1]) cuts.splice(ri+1,1); }
+  p.u=todayISO(); PALV++; savePal(); refreshPalRows(); renderNotes(true);
+});
+
+/* practice: the room's verses are covered on the page and uncovered a word at a time */
+const palbar=$('#palbar');
+async function startPractice(ri){
+  const p=palCur(); if(!p) return;
+  if(S.tr!==p.t) await setSetting('tr',p.t);
+  const C=palCalc(), room=C&&C.rooms[ri]; if(!room) return;
+  let k=0; const base=new Map(), rows=new Set(), vend=[];
+  for(const x of room.V){ for(const r of x.rows){ base.set(r,k); rows.add(r); k+=((NUM[p.t].t[r]||'').match(/\S+/g)||[]).length; } vend.push(k); }
+  const was=PR; PR={pid:p.id,ri,base,rows,vend,n:0,total:k};
+  document.body.classList.add('prac'); applyHint();
+  go(p.b,room.V[0].r,{push:!was&&CUR.b>=0});
+  palShown=true; refreshPalRows(); palSync(); drawPalbar(); renderNotes(false);
+}
+// called before the palace or its rooms change, so the covered words are typeset back while the old rooms still apply
+function endPractice(){
+  if(!PR) return; PR=null;
+  document.body.classList.remove('prac','pm-kw','pm-fl'); palbar.classList.remove('on');
+  refreshPalRows(); palSync(); renderNotes(false);
+}
+function applyHint(){ document.body.classList.toggle('pm-fl',S.palHint==='fl'); document.body.classList.toggle('pm-kw',S.palHint!=='fl'); }
+function spreadOfEl(el){
+  const G=CUR.G, fr=flow.getBoundingClientRect(), er=el.getBoundingClientRect();
+  const col=Math.floor((er.left+Math.min(er.width/2,4)-fr.left)/G.pitch); return Math.floor(Math.floor(col/G.cpp)/G.ppv);
+}
+function prReveal(to){
+  if(!PR) return; to=Math.max(0,Math.min(PR.total,to));
+  if(to<PR.n){ PR.n=to; for(const el of flow.querySelectorAll('.pw.on')) if(+el.dataset.pw>=to) el.classList.remove('on'); drawPalbar(); return; }
+  const from=PR.n; PR.n=to;
+  for(const el of flow.querySelectorAll('.pw')){ const k=+el.dataset.pw; if(k>=from&&k<to) el.classList.add('on'); }
+  // a room can run over onto the next page: turn to the newest word
+  const last=to>0&&flow.querySelector('.pw[data-pw="'+(to-1)+'"]');
+  if(last&&!CUR.par){ const s=spreadOfEl(last); if(s>=0&&s<CUR.spreads&&s!==CUR.spread) show(s,s>CUR.spread?1:-1); }
+  drawPalbar();
+}
+const prVerse=()=>{ if(PR) prReveal(PR.vend.find(e=>e>PR.n)??PR.total); };
+function drawPalbar(){
+  if(!PR){ palbar.classList.remove('on'); return; }
+  const C=palCalc(), room=C&&C.rooms[PR.ri]; if(!room){ endPractice(); return; }
+  const done=PR.n>=PR.total;
+  palbar.innerHTML='<div class="pbrow"><span class="pbl">'+esc(L.pRoom)+' '+(PR.ri+1)+' <i>'+esc(vRange(room.V))+'</i> <small>'+PR.n+'/'+PR.total+'</small></span>'+
+    '<div class="seg pbm"><button type="button" data-pb="kw" aria-pressed="'+(S.palHint!=='fl')+'">'+esc(L.pKeywords)+'</button><button type="button" data-pb="fl" aria-pressed="'+(S.palHint==='fl')+'">'+esc(L.pLetters)+'</button></div>'+
+    '<button type="button" class="x" data-pb="end" aria-label="'+escA(L.close)+'">\u00d7</button></div><div class="pbrow">'+
+    (done?'<span class="pbdone">'+esc(L.pDone)+'</span><button type="button" data-pb="again">'+esc(L.pAgain)+'</button>'+(C.rooms[PR.ri+1]?'<button type="button" class="pbmain" data-pb="nextroom">'+esc(L.pNextRoom)+'</button>':'')
+         :'<button type="button" class="pbmain" data-pb="word">'+esc(L.pWord)+'</button><button type="button" data-pb="verse">'+esc(L.pVerse)+'</button><button type="button" data-pb="all">'+esc(L.pShowAll)+'</button>'+
+          (PR.n?'<button type="button" data-pb="again">'+esc(L.pHide)+'</button>':'<span class="pbhelp">'+esc(L.pTapHelp)+'</span>'))+'</div>';
+  palbar.classList.add('on');
+}
+palbar.addEventListener('click',e=>{ const b=e.target.closest('[data-pb]'); if(!b||!PR) return; const a=b.dataset.pb;
+  if(a==='kw'||a==='fl'){ S.palHint=a; persist(); applyHint(); drawPalbar(); }
+  else if(a==='word') prReveal(PR.n+1);
+  else if(a==='verse') prVerse();
+  else if(a==='all') prReveal(PR.total);
+  else if(a==='again'){ prReveal(0); const C=palCalc(); if(C) go(palCur().b,C.rooms[PR.ri].V[0].r); }
+  else if(a==='nextroom') startPractice(PR.ri+1);
+  else if(a==='end') endPractice();
+});
+palbar.addEventListener('pointerdown',e=>e.stopPropagation());
+// a tap on the text: in practice the next word is uncovered; while choosing keywords, a word becomes a place (or stops being one)
+$('#stage').addEventListener('click',e=>{
+  if(!PR&&!palKwOn()) return;
+  if(!e.target.closest('#book')||PICK.range||PICK.swallow||swiped||String(getSelection()).trim()) return;
+  const hit=wordAt(e.clientX,e.clientY); if(!hit) return;
+  const p=palCur(); if(!p) return;
+  const t=hit.rw.dataset.t||S.tr, r=+hit.rw.dataset.r; if(t!==p.t) return;
+  if(PR){ if(!PR.rows.has(r)) return; e.stopImmediatePropagation(); e.preventDefault(); prReveal(PR.n+1); return; }
+  const C=palCalc(); if(!C||!C.rowRoom.has(r)) return;      // outside the palace the page turns as usual
+  e.stopImmediatePropagation(); e.preventDefault();
+  toggleKw(p,r,domToSrc(hit.rw,hit.w,false));
+},true);
+document.addEventListener('keydown',e=>{
+  if(!PR||e.altKey||e.ctrlKey||e.metaKey) return;
+  if(e.target.closest&&e.target.closest('textarea,input,select,[contenteditable]')) return;
+  if(findEl.classList.contains('on')||navEl.classList.contains('on')||shelfOpen()) return;
+  if(e.key===' '&&!e.shiftKey){ e.preventDefault(); e.stopImmediatePropagation(); prReveal(PR.n+1); }
+  else if(e.key===' '&&e.shiftKey){ e.preventDefault(); e.stopImmediatePropagation(); prReveal(PR.n-1); }
+  else if(e.key==='Enter'){ e.preventDefault(); e.stopImmediatePropagation(); prVerse(); }
+  else if(e.key==='Escape'){ e.preventDefault(); e.stopImmediatePropagation(); endPractice(); }
+},true);
+
 /* ---------------- open ---------------- */
 $('#status').hidden=S.status==='off';
 labelChrome(); loadReg(); labelNotes(); labelMarkbar(); applyNotesUI(); applyPhone();
@@ -3011,7 +3453,7 @@ if(firstRun){
 await relayout(true);
 openShelf();
 renderNotes(true);
-window.__reader={CNT:()=>CNT,CAL:()=>CAL,CUR,S,D,calibrate,next,prev,go,relayout,a5page,geomFor,openShelf,closeShelf,buildShelf};
+window.__reader={CNT:()=>CNT,CAL:()=>CAL,PAL:()=>PAL,CUR,S,D,calibrate,next,prev,go,relayout,a5page,geomFor,openShelf,closeShelf,buildShelf};
 })();
 </script>
 <script>
