@@ -514,6 +514,18 @@ body.phone .nbody{padding:10px 10px 16px}
 .ptl{display:flow-root}
 .flowcss .pside .bt{font-size:1.45em}
 .ptr{font-family:var(--sans);font-size:.72em;letter-spacing:.08em;color:var(--soft);text-transform:uppercase}
+
+/* in the dark the gilt is toned down, so it does not draw the eye from the page */
+[data-theme=dark] #book[data-gilt=gold] .edge{background:linear-gradient(rgba(255,240,200,.08),transparent 28%,transparent 72%,rgba(0,0,0,.3)),repeating-linear-gradient(to right,#8a7546 0 1px,#5f4f2e 1px 2px)}
+[data-theme=dark] #book[data-gilt=red] .edge{background:linear-gradient(rgba(190,155,90,.22),transparent 22%,transparent 78%,rgba(190,155,90,.16)),repeating-linear-gradient(to right,#6e2823 0 1px,#521c18 1px 2px)}
+[data-theme=dark] .tab{color:#a8925f}[data-theme=dark] .tab.cur{color:#d6c08c}
+[data-theme=dark] .edge .nt{opacity:.55}
+@media (prefers-color-scheme:dark){
+[data-theme=auto] #book[data-gilt=gold] .edge{background:linear-gradient(rgba(255,240,200,.08),transparent 28%,transparent 72%,rgba(0,0,0,.3)),repeating-linear-gradient(to right,#8a7546 0 1px,#5f4f2e 1px 2px)}
+[data-theme=auto] #book[data-gilt=red] .edge{background:linear-gradient(rgba(190,155,90,.22),transparent 22%,transparent 78%,rgba(190,155,90,.16)),repeating-linear-gradient(to right,#6e2823 0 1px,#521c18 1px 2px)}
+[data-theme=auto] .tab{color:#a8925f}[data-theme=auto] .tab.cur{color:#d6c08c}
+[data-theme=auto] .edge .nt{opacity:.55}
+}
 </style>
 </head>
 <body>

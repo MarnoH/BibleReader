@@ -207,6 +207,18 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
 /* gilt page edges, as on a leather Bible: gold, or red under gold */
 #book[data-gilt=gold] .edge{background:linear-gradient(rgba(255,250,220,.4),transparent 28%,transparent 72%,rgba(60,35,0,.28)),repeating-linear-gradient(to right,#e6c874 0 1px,#b08835 1px 2px)}
 #book[data-gilt=red] .edge{background:linear-gradient(rgba(236,196,104,.55),transparent 22%,transparent 78%,rgba(236,196,104,.42)),repeating-linear-gradient(to right,#a8322b 0 1px,#7a1d18 1px 2px)}
+
+/* in the dark the gilt is toned down, so it does not draw the eye from the page */
+[data-theme=dark] #book[data-gilt=gold] .edge{background:linear-gradient(rgba(255,240,200,.08),transparent 28%,transparent 72%,rgba(0,0,0,.3)),repeating-linear-gradient(to right,#8a7546 0 1px,#5f4f2e 1px 2px)}
+[data-theme=dark] #book[data-gilt=red] .edge{background:linear-gradient(rgba(190,155,90,.22),transparent 22%,transparent 78%,rgba(190,155,90,.16)),repeating-linear-gradient(to right,#6e2823 0 1px,#521c18 1px 2px)}
+[data-theme=dark] .tab{color:#a8925f}[data-theme=dark] .tab.cur{color:#d6c08c}
+[data-theme=dark] .edge .nt{opacity:.55}
+@media (prefers-color-scheme:dark){
+[data-theme=auto] #book[data-gilt=gold] .edge{background:linear-gradient(rgba(255,240,200,.08),transparent 28%,transparent 72%,rgba(0,0,0,.3)),repeating-linear-gradient(to right,#8a7546 0 1px,#5f4f2e 1px 2px)}
+[data-theme=auto] #book[data-gilt=red] .edge{background:linear-gradient(rgba(190,155,90,.22),transparent 22%,transparent 78%,rgba(190,155,90,.16)),repeating-linear-gradient(to right,#6e2823 0 1px,#521c18 1px 2px)}
+[data-theme=auto] .tab{color:#a8925f}[data-theme=auto] .tab.cur{color:#d6c08c}
+[data-theme=auto] .edge .nt{opacity:.55}
+}
 </style>
 </head>
 <body>
