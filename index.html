@@ -2028,13 +2028,18 @@ function ribHere(i){ const r=RIBS[i].r; if(r==null||bookOf[r]!==CUR.b||!CUR.rowM
 function drawRibbons(){
   if(!CUR.G) return; const G=CUR.G, H=G.H, phone=isPhone(), tail=phone?0:Math.min(30,Math.max(14,($('#stage').clientHeight-H)/2-4));
   let h='';
+  // ribbons lying in the book stay inside the inner margin, side by side towards the fold
+  const sides=RIBS.map((_,i)=>ribHere(i)), margin=G.ppv===2?(G.P-G.mo-G.w):G.mo, cnt=[0,0];
+  const lying=k=>sides.filter(x=>x===k).length;
   RIBS.forEach((rb,i)=>{
-    const side=ribHere(i), set=rb.r!=null;
+    const side=sides[i], set=rb.r!=null;
     const tip=esc(ribName(i)+' \u00b7 '+(set?ribRef(rb.r):L.ribEmpty)+'\n'+L.ribTip);
     let x,top,ht;
     if(side>=0){   // lying in the book at this page, near the inner edge
-      const inner=G.ppv===2?(side===0?G.P-G.P*.045:G.P+G.P*.045-9):G.P-G.mo*.55;
-      x=inner+(side===0?-1:1)*i*13; top=-2; ht=H+2+(phone?0:tail*.9);
+      const n=lying(side), k=cnt[side]++, room=Math.max(9,margin-8), step=n>1?Math.min(11,(room-9)/(n-1)):0;
+      if(G.ppv===2) x=step>=4?(side===0?G.P-4-9-k*step:G.P+4+k*step):(side===0?G.P-13+k*5:G.P+4-k*5);   // a narrow margin: they fan over the fold
+      else x=G.P-4-9-k*step;          // one page: in the outer margin, clear of the text
+      top=-2; ht=H+2+(phone?0:tail*.9);
     } else {
       const c=G.ppv===2?G.P:G.P/2; x=c-16+i*12; top=phone?H-Math.max(16,G.mb*.7):H-6; ht=phone?Math.max(16,G.mb*.7):tail+6;
     }
