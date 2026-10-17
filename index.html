@@ -591,6 +591,23 @@ body.sg #flow .rw{cursor:help}
 .ach.free{opacity:.55}
 .atools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 10px}
 .atools .msg{font-size:13px;color:var(--soft)}
+.ach-t{font-family:var(--serif);font-size:17px;min-width:7em;text-align:center}
+.avg{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;align-items:start}
+.avg .aor{margin-top:0}
+.avg .aor+.aor{margin-top:8px}
+@media (max-width:760px){.avg{grid-template-columns:1fr}}
+.av .ref{display:flex;align-items:center;gap:10px}
+.av .ref span{flex:1}
+.apr{border:1px solid var(--line);background:none;border-radius:999px;padding:3px 11px;font:12.5px var(--sans);cursor:pointer;color:var(--ink)}
+.apr.on{background:#3f7f4f;border-color:#3f7f4f;color:#fff}
+.av.ok{border-left:3px solid #3f7f4f;padding-left:9px}
+.astrip{display:flex;flex-wrap:wrap;gap:3px;margin:0 0 8px}
+.astrip button{min-width:26px;height:22px;border:1px solid var(--line);border-radius:5px;background:none;font:11px var(--sans);cursor:pointer;color:var(--soft);font-feature-settings:"lnum"}
+.astrip button.ok{background:#3f7f4f;border-color:#3f7f4f;color:#fff}
+.astrip button.fx{border-color:#c39a3e;color:var(--ink)}
+.ach.brush{outline:3px solid var(--ink);outline-offset:1px}
+.abrush{background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:8px;padding:6px 10px}
+#amap .aen .ach{touch-action:none}
 /* ---------- search ---------- */
 .fq{display:flex;gap:8px;margin:2px 0 10px}
 .fq input{flex:1;min-width:0;font:16px var(--serif);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
@@ -729,6 +746,7 @@ const UI={
   ot:'Old Testament',nt:'New Testament',books:'Books',chooseBook:'Go to',
   backTo:'Back to',a5:'A5 p. ',xrefs:'Cross references',
   opening:'Opening the Bible\u2026',fitting:'Fitting the pages to your A5\u2026',
+  aApprove:'Approve',aApproved:'Approved',aDone:'{a} of {b} verses approved',aAll:'{n} approved in all',aPrevCh:'Previous chapter',aNextCh:'Next chapter',aBrush:'Brush: {w} \u2014 tap or drag over the words that render it.',aBrushOff:'Put the brush down',aBrushHelp:'Quicker: tap an original word first to pick it up as a brush, then tap or drag over its words.',
   aTitleAov:'AOV \u2194 Hebrew & Greek links',aHelpAov:'The AOV\u2019s links are a first draft made by matching words across the whole Bible, so some will be wrong. Each AOV word has the colour of the original word it is linked to. Tap one or more AOV words, then the original word they render. \u2022 marks your corrections.',
   aFix:'Check link',aOpen:'Check the links on these pages',aTitle:'KJV \u2194 Hebrew & Greek links',aHelp:'Each English word has the colour of the original word it is linked to. Tap one or more English words, then the original word they render. A dashed outline means no link was found; a red line under a word means its number differs; \u2022 marks your corrections.',aNone:'No link',aAuto:'Back to automatic',aExport:'Save corrections',aImport:'Load corrections',aCount:'{n} corrections',aPick:'Now tap the original word for \u201c{w}\u201d.',aNear:'from the verse beside it',
   mapTitle:'Map of Strong\u2019s numbers',mapOpen:'Number map',mHeb:'Hebrew',mGrk:'Greek',mFind:'Number\u2026',mTest:'Test me',mNext:'Next',mWhich:'Which letter does {n} begin with?',mScore:'{a} of {b} right',mBlocks:'{n} blocks by second letter',mWords:'{n} words',mHint:'Strong\u2019s numbers follow the alphabet: each first letter is one stretch of numbers, divided again by the second letter. Tap a letter, then a block.',
@@ -775,6 +793,7 @@ const UI={
   ot:'Ou Testament',nt:'Nuwe Testament',books:'Boeke',chooseBook:'Gaan na',
   backTo:'Terug na',a5:'A5 bl. ',xrefs:'Kruisverwysings',
   opening:'Die Bybel word oopgemaak\u2026',fitting:'Die bladsye word by jou A5 gepas\u2026',
+  aApprove:'Keur goed',aApproved:'Goedgekeur',aDone:'{a} van {b} verse goedgekeur',aAll:'{n} goedgekeur altesaam',aPrevCh:'Vorige hoofstuk',aNextCh:'Volgende hoofstuk',aBrush:'Kwas: {w} \u2014 tik of sleep oor die woorde wat dit weergee.',aBrushOff:'Sit die kwas neer',aBrushHelp:'Vinniger: tik eers op \u2019n oorspronklike woord om dit as kwas op te tel, en tik of sleep dan oor sy woorde.',
   aTitleAov:'AOV \u2194 Hebreeuse en Griekse koppelings',aHelpAov:'Die AOV se koppelings is \u2019n eerste konsep, gemaak deur woorde oor die hele Bybel te vergelyk, so sommige sal verkeerd wees. Elke AOV-woord het die kleur van die oorspronklike woord waaraan dit gekoppel is. Tik op een of meer AOV-woorde, dan op die oorspronklike woord wat hulle weergee. \u2022 wys jou regstellings.',
   aFix:'Kontroleer koppeling',aOpen:'Kontroleer die koppelings op hierdie bladsye',aTitle:'KJV \u2194 Hebreeuse en Griekse koppelings',aHelp:'Elke Engelse woord het die kleur van die oorspronklike woord waaraan dit gekoppel is. Tik op een of meer Engelse woorde, dan op die oorspronklike woord wat hulle weergee. \u2019n Stippelraam beteken geen koppeling is gevind nie; \u2019n rooi streep onder \u2019n woord beteken sy nommer verskil; \u2022 wys jou regstellings.',aNone:'Geen koppeling',aAuto:'Terug na outomaties',aExport:'Stoor regstellings',aImport:'Laai regstellings',aCount:'{n} regstellings',aPick:'Tik nou op die oorspronklike woord vir \u201c{w}\u201d.',aNear:'uit die vers langsaan',
   mapTitle:'Kaart van Strong se nommers',mapOpen:'Nommerkaart',mHeb:'Hebreeus',mGrk:'Grieks',mFind:'Nommer\u2026',mTest:'Toets my',mNext:'Volgende',mWhich:'Met watter letter begin {n}?',mScore:'{a} van {b} reg',mBlocks:'{n} blokke volgens tweede letter',mWords:'{n} woorde',mHint:'Strong se nommers volg die alfabet: elke eerste letter is een stuk nommers, weer verdeel volgens die tweede letter. Tik op \u2019n letter, dan op \u2019n blok.',
@@ -2144,7 +2163,7 @@ async function ensureAov(){
 }
 // AOV tokens with your corrections: per word, the number of the Hebrew/Greek word it renders, or '-'
 function aovTokens(r){ const t=SG.aov&&SG.aov[r]; if(!t) return null;
-  return t.split(' ').map((x,w)=>{ const k='aov:'+r+':'+w; return k in FIX?(FIX[k]==null?'-':String(FIX[k])):x; }); }
+  return t.split(' ').map((x,w)=>{ const k='aov:'+r+':'+w; return k in FIX?(FIX[k]==null?'-':String(FIX[k])):x; }); }   // 'j' = the whole word, 'j.p' = one part of a joined word
 const hereKey=(t,r,g)=>(t==='kjv'?'':t+':')+r+':'+g;
 const PARTICLE=new Set(['853','3588','5921','413','834','3605','854','5973','1161','2532','3739','846','1063']);
 const testPre=r=>r<D.bs[39]?'H':'G';
@@ -2152,7 +2171,7 @@ function bsbParts(r){ const tk=SG.bsb&&SG.bsb[r]; if(!tk) return null; let src=r
   if(p[0][0]==='@'){ src=+p[0].slice(1); p=p.slice(1); } return {src,p}; }
 // KJV tokens with your word-by-word corrections ('@row:word' links a word straight to an original word)
 function kjvTokens(r){ const base=SG.kjv&&SG.kjv[r]; if(!base) return null; const t=base.split(' ');
-  const ov=t.map((_,w)=>{ const k='kjvw:'+r+':'+w; return k in FIX?(FIX[k]?'@'+FIX[k].rr+':'+FIX[k].j:'-'):null; });
+  const ov=t.map((_,w)=>{ const k='kjvw:'+r+':'+w; return k in FIX?(FIX[k]?'@'+FIX[k].rr+':'+FIX[k].j+(FIX[k].p!=null?':'+FIX[k].p:''):'-'):null; });
   if(!ov.some(x=>x!==null)) return t;
   const head=[]; let h='-'; for(let w=0;w<t.length;w++){ if(t[w]!=='+') h=t[w]; head.push(h); }
   const out=[];
@@ -2173,9 +2192,11 @@ function tokens(t,r){
 function groupAt(t,r,w){
   if(t==='aov'){ const p=aovTokens(r); if(!p||w>=p.length||p[w]==='-') return null;
     let g=w; while(g>0&&p[g-1]===p[w]) g--; let e=w; while(e+1<p.length&&p[e+1]===p[w]) e++;
-    const j=+p[w], x=srcWords(r)[j]; if(!x) return null; const pre=testPre(r), ns=x.nums.filter(n=>n&&n!=='-'&&n!=='0'); if(!ns.length) return null;
+    const [js,qs]=p[w].split('.'), j=+js, q=qs!=null?+qs:null, x=srcWords(r)[j]; if(!x) return null; const pre=testPre(r);
+    const part=q!=null&&x.parts&&x.parts[q]?x.parts[q]:null;
+    const ns=(part?[part.num]:x.nums).filter(n=>n&&n!=='-'&&n!=='0'); if(!ns.length) return null;
     const key=[...ns].reverse().find(n=>!PARTICLE.has(n))||ns[ns.length-1];
-    return {g,e,nums:ns,key:pre+key,morph:'',pre,form:pre==='H'?partOf(x,key):x.form,parse:x.parse,html:true,j}; }
+    return {g,e,nums:ns,key:pre+key,morph:'',pre,form:part?part.form:x.form,parse:x.parse,html:true,j,p:q}; }
   if(t==='bsb'){ const b=bsbParts(r); if(!b||w>=b.p.length) return null;
     let g=w; while(g>0&&b.p[g]==='+') g--; let e=w; while(e+1<b.p.length&&b.p[e+1]==='+') e++;
     const head=b.p[g]; if(head==='-'||head==='+') return null; const i=+head, src=b.src, pre=testPre(src);
@@ -2186,9 +2207,10 @@ function groupAt(t,r,w){
     return {g,e,nums:[num],key:'G'+num,morph:'',pre,form,parse:SG.gp[code]||code,src,si:i}; }
   const tk=tokens(t,r); if(!tk||w>=tk.length) return null;
   if(t==='kjv'&&tk[w][0]==='@'){ let g=w; while(g>0&&tk[g-1]===tk[w]) g--; let e=w; while(e+1<tk.length&&tk[e+1]===tk[w]) e++;
-    const [rr,j]=tk[w].slice(1).split(':').map(Number), x=srcWords(rr)[j]; if(!x) return null; const pre=testPre(r), ns=x.nums.filter(n=>n&&n!=='-'&&n!=='0'); if(!ns.length) return null;
+    const [rr,j,q]=tk[w].slice(1).split(':').map(Number), x=srcWords(rr)[j]; if(!x) return null; const pre=testPre(r);
+    const ns=(q>=0&&x.parts&&x.parts[q]?[x.parts[q].num]:x.nums).filter(n=>n&&n!=='-'&&n!=='0'); if(!ns.length) return null;
     const key=[...ns].reverse().find(n=>!PARTICLE.has(n))||ns[ns.length-1];
-    return {g,e,nums:ns,key:pre+key,morph:'',pre,link:{rr,j,fixed:true}}; }
+    return {g,e,nums:ns,key:pre+key,morph:'',pre,link:q>=0?{rr,j,p:q,fixed:true}:{rr,j,fixed:true}}; }
   let g=w; if(t==='kjv') while(g>0&&tk[g]==='+') g--;
   let e=w; if(t==='kjv') while(e+1<tk.length&&tk[e+1]==='+') e++;
   const head=tk[g]; if(!head||head==='-'||head==='+') return null;
@@ -2241,7 +2263,9 @@ const saveFix=()=>{ try{ localStorage.setItem(FKEY,JSON.stringify(FIX)); }catch(
 // the words of the Hebrew (OT) or Greek (NT) verse on a row, with their numbers and parsing
 function srcWords(r){
   if(r<D.bs[39]){ const n=NUM.orig; if(!n||!n.t||!SG.heb||!SG.heb[r]||!n.t[r]) return [];
-    const tk=SG.heb[r].split(' '); return n.t[r].split(' ').map((w,i)=>{ const t=tk[i]||'-', k=t.indexOf('/'); return {form:w.replace(/\u05c3$/,''),nums:(k<0?t:t.slice(0,k)).split(','),parse:k<0?'':hebParse(t.slice(k+1))}; }); }
+    const tk=SG.heb[r].split(' '); return n.t[r].split(' ').map((w,i)=>{ const t=tk[i]||'-', k=t.indexOf('/'), form=w.replace(/\u05c3$/,''), nums=(k<0?t:t.slice(0,k)).split(',');
+      const ps=form.split('\u05be'), parts=ps.length>1&&ps.length===nums.length?ps.map((f,q)=>({form:f,num:nums[q]})):null;
+      return {form,nums,parts,parse:k<0?'':hebParse(t.slice(k+1))}; }); }
   if(!SG.grk||!SG.grk[r]) return [];
   return SG.grk[r].split('\t').map(x=>{ const [f,n,c]=x.split('|'); return {form:f,nums:[n],parse:esc(SG.gp[c]||c)}; });
 }
@@ -2258,13 +2282,21 @@ function kjvLink(r,gr){
 }
 function partOf(w,num){ const parts=w.form.split('\u05be'); if(parts.length<2||parts.length!==w.nums.length) return w.form;
   const i=w.nums.indexOf(num); return i>=0?parts[i]:w.form; }
-function kjvOrig(r,gr){ const l=kjvLink(r,gr); if(!l) return null; const ws=srcWords(l.rr), w=ws[l.j]; if(!w) return null;
-  let form=r<D.bs[39]&&!l.fixed?partOf(w,gr.key.slice(1)):w.form;   // a link you made yourself shows the whole word
+function sharedUnit(r,l,gr){ const tk=tokens('kjv',r); if(!tk) return false;
+  for(let w=0;w<tk.length;w++){ if(w===gr.g||tk[w]==='-'||tk[w]==='+') continue; const o=groupAt('kjv',r,w); if(!o) continue;
+    if(o.key!==gr.key){ const ol=kjvLink(r,o); if(ol&&ol.rr===l.rr&&ol.j===l.j) return true; } w=o.e; }
+  return false; }
+// the link with the part of a joined word: a joined word is linked whole, unless another phrase of the verse is
+// linked to it too; then each phrase gets the part with its number
+function kjvLinkP(r,gr){ const l=kjvLink(r,gr); if(!l||l.fixed||l.p!=null) return l; const w=srcWords(l.rr)[l.j];
+  if(!w||!w.parts||!sharedUnit(r,l,gr)) return l; const q=w.nums.indexOf(gr.key.slice(1)); return q>=0?Object.assign({},l,{p:q}):l; }
+function kjvOrig(r,gr){ const l=kjvLinkP(r,gr); if(!l) return null; const ws=srcWords(l.rr), w=ws[l.j]; if(!w) return null;
+  let form=l.p!=null&&w.parts&&w.parts[l.p]?w.parts[l.p].form:w.form;
   if(!(r<D.bs[39])&&gr.nums.includes('3588')&&l.j>0&&ws[l.j-1].nums[0]==='3588') form=ws[l.j-1].form+' '+form;
   return {form,parse:w.parse}; }
 function origOrd(t,r,gr){
-  if(t==='kjv'){ const l=kjvLink(r,gr); return l?l.rr*1000+l.j:r*1000+999; }
-  if(t==='aov') return r*1000+gr.j;
+  if(t==='kjv'){ const l=kjvLinkP(r,gr); return l?l.rr*1000+l.j+(l.p||0)/10:r*1000+999; }
+  if(t==='aov') return r*1000+gr.j+(gr.p||0)/10;
   if(t==='bsb'&&gr.si!=null) return gr.src*1000+gr.si;
   return r*1000+gr.g;
 }
@@ -2538,85 +2570,141 @@ document.addEventListener('click',e=>{ const m=e.target.closest('[data-map]'); i
 
 /* ---------------- checking and correcting the links to the Hebrew and Greek ----------------
    KJV: every phrase with a Strong's number is linked to the original word with that number (the first phrase with it
-   to the first such word, and so on). AOV: a first draft from a word aligner. Both can be corrected here word by word:
-   select one or more English or Afrikaans words, then the original word they render. Kept on this device; can be saved. */
-const amapEl=$('#amap'), ALN={rows:[],mode:'kjv',sel:null};
+   to the first such word, and so on). AOV: a first draft from a word aligner. Both can be corrected word by word, a
+   whole chapter at a time, with the English (or Afrikaans) beside the Hebrew or Greek:
+   - select words, then tap the original word; or
+   - tap an original word first to pick it up as a "brush", then tap or drag over the words that render it.
+   Verses you have checked can be ticked off as approved. Kept on this device; saved and loaded as one file. */
+const amapEl=$('#amap'), ALN={rows:[],mode:'kjv',sel:null,brush:null,b:0,c:1,focus:null};
+const AKEY='bybel-goedgekeur-v1'; let APR={kjv:{},aov:{}};
+try{ const p=JSON.parse(localStorage.getItem(AKEY)||'null'); if(p) APR=Object.assign(APR,p); }catch(e){}
+const saveApr=()=>{ try{ localStorage.setItem(AKEY,JSON.stringify(APR)); }catch(e){} };
 async function openAlign(what){
   if(S.strongs!=='on'){ S.strongs='on'; persist(); document.body.classList.add('sg'); }
   if(!await ensureStrongs()) return;
   const aov=(what&&what.startsWith('aov:'))||(what==='page'&&S.tr==='aov');
-  ALN.mode=aov?'aov':'kjv'; ALN.sel=null;
+  ALN.mode=aov?'aov':'kjv'; ALN.sel=null; ALN.brush=null;
   if(aov){ if(!await ensureAov()) return; }
   else if(S.tr!=='kjv'){ S.tr='kjv'; persist(); await relayout(true); }
   closePop(); smapEl.classList.remove('on');
+  let r0;
   if(what&&what!=='page'){ const parts=what.split(':').map(Number), r=aov?parts[1]:parts[0], g=aov?parts[2]:parts[1], gr=groupAt(ALN.mode,r,g);
-    ALN.rows=[r]; ALN.sel={r,fresh:true,ws:new Set(gr?Array.from({length:gr.e-gr.g+1},(_,k)=>gr.g+k):[g])}; }
-  else { const G=CUR.G, p0=CUR.spread*G.ppv, a=firstOnPage(p0), z=lastOnPage(Math.min(CUR.pages-1,p0+G.ppv-1));
-    ALN.rows=[]; for(let i=a;i<=z;i++) for(const r of CUR.V[i].rows) ALN.rows.push(r); }
-  drawAlign(); amapEl.classList.add('on');
+    r0=r; ALN.sel={r,fresh:true,ws:new Set(gr?Array.from({length:gr.e-gr.g+1},(_,k)=>gr.g+k):[g])}; }
+  else r0=CUR.V[startsOnSpread(CUR.spread)].r;
+  setAlignChapter(bookOf[r0],NUM[ALN.mode].c[r0],r0);
+  amapEl.classList.add('on');
 }
-// per word of the verse: the original word it is linked to ({rr,j}) and its Strong's numbers
+function setAlignChapter(b,c,focus){
+  const n=NUM[ALN.mode]; ALN.b=b; ALN.c=c; ALN.rows=[];
+  for(let r=D.bs[b];r<D.bs[b+1];r++) if(n.c[r]===c&&n.t[r]) ALN.rows.push(r);
+  ALN.focus=focus!=null?focus:null; drawAlign();
+  if(ALN.focus!=null) setTimeout(()=>{ const el=amapEl.querySelector('.av[data-row="'+ALN.focus+'"]'); if(el) el.scrollIntoView({block:'center'}); },30);
+  else amapEl.querySelector('.box').scrollTop=0;
+}
+function chapterStep(d){ const n=NUM[ALN.mode]; let b=ALN.b, c=ALN.c+d;
+  const last=bb=>{ let m=0; for(let r=D.bs[bb];r<D.bs[bb+1];r++) if(n.t[r]) m=Math.max(m,n.c[r]); return m; };
+  if(c<1){ if(b===0) return; b--; c=last(b); } else if(c>last(b)){ if(b===65) return; b++; c=1; }
+  ALN.sel=null; ALN.brush=null; setAlignChapter(b,c,null); }
+// per word of the verse: the original word it is linked to ({rr,j,p}) and its Strong's numbers
 function wordLinks(t,r){
   const tk=tokens(t,r); if(!tk) return null; const out=tk.map(()=>({l:null,nums:'',fixed:false}));
   for(let w=0;w<tk.length;w++){ const gr=groupAt(t,r,w); if(!gr) continue;
-    const l=t==='aov'?{rr:r,j:gr.j}:kjvLink(r,gr), lab=gr.pre+gr.nums.join(','+gr.pre);
+    const l=t==='aov'?(gr.p!=null?{rr:r,j:gr.j,p:gr.p}:{rr:r,j:gr.j}):kjvLinkP(r,gr), lab=gr.pre+gr.nums.join(','+gr.pre);
     for(let k=gr.g;k<=gr.e;k++){ out[k]={l,nums:lab,fixed:(t==='aov'?('aov:'+r+':'+k) in FIX:(('kjvw:'+r+':'+k) in FIX||(r+':'+gr.g) in FIX))}; }
     w=gr.e; }
   for(let w=0;w<tk.length;w++){ const k=(t==='aov'?'aov:':'kjvw:')+r+':'+w; if(k in FIX&&FIX[k]==null) out[w].fixed=true; }
   return out;
 }
+const hueOfL=(r,rr,j,p)=>Math.round(((j+(rr-r)*7+(p!=null?p*0.37:0))*137.5)%360+360)%360;
+const sameL=(a,b)=>a&&b&&a.rr===b.rr&&a.j===b.j&&(a.p??null)===(b.p??null);
 function verseHTML(t,r){
   const lk=wordLinks(t,r); if(!lk) return '';
-  const heb=r<D.bs[39], words=(NUM[t].t[r]||'').split(' '), sel=ALN.sel&&ALN.sel.r===r?ALN.sel.ws:null;
-  const hueOf=(rr,j)=>Math.round(((j+(rr-r)*7)*137.5)%360+360)%360;
+  const heb=r<D.bs[39], words=(NUM[t].t[r]||'').split(' '), sel=ALN.sel&&ALN.sel.r===r?ALN.sel.ws:null, br=ALN.brush&&ALN.brush.r===r?ALN.brush:null;
   const en=words.map((w,i)=>{ const x=lk[i]||{l:null};
-    return '<button type="button" class="ach'+(x.l?' lk':(x.nums?' none':' free'))+(x.fixed?' fx':'')+(sel&&sel.has(i)?' sel':'')+'" style="--h:'+(x.l?hueOf(x.l.rr,x.l.j):0)+'" data-wr="'+r+'" data-ww="'+i+'">'+esc(w.replace(/[\[\]]/g,''))+'<small>'+(x.nums||'&nbsp;')+'</small></button>'; }).join('');
+    return '<button type="button" class="ach'+(x.l?' lk':(x.nums?' none':' free'))+(x.fixed?' fx':'')+(sel&&sel.has(i)?' sel':'')+'" style="--h:'+(x.l?hueOfL(r,x.l.rr,x.l.j,x.l.p):0)+'" data-wr="'+r+'" data-ww="'+i+'">'+esc(w.replace(/[\[\]]/g,''))+'<small>'+(x.nums||'&nbsp;')+'</small></button>'; }).join('');
   const rows=[r]; for(const x of lk) if(x&&x.l&&!rows.includes(x.l.rr)) rows.push(x.l.rr);
-  const used=new Set(lk.filter(x=>x&&x.l).map(x=>x.l.rr+':'+x.l.j));
+  const used=new Set(lk.filter(x=>x&&x.l).map(x=>x.l.rr+':'+x.l.j+(x.l.p!=null?':'+x.l.p:'')));
+  const chip=(rr,j,q,form,nums,tip,on,h)=>'<button type="button" class="ach'+(on?' lk':' free')+(br&&sameL(br,{rr,j,p:q})?' brush':'')+'" style="--h:'+h+'" data-or="'+r+'" data-orr="'+rr+'" data-oj="'+j+'"'+(q!=null?' data-op="'+q+'"':'')+' title="'+esc(tip)+'">'+esc(form)+'<small lang="en">'+nums+'</small></button>';
   let or='';
   for(const rr of rows){ const ws=srcWords(rr); if(!ws.length) continue;
     if(t==='aov'&&rr!==r) continue;
     or+='<div class="aor'+(heb?'':' gr')+'" lang="'+(heb?'he':'grc')+'">'+(rr!==r?'<span class="ach plain" lang="en" style="direction:ltr"><small>'+L.aNear+'</small></span>':'')+
-      ws.map((x,j)=>'<button type="button" class="ach'+(used.has(rr+':'+j)?' lk':' free')+'" style="--h:'+hueOf(rr,j)+'" data-or="'+r+'" data-orr="'+rr+'" data-oj="'+j+'" title="'+esc(x.parse.replace(/<[^>]+>/g,''))+'">'+esc(x.form)+'<small lang="en">'+(x.nums[0]&&x.nums[0]!=='-'&&x.nums[0]!=='0'?(heb?'H':'G')+x.nums.join(','):'')+'</small></button>').join('')+'</div>'; }
+      ws.map((x,j)=>{ const tip=x.parse.replace(/<[^>]+>/g,''), whole=used.has(rr+':'+j);
+        if(x.parts) return x.parts.map((pt,q)=>chip(rr,j,q,pt.form+(q<x.parts.length-1?'\u05be':''),'H'+pt.num,tip,whole||used.has(rr+':'+j+':'+q),whole?hueOfL(r,rr,j):hueOfL(r,rr,j,q))).join('');
+        return chip(rr,j,null,x.form,x.nums[0]&&x.nums[0]!=='-'&&x.nums[0]!=='0'?(heb?'H':'G')+x.nums.join(','):'',tip,whole,hueOfL(r,rr,j)); }).join('')+'</div>'; }
   const n=NUM[t], ref=(bookOf[r]===18?'Psalm':bookName(bookOf[r],t))+' '+n.c[r]+':'+n.v[r];
   const oref=heb&&NUM.orig&&NUM.orig.t?' \u2194 '+L.mHeb+' '+NUM.orig.c[r]+':'+NUM.orig.v[r]:'';
-  return '<div class="av" data-row="'+r+'"><div class="ref">'+t.toUpperCase()+' '+esc(ref)+esc(oref)+'</div><div class="aen">'+en+'</div>'+or+'</div>';
+  const ok=!!APR[t][r];
+  return '<div class="av'+(ok?' ok':'')+'" data-row="'+r+'"><div class="ref"><span>'+t.toUpperCase()+' '+esc(ref)+esc(oref)+'</span><button type="button" class="apr'+(ok?' on':'')+'" data-apr="'+r+'">'+(ok?'\u2713 '+L.aApproved:L.aApprove)+'</button></div>'+
+    '<div class="avg"><div class="aen">'+en+'</div><div>'+or+'</div></div></div>';
 }
 const fixKey=(t,r,w)=>(t==='aov'?'aov:':'kjvw:')+r+':'+w;
+const hasFix=(t,r)=>Object.keys(FIX).some(k=>k.startsWith(fixKey(t,r,'')));
 function drawAlign(){
-  const t=ALN.mode, pre=t==='aov'?'aov:':null, fx=Object.keys(FIX).filter(k=>pre?k.startsWith(pre):!k.startsWith('aov:')).length, sel=ALN.sel&&ALN.sel.ws.size;
+  const t=ALN.mode, n=NUM[t], sel=ALN.sel&&ALN.sel.ws.size, done=ALN.rows.filter(r=>APR[t][r]).length, all=Object.keys(APR[t]).length;
   let h='<div class="navh"><b>'+(t==='aov'?L.aTitleAov:L.aTitle)+'</b><button class="x" type="button" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+
-    '<p class="sgk" style="margin:0 0 6px">'+esc(t==='aov'?L.aHelpAov:L.aHelp)+'</p>'+
-    '<div class="atools"><span class="msg">'+L.aCount.replace('{n}',fx)+'</span><span class="grow"></span>'+
+    '<p class="sgk" style="margin:0 0 6px">'+esc(t==='aov'?L.aHelpAov:L.aHelp)+' '+esc(L.aBrushHelp)+'</p>'+
+    '<div class="atools"><button type="button" class="btn" data-ach="-1">\u2039</button><b class="ach-t">'+esc(bookName(ALN.b,t)+' '+ALN.c)+'</b><button type="button" class="btn" data-ach="1">\u203a</button>'+
+    '<span class="msg">'+L.aDone.replace('{a}',done).replace('{b}',ALN.rows.length)+' \u00b7 '+L.aAll.replace('{n}',all)+'</span><span class="grow"></span>'+
     (sel?'<button type="button" class="btn" data-aa="none">'+L.aNone+'</button><button type="button" class="btn" data-aa="auto">'+L.aAuto+'</button>':'')+
-    '<button type="button" class="btn" data-aa="export">'+L.aExport+'</button><button type="button" class="btn" data-aa="import">'+L.aImport+'</button></div>';
-  if(sel){ const w=(NUM[t].t[ALN.sel.r]||'').split(' '); h+='<p class="atools msg">'+esc(L.aPick.replace('{w}',[...ALN.sel.ws].sort((a,b)=>a-b).map(i=>w[i]).join(' ').replace(/[\[\]]/g,'')))+'</p>'; }
-  h+=ALN.rows.map(r=>verseHTML(t,r)).join('');
+    '<button type="button" class="btn" data-aa="export">'+L.aExport+'</button><button type="button" class="btn" data-aa="import">'+L.aImport+'</button></div>'+
+    '<div class="astrip">'+ALN.rows.map(r=>'<button type="button" class="'+(APR[t][r]?'ok':hasFix(t,r)?'fx':'')+'" data-ago="'+r+'" title="'+n.c[r]+':'+n.v[r]+'">'+n.v[r]+'</button>').join('')+'</div>';
+  if(ALN.brush){ const x=srcWords(ALN.brush.rr)[ALN.brush.j]; const f=x?(ALN.brush.p!=null&&x.parts?x.parts[ALN.brush.p].form:x.form):'';
+    h+='<p class="atools msg abrush">'+L.aBrush.replace('{w}','<b lang="'+(ALN.brush.rr<D.bs[39]?'he':'grc')+'">'+esc(f)+'</b>')+' <button type="button" class="btn" data-aa="unbrush">'+L.aBrushOff+'</button></p>'; }
+  else if(sel){ const w=(n.t[ALN.sel.r]||'').split(' '); h+='<p class="atools msg">'+esc(L.aPick.replace('{w}',[...ALN.sel.ws].sort((a,b)=>a-b).map(i=>w[i]).join(' ').replace(/[\[\]]/g,'')))+'</p>'; }
+  h+=ALN.rows.map(r=>verseHTML(t,r)).join('')+
+    '<div class="atools" style="justify-content:center;margin-top:14px"><button type="button" class="btn" data-ach="-1">\u2039 '+L.aPrevCh+'</button><button type="button" class="btn" data-ach="1">'+L.aNextCh+' \u203a</button></div>';
   const box=amapEl.querySelector('.box'), top=box.scrollTop; box.innerHTML=h; box.scrollTop=top;
 }
 let alignDirty=false;
 function clearGroupFix(r,ws){ const tk=SG.kjv[r]; if(!tk) return; const t=tk.split(' ');
   for(const w of ws){ let g=w; while(g>0&&t[g]==='+') g--; delete FIX[r+':'+g]; } }
+function setLink(t,r,i,l){ FIX[fixKey(t,r,i)]=l==null?null:(t==='aov'?(l.p!=null?l.j+'.'+l.p:l.j):(l.p!=null?{rr:l.rr,j:l.j,p:l.p}:{rr:l.rr,j:l.j})); if(t==='kjv') clearGroupFix(r,[i]); alignDirty=true; }
+/* the brush: tap an original word, then tap or drag over the words that render it (starting on a word that already
+   has it takes it off instead) */
+let paint=null;
+amapEl.addEventListener('pointerdown',e=>{
+  const b=e.target.closest('[data-ww]'); if(!b||!ALN.brush||+b.dataset.wr!==ALN.brush.r) return;
+  e.preventDefault(); const t=ALN.mode, r=+b.dataset.wr, i=+b.dataset.ww, cur=(wordLinks(t,r)||[])[i];
+  paint={r,erase:!!(cur&&cur.fixed&&sameL(cur.l,ALN.brush)),seen:new Set()};   // only a link you set yourself is taken off; an automatic one is confirmed
+  paintOne(b);
+  try{ b.releasePointerCapture(e.pointerId); }catch(x){}
+});
+amapEl.addEventListener('pointerover',e=>{ if(!paint) return; const b=e.target.closest('[data-ww]'); if(b&&+b.dataset.wr===paint.r) paintOne(b); });
+addEventListener('pointerup',()=>{ if(!paint) return; paint=null; saveFix(); drawAlign(); });
+function paintOne(b){ const i=+b.dataset.ww; if(paint.seen.has(i)) return; paint.seen.add(i);
+  setLink(ALN.mode,paint.r,i,paint.erase?null:ALN.brush);
+  b.classList.toggle('lk',!paint.erase); b.classList.toggle('free',paint.erase); b.classList.add('fx');
+  b.style.setProperty('--h',paint.erase?0:hueOfL(paint.r,ALN.brush.rr,ALN.brush.j,ALN.brush.p)); }
 amapEl.addEventListener('click',e=>{
   if(e.target===amapEl){ closeAlign(); return; }
   const b=e.target.closest('button'); if(!b) return; const t=ALN.mode;
   if(b.dataset.act==='close'){ closeAlign(); return; }
-  if(b.dataset.ww!=null){ const r=+b.dataset.wr, i=+b.dataset.ww;
+  if(b.dataset.ach){ chapterStep(+b.dataset.ach); return; }
+  if(b.dataset.ago){ const el=amapEl.querySelector('.av[data-row="'+b.dataset.ago+'"]'); if(el) el.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if(b.dataset.apr){ const r=+b.dataset.apr; if(APR[t][r]) delete APR[t][r]; else APR[t][r]=todayISO(); saveApr(); drawAlign();
+    if(APR[t][r]){ const nx=ALN.rows.find(x=>x>r&&!APR[t][x]); const el=nx&&amapEl.querySelector('.av[data-row="'+nx+'"]'); if(el) el.scrollIntoView({block:'center',behavior:'smooth'}); }
+    return; }
+  if(b.dataset.ww!=null){ if(ALN.brush) return; const r=+b.dataset.wr, i=+b.dataset.ww;
     if(!ALN.sel||ALN.sel.r!==r||(ALN.sel.fresh&&!ALN.sel.ws.has(i))) ALN.sel={r,ws:new Set()};   // a word chosen from its card is replaced by the next tap
     ALN.sel.fresh=false; ALN.sel.ws.has(i)?ALN.sel.ws.delete(i):ALN.sel.ws.add(i); if(!ALN.sel.ws.size) ALN.sel=null; drawAlign(); return; }
-  if(b.dataset.oj!=null&&ALN.sel&&+b.dataset.or===ALN.sel.r){ const r=ALN.sel.r, rr=+b.dataset.orr, j=+b.dataset.oj;
-    for(const i of ALN.sel.ws) FIX[fixKey(t,r,i)]=t==='aov'?j:{rr,j};
-    if(t==='kjv') clearGroupFix(r,ALN.sel.ws); saveFix(); alignDirty=true; ALN.sel=null; drawAlign(); return; }
+  if(b.dataset.oj!=null){ const r=+b.dataset.or, l={rr:+b.dataset.orr,j:+b.dataset.oj,p:b.dataset.op!=null?+b.dataset.op:null};
+    if(ALN.sel&&ALN.sel.r===r){ for(const i of ALN.sel.ws) setLink(t,r,i,l); saveFix(); ALN.sel=null; }
+    else { const nb=Object.assign({r},l); ALN.brush=ALN.brush&&ALN.brush.r===r&&sameL(ALN.brush,l)?null:nb; ALN.sel=null; }
+    drawAlign(); return; }
   const a=b.dataset.aa;
-  if((a==='none'||a==='auto')&&ALN.sel){ const r=ALN.sel.r;
+  if(a==='unbrush'){ ALN.brush=null; drawAlign(); }
+  else if((a==='none'||a==='auto')&&ALN.sel){ const r=ALN.sel.r;
     for(const i of ALN.sel.ws){ const k=fixKey(t,r,i); if(a==='none') FIX[k]=null; else delete FIX[k]; }
     if(t==='kjv') clearGroupFix(r,ALN.sel.ws); saveFix(); alignDirty=true; ALN.sel=null; drawAlign(); }
-  else if(a==='export'){ const blob=new Blob([JSON.stringify({kind:'bybel-koppel',v:1,fixes:FIX},null,1)],{type:'application/json'});
+  else if(a==='export'){ const blob=new Blob([JSON.stringify({kind:'bybel-koppel',v:2,fixes:FIX,approved:APR},null,1)],{type:'application/json'});
     const u=URL.createObjectURL(blob), l=document.createElement('a'); l.href=u; l.download='koppelings-'+todayISO()+'.json'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); }
   else if(a==='import'){ const inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json';
-    inp.onchange=async()=>{ try{ const j=JSON.parse(await inp.files[0].text()); if(j.kind!=='bybel-koppel') throw 0; Object.assign(FIX,j.fixes||{}); saveFix(); alignDirty=true; drawAlign(); }catch(x){ alert('?'); } }; inp.click(); }
+    inp.onchange=async()=>{ try{ const j=JSON.parse(await inp.files[0].text()); if(j.kind!=='bybel-koppel') throw 0; Object.assign(FIX,j.fixes||{});
+      if(j.approved) for(const k of ['kjv','aov']) Object.assign(APR[k],j.approved[k]||{}); saveFix(); saveApr(); alignDirty=true; drawAlign(); }catch(x){ alert('?'); } }; inp.click(); }
 });
-function closeAlign(){ amapEl.classList.remove('on'); if(alignDirty){ alignDirty=false; relayout(true); } }
+amapEl.addEventListener('keydown',e=>{ if(e.key==='Escape'&&(ALN.brush||ALN.sel)){ ALN.brush=null; ALN.sel=null; drawAlign(); e.stopPropagation(); } },true);
+function closeAlign(){ amapEl.classList.remove('on'); ALN.brush=null; if(alignDirty){ alignDirty=false; relayout(true); } }
 document.addEventListener('click',e=>{ const m=e.target.closest('[data-align]'); if(!m) return; e.preventDefault(); e.stopPropagation(); openAlign(m.dataset.align); },true);
 
 /* ---------------- two translations side by side ----------------
