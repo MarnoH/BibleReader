@@ -458,6 +458,21 @@ body.phone .nbody{padding:10px 10px 16px}
 @media (prefers-color-scheme:dark){[data-contrast=strong][data-theme=auto]{--desk:#000;--page:#2b2824;--page2:#37332e;--ink:#f5f0e6;--soft:#bcb4a6;--rule:#45403a;--line:#4b4640;
   --fold:rgba(0,0,0,.85);--fold2:rgba(0,0,0,.32);--sheen:rgba(255,255,255,.06);--edgebg:#958b78;--edgeln2:#3e3933;--shadow:rgba(0,0,0,.8)}}
 
+
+/* gilt page edges, as on a leather Bible: gold, or red under gold */
+#book[data-gilt=gold] .edge{background:linear-gradient(rgba(255,250,220,.4),transparent 28%,transparent 72%,rgba(60,35,0,.28)),repeating-linear-gradient(to right,#e6c874 0 1px,#b08835 1px 2px)}
+#book[data-gilt=red] .edge{background:linear-gradient(rgba(236,196,104,.55),transparent 22%,transparent 78%,rgba(236,196,104,.42)),repeating-linear-gradient(to right,#a8322b 0 1px,#7a1d18 1px 2px)}
+#book[data-gilt] .edge .nt{background:#2b2420}
+
+/* thumb index: a tab for each group of books on the fore-edge, on the side where that group lies */
+#thumbs{position:absolute;inset:0;pointer-events:none;z-index:1}
+.tab{position:absolute;width:17px;pointer-events:auto;border:0;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(to right,rgba(255,255,255,.08),transparent 40%,rgba(0,0,0,.25)),#1e1b18;color:#e2c47c;font:600 9.5px/1 var(--sans);letter-spacing:.06em;
+  box-shadow:0 1px 2px rgba(0,0,0,.4)}
+.tab span{writing-mode:vertical-rl;white-space:nowrap;overflow:hidden;max-height:100%}
+.tab.r{border-radius:0 5px 5px 0}.tab.l{border-radius:5px 0 0 5px}.tab.l span{transform:rotate(180deg)}
+.tab.cur{color:#fff1c4;background:linear-gradient(to right,rgba(255,255,255,.1),transparent 40%,rgba(0,0,0,.2)),#4a3a22}
+.tab:hover{filter:brightness(1.35)}
 /* ---------- search ---------- */
 .fq{display:flex;gap:8px;margin:2px 0 10px}
 .fq input{flex:1;min-width:0;font:16px var(--serif);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
@@ -521,6 +536,7 @@ body.phone .nbody{padding:10px 10px 16px}
     <i class="cover"></i>
     <i class="edge l"><b class="nt"></b></i><i class="edge r"><b class="nt"></b></i>
     <div id="ribs"></div>
+    <div id="thumbs"></div>
     <div class="pg l"><div class="rh"></div><div class="fo"></div></div>
     <div class="pg r"><div class="rh"></div><div class="fo"></div></div>
     <div id="vp"><div id="flow" class="flowcss"></div></div>
@@ -607,6 +623,7 @@ const UI={
   regFrom:'Colours come from your leesregister.',
   noReg:'No leesregister found in this browser, so the books show no reading yet. Open bybel-leesregister.html in this same browser, or load a register backup.',
   loadReg:'Load register backup',regBad:'That file has no readings in it.',
+  tabs:['Law','Hist','Wis','Maj','Min','Gosp','Paul','Gen','Rev'],gilt:'Page edges',gPlain:'Plain',gGold:'Gold',gRed:'Red & gold',thumbs:'Thumb index',
   groups:['Law','History','Wisdom Books','Major Prophets','Minor Prophets','Gospels & Acts','Pauline Epistles','General Epistles','Revelation'],
   months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
   old:'This browser can\u2019t unpack the text (it needs DecompressionStream). A current Chrome, Edge, Firefox or Safari will open it.',
@@ -646,6 +663,7 @@ const UI={
   regFrom:'Die kleure kom uit jou leesregister.',
   noReg:'Geen leesregister in hierdie blaaier nie, dus wys die boeke nog geen lesings nie. Maak bybel-leesregister.html in dieselfde blaaier oop, of laai \u2019n registerrugsteun.',
   loadReg:'Laai registerrugsteun',regBad:'Daardie l\u00eaer bevat geen lesings nie.',
+  tabs:['Wet','Gesk','Wysh','Gr Pr','Kl Pr','Ev','Paul','Alg','Op'],gilt:'Snykante',gPlain:'Gewoon',gGold:'Goud',gRed:'Rooi & goud',thumbs:'Duimindeks',
   groups:['Wet','Geskiedenis','Wysheidsboeke','Groot profete','Klein profete','Evangelies & Handelinge','Pauliniese briewe','Algemene briewe','Openbaring'],
   months:['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Des'],
   old:'Hierdie blaaier kan nie die teks uitpak nie (dit benodig DecompressionStream). \u2019n Huidige Chrome, Edge, Firefox of Safari sal dit oopmaak.',
@@ -654,7 +672,7 @@ const UI={
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -863,6 +881,7 @@ async function calibrate(t,cpp,layout){
 /* ---------------- reading state ---------------- */
 const CUR={b:-1,t:'',xs:false,V:[],rowMap:null,col:null,pages:0,spreads:0,spread:0,G:null,anchor:null};
 const book=$('#book'), flow=$('#flow'), vp=$('#vp');
+if(S.gilt&&S.gilt!=='plain') book.dataset.gilt=S.gilt;
 const pgs=book.querySelectorAll('.pg');
 
 function applyGeom(G){
@@ -954,8 +973,23 @@ function depthOf(r){
   return DEPTH.cum[r]/DEPTH.cum[N];
 }
 const coverOn=()=>S.cover!=='off'&&!isPhone();
+const thumbsOn=()=>S.thumbs!=='off'&&!isPhone();
+const GFIRST=[0,5,17,22,27,39,44,57,65];
+function drawThumbs(f,wl,wr){
+  const el=$('#thumbs'); if(!thumbsOn()||!CUR.G){ el.innerHTML=''; return; }
+  const G=CUR.G, H=G.H, W=G.ppv*G.P, top=H*.05, step=H*.9/9, cur=GROUP[CUR.b];
+  let h='';
+  GFIRST.forEach((b0,g)=>{
+    const behind=depthOf(D.bs[b0])<=f+1e-9, y=top+g*step;
+    const x=behind?-wl-15:W+wr-2;
+    h+='<button type="button" class="tab '+(behind?'l':'r')+(g===cur?' cur':'')+'" data-g="'+g+'" title="'+esc(L.groups[g])+'" style="left:'+x+'px;top:'+y+'px;height:'+(step-3)+'px"><span>'+esc(L.tabs[g])+'</span></button>';
+  });
+  el.innerHTML=h;
+}
+$('#thumbs').addEventListener('click',e=>{ const t=e.target.closest('.tab'); if(!t) return; e.stopPropagation();
+  const b0=GFIRST[+t.dataset.g]; closeShelf(); go(b0,D.bs[b0],{push:true}); });
 function setDepth(r){
-  const f=depthOf(r), nt=depthOf(D.bs[39]), G=CUR.G, bd=coverOn()?Math.max(6,G.P*.016):0, room=($('#stage').clientWidth-G.ppv*G.P)/2-4-bd, T=isPhone()?7:Math.max(7,Math.min(48,G.P*.075,room));
+  const f=depthOf(r), nt=depthOf(D.bs[39]), G=CUR.G, bd=coverOn()?Math.max(6,G.P*.016):0, room=($('#stage').clientWidth-G.ppv*G.P)/2-4-bd-(thumbsOn()?16:0), T=isPhone()?7:Math.max(7,Math.min(48,G.P*.075,room));
   const el=book.querySelector('.edge.l'), er=book.querySelector('.edge.r'), wl=1.5+T*f, wr=1.5+T*(1-f);
   el.style.setProperty('--w',wl+'px'); er.style.setProperty('--w',wr+'px');
   book.style.setProperty('--wl',wl+'px'); book.style.setProperty('--wr',wr+'px'); book.style.setProperty('--bd',bd+'px');
@@ -964,6 +998,7 @@ function setDepth(r){
   const ln=el.firstChild, rn=er.firstChild;
   ln.hidden=f<=nt; rn.hidden=f>nt;
   ln.parentNode.style.setProperty('--at',(1.5+T*(f-nt))+'px'); rn.parentNode.style.setProperty('--at',(T*(nt-f))+'px');
+  drawThumbs(f,wl,wr);
   const pc=Math.round(f*100), tip=L.depth.replace('{p}',pc).replace('{q}',100-pc);
   el.title=tip; er.title=tip;
 }
@@ -1123,7 +1158,7 @@ const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['cont
  ['headings',[['off','off'],['dim','dim'],['on','on']]],['folio',[['book','fBook'],['testament','fTest'],['both','fBoth']]],['-'],
  ['cols',[[1,'1'],[2,'2']]],['layout',[['lines','lines'],['para','para']]],['gap',[['off','off'],['on','on']]],['-'],
  ['xref',[['off','off'],['on','on']]],['status',[['off','off'],['on','on']]],
- ['cover',[['off','off'],['book','cvBook'],...COVERS.map(c=>[c,c])]],['-'],
+ ['cover',[['off','off'],['book','cvBook'],...COVERS.map(c=>[c,c])]],['gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']]],['thumbs',[['off','off'],['on','on']]],['-'],
  ['tr',CAT.bibles.map(b=>[b.id,b.label])],['par',[['off','off'],...CAT.bibles.map(b=>[b.id,b.label])]],['lang',[['en','English'],['af','Afrikaans']]]];
 const setEl=$('#set');
 function buildSettings(){
@@ -1154,6 +1189,8 @@ async function setSetting(k,v){
   else if(k==='status'){ $('#status').hidden=v==='off'; await relayout(false); }
   else if(k==='cover'){ await relayout(false); }
   else if(k==='contrast'){ document.documentElement.dataset.contrast=v; }
+  else if(k==='gilt'){ book.dataset.gilt=v; if(v==='plain') delete book.dataset.gilt; }
+  else if(k==='thumbs'){ await relayout(false); }
   else if(k==='par'){ await relayout(true); }
   else await relayout(k==='xref'||k==='tr');
   if(k==='tr') updateBack();
@@ -1165,7 +1202,7 @@ setEl.addEventListener('click',async e=>{
   if(b.dataset.k){ await setSetting(b.dataset.k,b.dataset.v); return; }
   const a=b.dataset.act;
   if(a==='close') setEl.classList.remove('on');
-  else if(a==='reset'){ S=Object.assign({},DEF,{tr:S.tr,lang:S.lang}); document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast;
+  else if(a==='reset'){ S=Object.assign({},DEF,{tr:S.tr,lang:S.lang}); document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast; delete book.dataset.gilt;
     $('#status').hidden=false; persist(); await relayout(true); buildSettings(); }
   else if(a==='smaller'||a==='bigger'||a==='a5'){
     S.scale= a==='a5'?1 : Math.min(4,Math.max(.6,S.scale*(a==='bigger'?1.08:1/1.08)));
