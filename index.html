@@ -17,6 +17,11 @@
 @font-face{font-family:"SS4";src:url(fonts/SourceSerif4-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
 @font-face{font-family:"SS4";src:url(fonts/SourceSerif4-It.woff2) format("woff2");font-weight:400;font-style:italic;font-display:block}
 @font-face{font-family:"SS4";src:url(fonts/SourceSerif4-Semibold.woff2) format("woff2");font-weight:600;font-style:normal;font-display:block}
+@font-face{font-family:"SS4";src:url(fonts/NotoSerifHebrew-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0590-05FF,U+FB1D-FB4F}
+@font-face{font-family:"SS4";src:url(fonts/NotoSerifHebrew-Bold.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap;unicode-range:U+0590-05FF,U+FB1D-FB4F}
+@font-face{font-family:"SS4";src:url(fonts/NotoSerifGreek-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:"SS4";src:url(fonts/NotoSerifGreek-Italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:"SS4";src:url(fonts/NotoSerifGreek-SemiBold.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
 
 :root{
   color-scheme:light;
@@ -149,6 +154,13 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .flowcss.ch-off .cn{display:none}
 .flowcss.ch-dim .cn{opacity:.42}
 .flowcss.ch-on .vs.hascn>.vn,.flowcss.ch-dim .vs.hascn>.vn{display:none}
+.vs:lang(he),.pa:lang(he),.pu:lang(he),.chp:lang(he){direction:rtl}
+.vs:lang(he){font-size:1.1em;line-height:1.5}
+.pa:lang(he) .vs:lang(he){font-size:1em}
+.pa:lang(he){font-size:1.1em;line-height:1.5}
+.cn:lang(he){float:right;margin:.06em 0 0 .12em}
+.vn:lang(he){margin-right:0;margin-left:.3em}
+.flowcss:lang(he),.flowcss :lang(he){hyphens:manual;-webkit-hyphens:manual}
 .psh{text-align:center;font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:.82em;margin:.75em 0 .3em;break-after:avoid}
 .chp:first-of-type .psh{margin-top:0}
 .flowcss.ch-off .psh{display:none}
@@ -188,10 +200,10 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .sep{height:8px}
 .cred{font-size:11.5px;color:var(--faint);margin:12px 0 0;line-height:1.45}
 
-#nav,#find{position:absolute;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding:14px;
+#nav,#find,#smap{position:absolute;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding:14px;
   background:color-mix(in srgb,var(--desk) 82%,transparent);backdrop-filter:blur(3px)}
-#nav.on,#find.on{display:flex}
-#nav .box,#find .box{width:100%;max-width:880px;max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);
+#nav.on,#find.on,#smap.on{display:flex}
+#nav .box,#find .box,#smap .box{width:100%;max-width:880px;max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);
   border-radius:12px;padding:14px 20px 18px;box-shadow:0 22px 50px -12px var(--shadow)}
 .navh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .navh b{font-family:var(--serif);font-size:19px;font-weight:600}
@@ -429,7 +441,7 @@ body.phone #top{position:absolute;left:0;right:0;top:0;z-index:58;height:auto;mi
   border-bottom:1px solid var(--line);transform:translateY(-105%);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
 body.phone.chrome #top{transform:none}
 body.phone #shelf{padding-top:58px}
-body.phone #nav,body.phone #find{padding-top:60px}
+body.phone #nav,body.phone #find,body.phone #smap{padding-top:60px}
 body.phone #set{top:58px;right:8px;max-height:calc(100% - 66px)}
 body.phone #book{filter:none}
 body.phone .flowcss{text-align:left;hyphens:manual}
@@ -473,6 +485,87 @@ body.phone .nbody{padding:10px 10px 16px}
 .tab.r{border-radius:0 5px 5px 0}.tab.l{border-radius:5px 0 0 5px}.tab.l span{transform:rotate(180deg)}
 .tab.cur{color:#fff1c4;background:linear-gradient(to right,rgba(255,255,255,.1),transparent 40%,rgba(0,0,0,.2)),#4a3a22}
 .tab:hover{filter:brightness(1.35)}
+
+/* ---------- Strong's ---------- */
+.orw{border-bottom:1.5px dotted color-mix(in srgb,var(--rubric) 70%,transparent);color:color-mix(in srgb,var(--ink) 80%,var(--rubric))}
+.orw:lang(he){font-size:1.12em}
+body.sg #flow .rw{cursor:help}
+.sgb{padding:6px 8px 8px;border-top:1px solid var(--line)}
+.sgb:first-of-type{border-top:0}
+.sgh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.sgn{font:600 12.5px var(--sans);color:var(--rubric);letter-spacing:.03em}
+.sgl{font-family:var(--serif);font-size:22px;line-height:1.2}
+.sgl:lang(he){font-size:25px}
+.sgx{font-size:12.5px;color:var(--soft)}
+.sgd{font-family:var(--serif);font-size:14.5px;line-height:1.4;margin-top:4px}
+.sgk{font-size:12.5px;color:var(--soft);margin-top:3px;line-height:1.4}
+.sgu{font-size:12px;color:var(--faint);margin-top:3px}
+.sgdef{white-space:pre-line;max-height:9.5em;overflow:auto;border-left:2px solid var(--line);padding-left:7px}
+.sgr{border:0;background:color-mix(in srgb,var(--rubric) 10%,transparent);color:var(--rubric);border-radius:5px;padding:0 5px;margin:1px 0;font:600 11.5px var(--sans);cursor:pointer;line-height:1.7}
+.sgr span{font:400 14px var(--serif);color:var(--ink)}
+.sgr span:lang(he){font-size:16px}
+.sgr:hover{background:color-mix(in srgb,var(--rubric) 18%,transparent)}
+.sgv{margin:4px 8px 2px;padding:7px 9px;border-radius:8px;background:color-mix(in srgb,var(--ink) 5%,transparent);font-size:13px;line-height:1.45}
+.sgv .f{font-family:var(--serif);font-size:20px}
+.sgv .f:lang(he){font-size:23px}
+.sga{display:flex;flex-wrap:wrap;gap:6px;padding:8px 8px 2px}
+.sga button{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 11px;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.sga button.on{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+/* my words */
+.wlist{padding:4px 2px 30px}
+.wcard{border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin:0 0 10px;background:var(--page)}
+.wcard .sgh{gap:8px}
+.wcard textarea{width:100%;min-height:52px;margin-top:6px;font:14px/1.45 var(--serif);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:7px;padding:6px 8px;resize:vertical}
+.wmet{font-size:12px;color:var(--soft);margin-top:5px;line-height:1.7}
+.wmet button{border:0;background:none;color:var(--rubric);cursor:pointer;padding:0 4px 0 0;font-size:12px}
+.wrow{display:flex;gap:8px;align-items:center;margin-top:6px;font-size:12.5px}
+.wrow button{border:1px solid var(--line);background:none;border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink);font-size:12px}
+.wrow button.on{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.wempty{color:var(--soft);font-family:var(--serif);font-size:15px;line-height:1.5;padding:10px 4px}
+.wfilter{width:100%;font:14px var(--sans);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:2px 0 10px}
+#notes[data-tab=w] .ntools{display:none}
+
+/* ---------- the map of Strong's numbers ---------- */
+#smap .box{max-width:980px}
+.mline{display:flex;height:46px;border-radius:8px;overflow:hidden;margin:8px 0 4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);position:relative}
+.mline button{border:0;padding:0;cursor:pointer;color:#fff;font:600 17px var(--serif);text-shadow:0 1px 1px rgba(0,0,0,.35);min-width:0;overflow:hidden;
+  background:hsl(var(--h) 48% 46%);position:relative}
+.mline button:lang(he){font-size:19px}
+.mline button[aria-pressed=true]{box-shadow:inset 0 0 0 3px var(--ink);z-index:1}
+.mline button:hover{filter:brightness(1.12)}
+.mpin{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--ink);border-radius:2px;pointer-events:none;z-index:2}
+.mticks{position:relative;height:16px;font:11px var(--sans);color:var(--soft);margin-bottom:10px}
+.mticks span{position:absolute;transform:translateX(-50%);font-feature-settings:"lnum"}
+.mtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 12px}
+.mtools input{width:9em;font:15px var(--sans);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.mans{font-family:var(--serif);font-size:15px}
+.mans b{font-size:20px}
+.mletter{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;border-left:6px solid hsl(var(--h) 48% 46%);padding:6px 0 6px 12px;margin:6px 0 12px}
+.mletter .big{font:600 44px/1 var(--serif);color:hsl(var(--h) 48% 40%)}
+[data-theme=dark] .mletter .big{color:hsl(var(--h) 55% 68%)}
+.mletter .nm{font-family:var(--serif);font-size:18px}
+.mletter .rg{color:var(--soft);font-size:13px;font-feature-settings:"lnum"}
+.mblocks{display:flex;flex-wrap:wrap;gap:6px}
+.mblocks button{border:0;border-radius:8px;padding:5px 9px 4px;cursor:pointer;text-align:left;color:var(--ink);background:hsl(var(--h) 55% 50% / calc(.10 + var(--w) * .30));min-width:84px}
+.mblocks button[aria-pressed=true]{box-shadow:inset 0 0 0 2px hsl(var(--h) 48% 40%)}
+.mblocks .pr{display:block;font:600 20px var(--serif)}
+.mblocks .pr:lang(he){font-size:22px}
+.mblocks .nr{display:block;font:11.5px var(--sans);color:var(--soft);font-feature-settings:"lnum"}
+.mwords{margin:12px 0 4px;border-top:1px solid var(--line)}
+.mwords button{display:grid;grid-template-columns:4.5em auto 1fr;gap:10px;align-items:baseline;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:6px 4px;cursor:pointer;color:var(--ink)}
+.mwords button:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.mwords .n{font:600 12px var(--sans);color:var(--rubric);font-feature-settings:"lnum"}
+.mwords .l{font:19px var(--serif)}
+.mwords .l:lang(he){font-size:21px}
+.mwords .g{font-size:13px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mwords .mine .n::after{content:" \2605";color:#c39a3e}
+.mquiz{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin:0 0 12px}
+.mquiz .q{font:600 22px var(--serif)}
+.mquiz .opts{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.mquiz .opts button{border:1px solid var(--line);background:none;border-radius:7px;min-width:38px;padding:4px 7px;font:19px var(--serif);cursor:pointer;color:var(--ink)}
+.mquiz .opts button.ok{background:#3f7f4f;color:#fff;border-color:#3f7f4f}
+.mquiz .opts button.no{background:#a2392a;color:#fff;border-color:#a2392a}
+.sgn.lnk{border:0;background:none;padding:0;cursor:pointer;text-decoration:underline dotted}
 /* ---------- search ---------- */
 .fq{display:flex;gap:8px;margin:2px 0 10px}
 .fq input{flex:1;min-width:0;font:16px var(--serif);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
@@ -486,6 +579,8 @@ body.phone .nbody{padding:10px 10px 16px}
   font-family:var(--serif);font-size:15px;line-height:1.4;color:var(--ink)}
 .fres button.hit:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
 .fres .rf{display:block;font-family:var(--sans);font-size:12px;color:var(--soft);margin-bottom:1px;letter-spacing:.02em}
+.fres .hit:lang(he){direction:rtl;text-align:right;font-size:17px}
+.fres .hit:lang(he) .rf{direction:ltr;text-align:right}
 .fres mark{background:color-mix(in srgb,#ffd400 45%,transparent);color:inherit;border-radius:2px}
 .fres button.go{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:9px;background:none;padding:8px 10px;margin-bottom:8px;cursor:pointer;font-family:var(--serif);font-size:15px}
 .fres .more{margin:10px auto 0;display:block}
@@ -556,13 +651,14 @@ body.phone .nbody{padding:10px 10px 16px}
   <div id="set" role="dialog"></div>
   <div id="nav" role="dialog"><div class="box"></div></div>
   <div id="find" role="dialog"><div class="box"></div></div>
+  <div id="smap" role="dialog"><div class="box"></div></div>
   <section id="shelf" aria-label="Bookshelf"><div class="case"></div><p class="shelfnote"></p></section>
   <div id="busy" class="on"><span>…</span></div>
 </main>
 <aside id="notes" aria-label="Notes">
   <div class="ngrab" aria-hidden="true"></div>
   <div class="nhead">
-    <div class="seg ntabs"><button type="button" data-tab="n"></button><button type="button" data-tab="s"></button></div><span class="npass"></span>
+    <div class="seg ntabs"><button type="button" data-tab="n"></button><button type="button" data-tab="s"></button><button type="button" data-tab="w"></button></div><span class="npass"></span>
     <button type="button" class="nbtn" data-n="pin" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3h6l-1 5 3 3H5l3-3z M10 11v6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
     <button type="button" class="x" data-n="close">×</button>
   </div>
@@ -607,6 +703,9 @@ const UI={
   ot:'Old Testament',nt:'New Testament',books:'Books',chooseBook:'Go to',
   backTo:'Back to',a5:'A5 p. ',xrefs:'Cross references',
   opening:'Opening the Bible\u2026',fitting:'Fitting the pages to your A5\u2026',
+  mapTitle:'Map of Strong\u2019s numbers',mapOpen:'Number map',mHeb:'Hebrew',mGrk:'Greek',mFind:'Number\u2026',mTest:'Test me',mNext:'Next',mWhich:'Which letter does {n} begin with?',mScore:'{a} of {b} right',mBlocks:'{n} blocks by second letter',mWords:'{n} words',mHint:'Strong\u2019s numbers follow the alphabet: each first letter is one stretch of numbers, divided again by the second letter. Tap a letter, then a block.',
+  strongs:'Strong\u2019s',swapAs:'Original shows as',swWord:'Word',swNum:'Number',sAdd:'Add to my words',sIn:'In my words \u2713',sHere:'Show original here',sHereOff:'Show English here',sAlways:'Always show original',sAlwaysOff:'Stop showing original',sUsed:'{n}\u00d7 in the KJV',sVerse:'In this verse',sLoading:'Fetching Strong\u2019s numbers\u2026',sNoNet:'The Strong\u2019s numbers are not on this device yet. Connect to the internet once and switch them on again.',sNone:'No Strong\u2019s number for this word.',sRoot:'Root',sBrief:'Short definition',sIsRoot:'A root word: it comes from no other entry.',sKids:'Words built on it ({n})',sDeriv:'From',wordsTab:'Words',wEmpty:'No words yet. Switch Strong\u2019s on in the settings, tap a word in the KJV and choose \u201cAdd to my words\u201d.',wNotes:'Your notes\u2026',wMet:'Met in',wRemove:'Remove',wFilter:'Find a word or number\u2026',wAlways:'Original in the text',wCount:'{n} words',
+  teamim:'Hebrew accents',
   find:'Search',findPh:'Word or phrase \u2014 use "quotes" for an exact phrase',fAll:'Whole Bible',fOT:'Old Testament',fNT:'New Testament',fAllS:'Bible',fOTS:'OT',fNTS:'NT',fBook:'This book',fCount:'{n} verses',fNone:'Nothing found.',fMore:'Show more',fGo:'Go to {x}',
   contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',par:'Side by side',
   ribbon:'Ribbon',ribHere:'Place here',ribRemove:'Take out',ribName:'Name',ribGo:'Go there',ribEmpty:'not placed yet \u2014 click to place it on this page',ribTip:'click: go there \u00b7 right-click or hold: move or name it',
@@ -639,7 +738,7 @@ const UI={
   groups:['Law','History','Wisdom Books','Major Prophets','Minor Prophets','Gospels & Acts','Pauline Epistles','General Epistles','Revelation'],
   months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
   old:'This browser can\u2019t unpack the text (it needs DecompressionStream). A current Chrome, Edge, Firefox or Safari will open it.',
-  cred:'AOV, KJV and BSB text and the Treasury of Scripture Knowledge cross-references from CrossReferences.org (cross-references CC BY 4.0). Typeset in Source Serif 4, \u00a9 Adobe, SIL Open Font License.'},
+  cred:'AOV, KJV and BSB text and the Treasury of Scripture Knowledge cross-references from CrossReferences.org (cross-references CC BY 4.0). Typeset in Source Serif 4, \u00a9 Adobe, SIL Open Font License. Hebrew: Westminster Leningrad Codex (public domain), from the Open Scriptures Hebrew Bible. Greek: Scrivener\u2019s 1894 Textus Receptus (public domain). Hebrew verse mapping from TVTMS, STEPBible / Tyndale House (CC BY 4.0). Hebrew and Greek letters in Noto Serif, SIL Open Font License. Greek also: SBL Greek New Testament, \u00a9 2010 Society of Biblical Literature and Logos Bible Software (CC BY 4.0). Strong\u2019s numbers in the KJV from CrossWire\u2019s KJV module (general public licence). Strong\u2019s dictionary from Open Scriptures (CC BY-SA). Hebrew parsing from the Open Scriptures Hebrew Bible (CC BY 4.0). Greek words and parsing for the KJV\u2019s New Testament, BDB outlines and short definitions from the BSB interlinear tables (Berean, public domain).'},
  af:{reset:'Herstel',close:'Maak toe',theme:'Tema',auto:'Outo',light:'Lig',dark:'Donker',size:'Grootte',
   verses:'Verse',chapters:'Hoofstukke',headings:'Opskrifte',off:'Af',dim:'Dof',on:'Aan',
   cols:'Kolomme',layout:'Uitleg',lines:'Versre\u00ebls',para:'Paragrawe',gap:'Hoofstukspasie',
@@ -647,6 +746,9 @@ const UI={
   ot:'Ou Testament',nt:'Nuwe Testament',books:'Boeke',chooseBook:'Gaan na',
   backTo:'Terug na',a5:'A5 bl. ',xrefs:'Kruisverwysings',
   opening:'Die Bybel word oopgemaak\u2026',fitting:'Die bladsye word by jou A5 gepas\u2026',
+  mapTitle:'Kaart van Strong se nommers',mapOpen:'Nommerkaart',mHeb:'Hebreeus',mGrk:'Grieks',mFind:'Nommer\u2026',mTest:'Toets my',mNext:'Volgende',mWhich:'Met watter letter begin {n}?',mScore:'{a} van {b} reg',mBlocks:'{n} blokke volgens tweede letter',mWords:'{n} woorde',mHint:'Strong se nommers volg die alfabet: elke eerste letter is een stuk nommers, weer verdeel volgens die tweede letter. Tik op \u2019n letter, dan op \u2019n blok.',
+  strongs:'Strong se',swapAs:'Oorspronklike as',swWord:'Woord',swNum:'Nommer',sAdd:'Voeg by my woorde',sIn:'In my woorde \u2713',sHere:'Wys oorspronklike hier',sHereOff:'Wys Engels hier',sAlways:'Wys altyd oorspronklike',sAlwaysOff:'Wys nie meer oorspronklike nie',sUsed:'{n}\u00d7 in die KJV',sVerse:'In hierdie vers',sLoading:'Strong-nommers word gehaal\u2026',sNoNet:'Die Strong-nommers is nog nie op hierdie toestel nie. Koppel een keer aan die internet en skakel dit weer aan.',sNone:'Geen Strong-nommer vir hierdie woord nie.',sRoot:'Wortel',sBrief:'Kort betekenis',sIsRoot:'\u2019n Wortelwoord: dit kom van geen ander inskrywing nie.',sKids:'Woorde daarop gebou ({n})',sDeriv:'Van',wordsTab:'Woorde',wEmpty:'Nog geen woorde nie. Skakel Strong se aan in die instellings, tik op \u2019n woord in die KJV en kies \u201cVoeg by my woorde\u201d.',wNotes:'Jou notas\u2026',wMet:'Te\u00ebgekom in',wRemove:'Verwyder',wFilter:'Soek \u2019n woord of nommer\u2026',wAlways:'Oorspronklik in die teks',wCount:'{n} woorde',
+  teamim:'Hebreeuse aksente',
   find:'Soek',findPh:'Woord of frase \u2014 gebruik "aanhalingstekens" vir \u2019n presiese frase',fAll:'Hele Bybel',fOT:'Ou Testament',fNT:'Nuwe Testament',fAllS:'Bybel',fOTS:'OT',fNTS:'NT',fBook:'Hierdie boek',fCount:'{n} verse',fNone:'Niks gevind nie.',fMore:'Wys meer',fGo:'Gaan na {x}',
   contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',par:'Langs mekaar',
   ribbon:'Lint',ribHere:'Plaas hier',ribRemove:'Haal uit',ribName:'Naam',ribGo:'Gaan soontoe',ribEmpty:'nog nie geplaas nie \u2014 klik om dit op hierdie bladsy te plaas',ribTip:'klik: gaan soontoe \u00b7 regskliek of hou vas: skuif of benoem',
@@ -679,12 +781,12 @@ const UI={
   groups:['Wet','Geskiedenis','Wysheidsboeke','Groot profete','Klein profete','Evangelies & Handelinge','Pauliniese briewe','Algemene briewe','Openbaring'],
   months:['Jan','Feb','Mrt','Apr','Mei','Jun','Jul','Aug','Sep','Okt','Nov','Des'],
   old:'Hierdie blaaier kan nie die teks uitpak nie (dit benodig DecompressionStream). \u2019n Huidige Chrome, Edge, Firefox of Safari sal dit oopmaak.',
-  cred:'AOV-, KJV- en BSB-teks en die Treasury of Scripture Knowledge-kruisverwysings van CrossReferences.org (kruisverwysings CC BY 4.0). Geset in Source Serif 4, \u00a9 Adobe, SIL Open Font License.'}
+  cred:'AOV-, KJV- en BSB-teks en die Treasury of Scripture Knowledge-kruisverwysings van CrossReferences.org (kruisverwysings CC BY 4.0). Geset in Source Serif 4, \u00a9 Adobe, SIL Open Font License. Hebreeus: Westminster Leningrad Codex (vrye gebruik), uit die Open Scriptures Hebrew Bible. Grieks: Scrivener se Textus Receptus van 1894 (vrye gebruik). Hebreeuse versindeling volgens TVTMS, STEPBible / Tyndale House (CC BY 4.0). Hebreeuse en Griekse letters in Noto Serif, SIL Open Font License. Grieks ook: SBL Greek New Testament, \u00a9 2010 Society of Biblical Literature en Logos Bible Software (CC BY 4.0). Strong-nommers in die KJV uit CrossWire se KJV-module (algemene openbare lisensie). Strong se woordeboek van Open Scriptures (CC BY-SA). Hebreeuse ontleding uit die Open Scriptures Hebrew Bible (CC BY 4.0). Griekse woorde en ontleding vir die KJV se Nuwe Testament, BDB-uiteensettings en kort betekenisse uit die BSB-interlineêre tabelle (Berean, vrye gebruik).'}
 };
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -730,10 +832,17 @@ function numberFor(id,d){
 for(const b of CAT.bibles){ BIB[b.id]=b; NUM[b.id]=numberFor(b.id,(D.num[b.id]||{}).d); }
 function buildFirstX(){ firstX=new Int32Array(N+1); let j=0; for(let r=0;r<N;r++){ firstX[r]=j; while(j<X.length&&X[j][0]===r) j++; } firstX[N]=X.length; }
 if(X) buildFirstX();
+const ACCENTS=/[\u0591-\u05AF\u05BD\u05C4\u05C5]/g;
+function applyAccents(){ const n=NUM.orig; if(!n||!n.t) return; if(!n.raw) n.raw=n.t;
+  n.t=S.teamim==='off'?n.raw.map(x=>x&&x.replace(ACCENTS,'')):n.raw; if(typeof FOLDED!=='undefined') delete FOLDED.orig; shareOT(); }
+// A translation that only carries a New Testament (the SBLGNT) borrows its Old Testament from another one.
+function shareOT(){ for(const b of CAT.bibles){ if(!b.ot||!NUM[b.id].t||!NUM[b.ot]||!NUM[b.ot].t) continue;
+  const dst=NUM[b.id].t, src=NUM[b.ot].t; for(let r=0;r<D.bs[39];r++) dst[r]=src[r]; if(typeof FOLDED!=='undefined') delete FOLDED[b.id]; } }
 async function ensureTr(t){
   if(!NUM[t]) return false; if(NUM[t].t) return true;
+  if(BIB[t].ot&&!await ensureTr(BIB[t].ot)) return false;
   const b=BIB[t]; busy(L.loadingTr.replace('{x}',b.label));
-  try{ const j=await getJSON(b.file); if(j.d) Object.assign(NUM[t],numberFor(t,j.d)); NUM[t].t=j.t; ORD.clear(); return true; }
+  try{ const j=await getJSON(b.file); if(j.d) Object.assign(NUM[t],numberFor(t,j.d)); NUM[t].t=j.t; ORD.clear(); if(t==='orig') applyAccents(); shareOT(); return true; }
   catch(e){ console.warn(e); busy(null); alert(L.notSaved.replace('{x}',b.label)); return false; }
 }
 async function ensureX(){
@@ -755,12 +864,13 @@ function orderOf(t,b){
   o.sort((a,c)=>(n.c[a]-n.c[c])||(n.v[a]-n.v[c])||(n.s[a]-n.s[c])||(a-c));
   ORD.set(key,o); return o;
 }
-const names=t=>D.names[(BIB[t]||{}).names||'en'];
+const names=t=>{ const n=(BIB[t]||{}).names||'en'; return D.names[n==='ui'?(S.lang==='af'?'af':'en'):n]; };
+const langOf=(t,b)=>{ const L2=(BIB[t]||{}).lang; return L2?(b<39?L2.ot:L2.nt):(t==='aov'?'af':'en'); };
 const bookName=(b,t=S.tr)=>names(t)[b][0];
 const bookAbbr=(b,t=S.tr)=>names(t)[b][1];
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function fmt(t,s,ital){ s=esc(s); if(t==='kjv') s=ital? s.replace(/\[([^\]]*)\]/g,'<i>$1</i>') : s.replace(/[\[\]]/g,''); return s; }
-const phrase=(t,k)=>{ const a=X[k]; return t==='aov'?a[1]:t==='kjv'?a[2]:(a[3]===0?a[2]:a[3]); };
+const phrase=(t,k)=>{ const a=X[k]; return t==='aov'?a[1]:t==='kjv'?a[2]:t==='bsb'?(a[3]===0?a[2]:a[3]):''; };
 
 /* ---------------- typesetting ---------------- */
 /* Word marks (highlight and text colour) are kept per translation, by verse row and word number:
@@ -769,12 +879,18 @@ const MKEY='bybel-merke-v1';
 let MARKS={}; try{ MARKS=JSON.parse(localStorage.getItem(MKEY)||'{}')||{}; }catch(e){ MARKS={}; }
 const markCls=c=>(c[0]!=='-'?'h-'+c[0]:'')+(c[1]!=='-'?' c-'+c[1]:'');
 function rowHTML(t,r,xs){
+  if(!NUM[t]||!NUM[t].t) return '';
   const s=NUM[t].t[r]; if(!s) return '';
   const mk=MARKS[t]&&MARKS[t][r], a0=firstX?firstX[r]:0, a1=firstX?firstX[r+1]:0, hasX=xs&&a0<a1;
+  const sw=swapsFor(t,r);
   let inner;
-  if(!hasX&&!mk) inner=fmt(t,s,true);
+  if(!hasX&&!mk&&!sw) inner=fmt(t,s,true);
   else {
-    const n=s.length, ax=new Int32Array(n).fill(-1), mc=new Array(n).fill(''), loose=[];
+    const n=s.length, ax=new Int32Array(n).fill(-1), mc=new Array(n).fill(''), loose=[], sc=new Int32Array(n).fill(-1);
+    if(sw){ const re=/\S+/g; let m, w=0; const at=[];
+      while((m=re.exec(s))){ at.push([m.index,m.index+m[0].length]); w++; }
+      sw.forEach((g,k)=>{ if(!at[g.g]||!at[g.e]) return; let a=at[g.g][0], z=at[g.e][1];
+        while(a<z&&/[(\[\u2018\u201c'"]/.test(s[a])) a++; while(z>a&&/[,.;:!?)\]\u2019\u201d'"]/.test(s[z-1])) z--; sc.fill(k,a,z); }); }
     if(hasX){ const used=[]; let from=0;
       for(let k=a0;k<a1;k++){
         const p=phrase(t,k); if(!p){ loose.push(k); continue; }
@@ -789,15 +905,19 @@ function rowHTML(t,r,xs){
           if(prevEnd>=0&&prev){ const gap=prev===code?code:(code[0]!=='-'&&code[0]===prev[0]?code[0]+'-':''); if(gap) for(let i=prevEnd;i<m.index;i++) mc[i]=gap; } }
         prevEnd=m.index+m[0].length; prev=code||''; w++; } }
     let out='', i=0;
-    while(i<n){ let j=i+1; while(j<n&&ax[j]===ax[i]&&mc[j]===mc[i]) j++;
-      let seg=fmt(t,s.slice(i,j),false);
+    let done=new Set();
+    while(i<n){ let j=i+1; while(j<n&&ax[j]===ax[i]&&mc[j]===mc[i]&&sc[j]===sc[i]) j++;
+      let seg;
+      if(sc[i]>=0){ const g=sw[sc[i]]; if(done.has(sc[i])){ i=j; continue; } done.add(sc[i]);
+        seg='<span class="orw" data-g="'+g.g+'" lang="'+g.lang+'"'+(g.lang==='he'?' dir="rtl"':'')+'>'+esc(g.text)+'</span>'; }
+      else seg=fmt(t,s.slice(i,j),false);
       if(mc[i]) seg='<span class="'+markCls(mc[i])+'">'+seg+'</span>';
       if(ax[i]>=0) seg='<span class="xa" data-x="'+ax[i]+'">'+seg+'</span>';
       out+=seg; i=j; }
     if(loose.length) out+='<span class="xa xm" data-x="'+loose.join(',')+'">\u00b0</span>';
     inner=out;
   }
-  return '<span class="rw" data-r="'+r+'">'+inner+'</span>';
+  return '<span class="rw" data-r="'+r+'"'+(sw?' data-sw="'+sw.map(g=>g.g+':'+(g.e-g.g+1)).join(',')+'"':'')+'>'+inner+'</span>';
 }
 function bookHTML(t,b,xs){
   const n=NUM[t], ord=orderOf(t,b), isPs=b===18;
@@ -912,7 +1032,7 @@ function layoutBook(b){ if(parOn()) parRender(b); else { render(b); paginate(); 
 function render(b){
   CUR.par=null;
   const t=S.tr, xs=S.xref==='on', r=bookHTML(t,b,xs);
-  flow.innerHTML=r.h; flow.lang=t==='aov'?'af':'en';
+  flow.innerHTML=r.h; flow.lang=langOf(t,b);
   Object.assign(CUR,{b,t,xs,V:r.V});
   const rm=new Map(); r.V.forEach((x,i)=>{ for(const row of x.rows) rm.set(row,i); }); CUR.rowMap=rm;
 }
@@ -1053,6 +1173,7 @@ function go(b,row,o={}){
 async function relayout(rerender){
   if(!await ensureTr(S.tr)){ S.tr=Object.keys(NUM).find(t=>NUM[t].t)||'aov'; persist(); if(!await ensureTr(S.tr)) return; }
   if(S.xref==='on'&&!await ensureX()){ S.xref='off'; persist(); }
+  if(bsbWanted()&&SG.dict) await ensureBsb();
   const z=stageSize();
   if(parWanted()&&z.ppv===2&&!await ensureTr(S.par)){ S.par='off'; persist(); }
   const par=parWanted()&&z.ppv===2, cpp=par?1:S.cols;
@@ -1095,16 +1216,16 @@ function scheduleCounts(){
   for(const [a,z] of [first,second]) for(let b=a;b<z;b++) if(!CNT.pages[b]) order.push(b);
   if(!order.length){ updateFolios(); return; }
   const m=$('#measure .cflow');
-  m.className='cflow '+flowClasses(S); m.lang=S.tr==='aov'?'af':'en'; styleFlow(m,G);
+  m.className='cflow '+flowClasses(S); m.lang=langOf(S.tr,CUR.b); styleFlow(m,G);
   let i=0;
   // only when the browser has nothing else to do, so turning pages, typing or dragging is never held up
   const later=()=>window.requestIdleCallback?requestIdleCallback(step,{timeout:2000}):setTimeout(step,30);
   const step=()=>{
-    if(gen!==CNT.gen) return;
+    if(gen!==CNT.gen||!NUM[S.tr]||!NUM[S.tr].t) return;   // a translation still being fetched is counted later
     if(i>=order.length){ m.innerHTML=''; try{ localStorage.setItem('bybel-leser-pages',JSON.stringify({key:CNT.key,pages:CNT.pages})); }catch(e){} return; }
     const b=order[i++];
     if(!CNT.pages[b]){
-      m.innerHTML=bookHTML(S.tr,b,S.xref==='on').h;
+      m.lang=langOf(S.tr,b); m.innerHTML=bookHTML(S.tr,b,S.xref==='on').h;
       const vs=m.querySelectorAll('.vs'), fr=m.getBoundingClientRect(), rs=vs[vs.length-1].getClientRects();
       CNT.pages[b]=Math.max(1,Math.ceil((Math.floor((rs[rs.length-1].left-fr.left+1)/G.pitch)+1)/G.cpp));
       if((b<39)===(CUR.b<39)&&b<CUR.b) updateFolios();
@@ -1171,7 +1292,7 @@ const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['cont
  ['cols',[[1,'1'],[2,'2']]],['layout',[['lines','lines'],['para','para']]],['gap',[['off','off'],['on','on']]],['-'],
  ['xref',[['off','off'],['on','on']]],['status',[['off','off'],['on','on']]],
  ['cover',[['off','off'],['book','cvBook'],...COVERS.map(c=>[c,c])]],['gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']]],['thumbs',[['off','off'],['on','on']]],['-'],
- ['tr',CAT.bibles.map(b=>[b.id,b.label])],['par',[['off','off'],...CAT.bibles.map(b=>[b.id,b.label])]],['lang',[['en','English'],['af','Afrikaans']]]];
+ ['tr',CAT.bibles.map(b=>[b.id,b.label])],['teamim',[['off','off'],['on','on']]],['strongs',[['off','off'],['on','on']]],['swapAs',[['word','swWord'],['num','swNum']]],['par',[['off','off'],...CAT.bibles.map(b=>[b.id,b.label])]],['lang',[['en','English'],['af','Afrikaans']]]];
 const setEl=$('#set');
 function buildSettings(){
   let h='<div class="seth"><button class="lnk" type="button" data-act="reset">'+L.reset+'</button>'+
@@ -1203,6 +1324,9 @@ async function setSetting(k,v){
   else if(k==='contrast'){ document.documentElement.dataset.contrast=v; }
   else if(k==='gilt'){ book.dataset.gilt=v; if(v==='plain') delete book.dataset.gilt; }
   else if(k==='thumbs'){ await relayout(false); }
+  else if(k==='teamim'){ applyAccents(); await relayout(true); }
+  else if(k==='strongs'){ document.body.classList.toggle('sg',v==='on'); if(v==='on'&&!await ensureStrongs()){ S.strongs='off'; persist(); } await relayout(true); }
+  else if(k==='swapAs'){ await relayout(true); }
   else if(k==='par'){ await relayout(true); }
   else await relayout(k==='xref'||k==='tr');
   if(k==='tr') updateBack();
@@ -1508,6 +1632,9 @@ function makeSheet(st,k){
 function renderNotes(force){
   updateNotesBadge();
   if(!notesOpen()) return;
+  notesEl.dataset.tab=S.notesTab==='w'?'w':'';
+  if(S.notesTab==='w'){ if(nSig!=='w'||force){ saveNotes(); nSig='w'; renderWords(); } return; }
+  if(nSig==='w') nSig='';
   const tab=S.notesTab==='s'?'s':'n';
   const cs=spreadChapters(), keys=cs.map(c=>OSIS[CUR.b]+'.'+c);
   if(tab==='s') for(const id in SERM) if(id!==justMade&&!sermFilled(SERM[id])) delete SERM[id];   // an empty sermon left behind is not kept
@@ -1667,12 +1794,12 @@ function applyNotesUI(){
   notesEl.dataset.tool=S.notesTool;
   $('#notesbtn').setAttribute('aria-pressed',open);
   const q=(sel,attr,val)=>notesEl.querySelectorAll(sel).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[attr])===String(val)));
-  q('[data-tool]','tool',S.notesTool); q('[data-ink]','ink',S.penColor); q('[data-size]','size',S.penSize); q('[data-tab]','tab',S.notesTab==='s'?'s':'n');
+  q('[data-tool]','tool',S.notesTool); q('[data-ink]','ink',S.penColor); q('[data-size]','size',S.penSize); q('[data-tab]','tab',S.notesTab==='s'||S.notesTab==='w'?S.notesTab:'n');
   notesEl.querySelector('[data-n=pin]').setAttribute('aria-pressed',pin);
   notesEl.querySelector('[data-n=lines]').setAttribute('aria-pressed',!!S.notesLines);
 }
 function labelNotes(){
-  notesEl.querySelector('[data-tab=n]').textContent=L.notes; notesEl.querySelector('[data-tab=s]').textContent=L.sermons;
+  notesEl.querySelector('[data-tab=n]').textContent=L.notes; notesEl.querySelector('[data-tab=s]').textContent=L.sermons; notesEl.querySelector('[data-tab=w]').textContent=L.wordsTab;
   const t={type:L.nType,pen:L.nPen,erase:L.nErase}; notesEl.querySelectorAll('[data-tool]').forEach(b=>b.textContent=t[b.dataset.tool]);
   const ink={ink:L.nInk,blue:L.nBlue,red:L.nRed,green:L.nGreen}; notesEl.querySelectorAll('[data-ink]').forEach(b=>{ b.title=ink[b.dataset.ink]; b.setAttribute('aria-label',ink[b.dataset.ink]); });
   const sz={'1.4':L.nFine,'2.4':L.nMed,'4':L.nBold}; notesEl.querySelectorAll('[data-size]').forEach(b=>{ b.title=sz[b.dataset.size]; b.setAttribute('aria-label',sz[b.dataset.size]); });
@@ -1725,7 +1852,7 @@ function selectedWords(){
     let a=0, b=words.length-1;
     if(rw.contains(rg.startContainer)){ const p=offsetIn(rw,rg.startContainer,rg.startOffset); a=words.findIndex(w=>w[1]>p); if(a<0) continue; }
     if(rw.contains(rg.endContainer)){ const p=offsetIn(rw,rg.endContainer,rg.endOffset); b=-1; words.forEach((w,i)=>{ if(w[0]<p) b=i; }); }
-    if(a>=0&&a<=b) out.push({r:+rw.dataset.r,a,b,t:rw.dataset.t||S.tr});
+    if(a>=0&&a<=b) out.push({r:+rw.dataset.r,a:domToSrc(rw,a,false),b:domToSrc(rw,b,true),t:rw.dataset.t||S.tr});
   }
   return out.length?out:null;
 }
@@ -1906,11 +2033,11 @@ document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='f'){ e.preventDefault(); openFind(); return; }
   if(e.target.closest&&e.target.closest('textarea,input,select,[contenteditable]')){ if(e.key==='Escape'){ if(findEl.classList.contains('on')) closeFind(); else e.target.blur(); } return; }
   if(e.key==='/'&&!shelfOpen()){ e.preventDefault(); openFind(); return; }
-  if(e.key==='Escape'&&(findEl.classList.contains('on')||ribMenu.classList.contains('on'))){ closeFind(); closeRibMenu(); return; }
+  if(e.key==='Escape'&&(findEl.classList.contains('on')||ribMenu.classList.contains('on')||smapEl.classList.contains('on'))){ closeFind(); closeRibMenu(); smapEl.classList.remove('on'); return; }
   if(e.key==='Escape'){ if(chap.classList.contains('on')){ closeChap(); return; } closePop(); setEl.classList.remove('on'); closeNav(); return; }
   if(shelfOpen()) return;
   if(navEl.classList.contains('on')||e.altKey||e.ctrlKey||e.metaKey) return;
-  if(findEl.classList.contains('on')) return;
+  if(findEl.classList.contains('on')||smapEl.classList.contains('on')) return;
   const k=e.key;
   if(k==='ArrowRight'||k==='PageDown'||(k===' '&&!e.shiftKey)){ e.preventDefault(); next(); }
   else if(k==='ArrowLeft'||k==='PageUp'||(k===' '&&e.shiftKey)){ e.preventDefault(); prev(); }
@@ -1923,6 +2050,379 @@ new ResizeObserver(()=>{ if(grabbing) return; const st=$('#stage'), key=st.clien
   clearTimeout(rzT); rzT=setTimeout(()=>{ if(CUR.G) relayout(false); if(shelfOpen()){ closeChap(); buildShelf(); } },120); }).observe($('#stage'));
 addEventListener('resize',()=>{ if(notesOpen()) setTimeout(()=>nBody.querySelectorAll('.sheet').forEach(sizeSheet),150); });
 
+
+
+/* ---------------- Strong's numbers, parsing and my words ----------------
+   Word data lives in separate files, fetched only when Strong's is switched on, so plain reading is untouched.
+   KJV: one token per word ("7225" starts a phrase, "+" continues it, "-" untagged; "/..." the module's parsing).
+   Hebrew: one token per word, its Strong's numbers and the OSHB parsing. */
+const SG={dict:null,kjv:null,heb:null,grk:null,gp:null,defs:null,bsb:null,hb:null,hbc:null,hbp:null,count:null,wait:null,bwait:null};
+const WKEY='bybel-woorde-v1';
+let WORDS={list:{},here:{},always:{}};
+try{ const p=JSON.parse(localStorage.getItem(WKEY)||'null'); if(p) WORDS=Object.assign(WORDS,p); }catch(e){}
+const saveWords=()=>{ try{ localStorage.setItem(WKEY,JSON.stringify(WORDS)); }catch(e){} };
+async function ensureStrongs(){
+  if(SG.dict) return true; if(SG.wait) return SG.wait;
+  SG.wait=(async()=>{ try{
+    busy(L.sLoading);
+    const get=(k,u)=>EMBD&&EMBD.sg&&EMBD.sg[k]?Promise.resolve(EMBD.sg[k]):getJSON(u);
+    const [d,k,h,g,df]=await Promise.all([get('dict',CAT.strongs.dict),get('kjv',CAT.strongs.kjv),get('heb',CAT.strongs.heb),get('grk',CAT.strongs.grk),get('defs',CAT.strongs.defs)]);
+    SG.kjv=k.s; SG.heb=h.s; SG.grk=g.s; SG.gp=g.p; SG.defs=df; SG.dict=d; busy(null);
+    if(NUM.orig&&!NUM.orig.t) await ensureTr('orig');      // the Hebrew word itself, for the KJV's Old Testament
+    if(bsbWanted()) await ensureBsb();
+    return true;
+  }catch(e){ console.warn(e); busy(null); alert(L.sNoNet); SG.wait=null; return false; } })();
+  return SG.wait;
+}
+if(S.strongs==='on'){ document.body.classList.add('sg'); ensureStrongs().then(ok=>{ if(ok&&CUR.G) relayout(true); }); }
+// the BSB's own word links, fetched when the BSB is read with Strong's on
+async function ensureBsb(){
+  if(SG.bsb) return true; if(SG.bwait) return SG.bwait;
+  SG.bwait=(async()=>{ try{ busy(L.sLoading);
+    const get=(k,u)=>EMBD&&EMBD.sg&&EMBD.sg[k]?Promise.resolve(EMBD.sg[k]):getJSON(u);
+    const [a,h]=await Promise.all([get('bsb',CAT.strongs.bsb),get('hbsb',CAT.strongs.hbsb)]);
+    SG.hb=h.s; SG.hbc=h.c; SG.hbp=h.p; SG.bsb=a.s; busy(null); return true;
+  }catch(e){ console.warn(e); busy(null); SG.bwait=null; return false; } })();
+  return SG.bwait;
+}
+const bsbWanted=()=>S.strongs==='on'&&(S.tr==='bsb'||S.par==='bsb');
+const hereKey=(t,r,g)=>(t==='kjv'?'':t+':')+r+':'+g;
+const PARTICLE=new Set(['853','3588','5921','413','834','3605','854','5973','1161','2532','3739','846','1063']);
+const testPre=r=>r<D.bs[39]?'H':'G';
+function bsbParts(r){ const tk=SG.bsb&&SG.bsb[r]; if(!tk) return null; let src=r, p=tk.split(' ');
+  if(p[0][0]==='@'){ src=+p[0].slice(1); p=p.slice(1); } return {src,p}; }
+function tokens(t,r){
+  if(t==='kjv') return SG.kjv&&SG.kjv[r]?SG.kjv[r].split(' '):null;
+  if(t==='bsb'){ const b=bsbParts(r); return b?b.p:null; }
+  if((t==='orig'||t==='sbl')&&r<D.bs[39]) return SG.heb&&SG.heb[r]?SG.heb[r].split(' '):null;
+  return null;
+}
+// the phrase a word belongs to, its Strong's numbers and parsing
+function groupAt(t,r,w){
+  if(t==='bsb'){ const b=bsbParts(r); if(!b||w>=b.p.length) return null;
+    let g=w; while(g>0&&b.p[g]==='+') g--; let e=w; while(e+1<b.p.length&&b.p[e+1]==='+') e++;
+    const head=b.p[g]; if(head==='-'||head==='+') return null; const i=+head, src=b.src, pre=testPre(src);
+    if(pre==='H'){ const ws=(SG.hb[src]||'').split(' '), x=ws[i]; if(!x) return null; const [num,ci]=x.split(':'); if(num==='0') return null;
+      const occ=ws.slice(0,i).filter(y=>y.split(':')[0]===num).length, hf=hebForm(src,num,occ);
+      return {g,e,nums:[num],key:'H'+num,morph:'',pre,form:hf?hf.form:'',parse:SG.hbp[+ci]||SG.hbc[+ci]||''}; }
+    const x=(SG.grk[src]||'').split('\t')[i]; if(!x) return null; const [form,num,code]=x.split('|'); if(num==='0') return null;
+    return {g,e,nums:[num],key:'G'+num,morph:'',pre,form,parse:SG.gp[code]||code}; }
+  const tk=tokens(t,r); if(!tk||w>=tk.length) return null;
+  let g=w; if(t==='kjv') while(g>0&&tk[g]==='+') g--;
+  let e=w; if(t==='kjv') while(e+1<tk.length&&tk[e+1]==='+') e++;
+  const head=tk[g]; if(!head||head==='-'||head==='+') return null;
+  const [nums,morph]=[head.split('/')[0],head.indexOf('/')>=0?head.slice(head.indexOf('/')+1):''];
+  const ns=nums.split(',').filter(Boolean), key=[...ns].reverse().find(n=>!PARTICLE.has(n))||ns[ns.length-1];
+  return {g,e,nums:ns,key:testPre(r)+key,morph,pre:testPre(r)};
+}
+function kjvCount(id){
+  if(!SG.count){ SG.count=new Map();
+    for(let r=0;r<SG.kjv.length;r++){ const pre=testPre(r); for(const tk of SG.kjv[r].split(' ')){ if(tk==='-'||tk==='+') continue;
+      for(const n of tk.split('/')[0].split(',')) SG.count.set(pre+n,(SG.count.get(pre+n)||0)+1); } } }
+  return SG.count.get(id)||0;
+}
+// the Hebrew word in this verse that carries the number (the verse beside it when the KJV and Hebrew verses divide differently)
+function hebForm(r,num,occ){
+  const n=NUM.orig; if(!n||!n.t||!SG.heb) return '';
+  for(const rr of [r,r-1,r+1]){ if(rr<0||rr>=D.bs[39]||!SG.heb[rr]||!n.t[rr]) continue;
+    const tk=SG.heb[rr].split(' '), ws=n.t[rr].split(' ');
+    const hits=tk.map((x,j)=>x.split('/')[0].split(',').includes(num)?j:-1).filter(j=>j>=0), i=hits.length?hits[Math.min(occ||0,hits.length-1)]:-1; if(i>=0) return {form:ws[i].replace(/\u05c3$/,''),morph:tk[i].slice(tk[i].indexOf('/')+1)}; }
+  return '';
+}
+/* the Greek word in this verse that carries the number, from the BSB's Greek; when the same number comes more
+   than once, the KJV's first phrase with it takes the first Greek word, and so on. A few words are numbered
+   differently by the two (\u03bb\u03ad\u03b3\u03c9 / \u03b5\u1f36\u03c0\u03bf\u03bd, the forms of \u1f10\u03b3\u03ce and \u03c3\u03cd) and count as the same here. */
+const GFAM=(()=>{ const m={}; for(const g of [['3004','2036','2046','4483'],['3708','3700','1492'],['1473','3165','3427','3450','1691','1698','1700','2248','2254','2257','2249'],['4771','4571','4671','4675','5209','5213','5216','5210'],['1438','1683','4572'],['846','848'],['3739','3748']]) for(const x of g) m[x]=g; return m; })();
+const sameG=(a,b)=>a===b||(GFAM[a]&&GFAM[a].includes(b));
+function grkForm(r,num,occ,art){
+  if(!SG.grk) return '';
+  for(const rr of [r,r-1,r+1]){ if(rr<D.bs[39]||rr>=N||!SG.grk[rr]) continue;
+    const ws=SG.grk[rr].split('\t').map(x=>x.split('|')), hit=ws.map((w,i)=>[w,i]).filter(([w])=>sameG(w[1],num));
+    if(hit.length){ const [w,i]=hit[Math.min(occ||0,hit.length-1)], pre=art&&i>0&&ws[i-1][1]==='3588'?ws[i-1][0]+' ':'';
+      return {form:pre+w[0],parse:SG.gp[w[2]]||w[2]}; } }
+  return '';
+}
+function occOf(r,g,num){ const tk=SG.kjv[r].split(' '); let k=0;
+  for(let i=0;i<g;i++){ const t=tk[i]; if(t==='-'||t==='+') continue; if(t.split('/')[0].split(',').some(n=>sameG(n,num))) k++; } return k; }
+function swapsFor(t,r){
+  if((t!=='kjv'&&t!=='bsb')||S.strongs!=='on'||!SG.kjv||(t==='bsb'&&!SG.bsb)) return null;
+  const any=Object.keys(WORDS.always).length; if(!any&&!Object.keys(WORDS.here).some(k=>k.startsWith(hereKey(t,r,'')))) return null;
+  const tks=tokens(t,r); if(!tks) return null; const out=[];
+  for(let w=0;w<tks.length;w++){ if(tks[w]==='-'||tks[w]==='+') continue;
+    const gr=groupAt(t,r,w); if(!gr) continue;
+    if(!(WORDS.here[hereKey(t,r,gr.g)]||WORDS.always[gr.key])) continue;
+    out.push({g:gr.g,e:gr.e,...origText(r,gr)}); w=gr.e; }
+  return out.length?out:null;
+}
+function origText(r,gr){
+  if(S.swapAs==='num') return {text:gr.key,lang:'en'};
+  if(gr.form) return {text:gr.form,lang:gr.pre==='H'?'he':'grc'};
+  if(gr.pre==='H'){ const h=hebForm(r,gr.key.slice(1)); if(h) return {text:h.form,lang:'he'}; }
+  else { const g=grkForm(r,gr.key.slice(1),occOf(r,gr.g,gr.key.slice(1)),gr.nums.includes('3588')); if(g) return {text:g.form,lang:'grc'}; }
+  const d=SG.dict&&SG.dict[gr.key]; return {text:d?d[0]:gr.key,lang:gr.pre==='H'?'he':'grc'};
+}
+// a word number on the page, counted as the source text counts it (a shown original word stands for its whole phrase)
+function domToSrc(rw,k,end){
+  const sw=rw.dataset.sw; if(!sw) return k; let off=0;
+  for(const p of sw.split(',')){ const [g,n]=p.split(':').map(Number), at=g-off;
+    if(k<at) break; if(k===at) return end?g+n-1:g; off+=n-1; }
+  return k+off;
+}
+/* parsing in words: OSHB codes for Hebrew, Robinson's for Greek */
+const HPOS={A:'adjective',C:'conjunction',D:'adverb',N:'noun',P:'pronoun',R:'preposition',S:'suffix',T:'particle',V:'verb'};
+const HSTEM={q:'Qal',N:'Niphal',p:'Piel',P:'Pual',h:'Hiphil',H:'Hophal',t:'Hithpael',o:'Polel',O:'Polal',r:'Hithpolel',m:'Poel',M:'Poal',k:'Palel',K:'Pulal',Q:'Qal passive',l:'Pilpel',L:'Polpal',f:'Hithpalpel',D:'Nithpael',j:'Pealal',i:'Pilel',u:'Hothpaal',c:'Tiphil',v:'Hishtaphel',w:'Nithpalel',y:'Nithpoel',z:'Hithpoel'};
+const ASTEM={q:'Peal',Q:'Peil',u:'Hithpeel',N:'Niphal',p:'Pael',P:'Ithpaal',M:'Hithpaal',a:'Aphel',h:'Haphel',s:'Saphel',e:'Shaphel',H:'Hophal',i:'Ithpeel',t:'Hishtaphel',v:'Ishtaphel',w:'Hithaphel',o:'Polel',z:'Ithpoel',r:'Hithpolel',f:'Hithpalpel',b:'Hephal',c:'Tiphel',m:'Poel',l:'Palpel',L:'Ithpalpel',O:'Ithpolel',G:'Ittaphal'};
+const HTYPE={p:'perfect',q:'sequential perfect',i:'imperfect',w:'sequential imperfect',h:'cohortative',j:'jussive',v:'imperative',r:'participle active',s:'participle passive',a:'infinitive absolute',c:'infinitive construct'};
+const HG={m:'masculine',f:'feminine',c:'common',b:'both'}, HN={s:'singular',p:'plural',d:'dual'}, HS={a:'absolute',c:'construct',d:'determined'};
+const HPRT={a:'affirmation',d:'article',e:'exhortation',i:'interrogative',j:'interjection',m:'demonstrative',n:'negative',o:'object marker',r:'relative'};
+function pgn(x){ let o=[]; for(const ch of x){ if('123'.includes(ch)) o.push(ch+(ch==='1'?'st':ch==='2'?'nd':'rd')); else if(HG[ch]&&!o.some(v=>Object.values(HG).includes(v))) o.push(HG[ch]); else if(HN[ch]&&o.some(v=>Object.values(HG).includes(v))) o.push(HN[ch]); else if(HS[ch]) o.push(HS[ch]); } return o.join(' '); }
+function hebParse(code){
+  if(!code) return ''; const ar=code[0]==='A', parts=code.slice(1).split('/'), out=[];
+  for(const p of parts){ const k=p[0];
+    if(k==='V'){ const stem=(ar?ASTEM:HSTEM)[p[1]]||p[1], ty=HTYPE[p[2]]||''; out.push('<b>'+stem+' '+ty+'</b>'+(p.length>3?' '+pgn(p.slice(3)):'')); }
+    else if(k==='N'){ out.push((p[1]==='p'?'proper noun':p[1]==='g'?'gentilic noun':'noun')+(p.length>2?' '+pgn(p.slice(2)):'')); }
+    else if(k==='A'){ out.push('adjective'+(p.length>2?' '+pgn(p.slice(2)):'')); }
+    else if(k==='T'){ out.push(HPRT[p[1]]||'particle'); }
+    else if(k==='S'){ out.push(p[1]==='p'?'suffix '+pgn(p.slice(2)):p[1]==='d'?'directional he':p[1]==='h'?'paragogic he':p[1]==='n'?'paragogic nun':'suffix'); }
+    else if(k==='P'){ out.push(({d:'demonstrative',f:'indefinite',i:'interrogative',p:'personal',r:'relative'}[p[1]]||'')+' pronoun'+(p.length>2?' '+pgn(p.slice(2)):'')); }
+    else if(k==='R'){ out.push(p[1]==='d'?'preposition + article':'preposition'); }
+    else out.push(HPOS[k]||p); }
+  return (ar?'Aramaic: ':'')+out.join(' + ');
+}
+const GT={P:'present',I:'imperfect',F:'future',A:'aorist',R:'perfect',L:'pluperfect'}, GV={A:'active',M:'middle',P:'passive',E:'middle or passive',D:'middle deponent',O:'passive deponent',N:'middle or passive deponent',Q:'impersonal active',X:'no voice'};
+const GM={I:'indicative',S:'subjunctive',O:'optative',M:'imperative',N:'infinitive',P:'participle',R:'participle (imperative sense)'};
+const GC={N:'nominative',G:'genitive',D:'dative',A:'accusative',V:'vocative'}, GNm={S:'singular',P:'plural'}, GGd={M:'masculine',F:'feminine',N:'neuter'};
+const GPOS={N:'noun',A:'adjective',T:'article',P:'personal pronoun',R:'relative pronoun',C:'reciprocal pronoun',D:'demonstrative pronoun',K:'correlative pronoun',I:'interrogative pronoun',X:'indefinite pronoun',Q:'correlative or interrogative pronoun',F:'reflexive pronoun',S:'possessive pronoun',ADV:'adverb',CONJ:'conjunction',PREP:'preposition',PRT:'particle',INJ:'interjection',COND:'conditional',HEB:'Hebrew word',ARAM:'Aramaic word',ARAM:'Aramaic word'};
+function cng(x){ const o=[]; const m=x.match(/^([123])?([NGDAV])?([SP])?([MFN])?/); if(!m) return x;
+  if(m[1]) o.push(m[1]+(m[1]==='1'?'st':m[1]==='2'?'nd':'rd')); if(m[2]) o.push(GC[m[2]]); if(m[3]) o.push(GNm[m[3]]); if(m[4]) o.push(GGd[m[4]]); return o.join(' '); }
+function grParse(code){
+  return code.split('+').map(c=>{ const [p,...rest]=c.split('-');
+    if(p==='V'){ const tvm=rest[0]||'', m=tvm.match(/^(2?)([PIFARL])([AMPEDONQX])([ISOMNPR])$/);
+      const head=m?'<b>'+(m[1]?'second ':'')+GT[m[2]]+' '+GV[m[3]]+' '+GM[m[4]]+'</b>':'verb '+tvm;
+      const pn=rest[1]||''; const per=pn.match(/^([123])([SP])$/);
+      return 'verb, '+head+(per?' '+per[1]+(per[1]==='1'?'st':per[1]==='2'?'nd':'rd')+' '+GNm[per[2]]:pn?' '+cng(pn):''); }
+    if(p==='PRT'&&rest[0]==='N') return 'negative particle';
+    const name=GPOS[p]||p; return name+(rest.length?' '+cng(rest.join('')):''); }).join(' + ');
+}
+/* the word card */
+function strongHTML(id,r){
+  const d=SG.dict[id]; if(!d) return '<div class="sgb"><div class="sgh"><b class="sgn">'+id+'</b></div></div>';
+  const he=id[0]==='H';
+  return '<div class="sgb"><div class="sgh"><button type="button" class="sgn lnk" data-map="'+id+'" title="'+esc(L.mapOpen)+'">'+id+'</button><span class="sgl" lang="'+(he?'he':'grc')+'"'+(he?' dir="rtl"':'')+'>'+esc(d[0])+'</span><span class="sgx">'+esc([d[1],d[2]].filter(Boolean).join(' \u00b7 '))+'</span></div>'+
+    (d[3]?'<div class="sgd">'+linkIds(esc(d[3]))+'</div>':'')+(d[4]?'<div class="sgk">KJV: '+linkIds(esc(d[4]))+'</div>':'')+(d[5]?'<div class="sgk">'+linkIds(esc(d[5]))+'</div>':'')+
+    (SG.defs&&SG.defs[id]?'<div class="sgk sgdef"><b>'+(he?'BDB':L.sBrief)+'</b> '+esc(SG.defs[id])+'</div>':'')+rootHTML(id)+'<div class="sgu">'+L.sUsed.replace('{n}',kjvCount(id).toLocaleString())+'</div></div>';
+}
+/* roots: each entry's derivation names the entries it comes from; read backwards, it gives the words built on it */
+const linkIds=h=>h.replace(/\b([HG])(\d{1,5})\b/g,(m,p,n)=>SG.dict[p+n]?'<button type="button" class="sgr" data-sid="'+p+n+'">'+p+n+'</button>':m);
+const refsOf=id=>{ const d=SG.dict[id]; return d?[...new Set((d[5].split(';')[0].match(/\b[HG]\d+\b/g)||[]).filter(x=>x!==id&&x[0]===id[0]&&SG.dict[x]))]:[]; };
+function derivedFrom(id){ if(!SG.kids){ SG.kids=new Map(); for(const k in SG.dict) for(const x of refsOf(k)){ if(!SG.kids.has(x)) SG.kids.set(x,[]); SG.kids.get(x).push(k); } }
+  return (SG.kids.get(id)||[]).sort((a,z)=>+a.slice(1)-+z.slice(1)); }
+function rootChain(id){ const out=[]; let cur=id, seen=new Set([id]);
+  for(let i=0;i<6;i++){ const r=refsOf(cur)[0]; if(!r||seen.has(r)) break; out.push(r); seen.add(r); cur=r; } return out; }
+const chip=(id)=>{ const d=SG.dict[id]; return '<button type="button" class="sgr" data-sid="'+id+'">'+id+(d?' <span lang="'+(id[0]==='H'?'he':'grc')+'">'+esc(d[0])+'</span>':'')+'</button>'; };
+function rootHTML(id){
+  const ch=rootChain(id), kids=derivedFrom(id); let h='';
+  if(ch.length){ const top=SG.dict[ch[ch.length-1]]; h+='<div class="sgk">'+L.sRoot+': '+ch.map(chip).join(' \u2190 ')+(top&&/primitive/.test(top[5])?' <i>('+esc(top[5].replace(/;$/,''))+')</i>':'')+'</div>'; }
+  else if(/primitive/.test((SG.dict[id]||[])[5]||'')) h+='<div class="sgk">'+L.sIsRoot+'</div>';
+  if(kids.length) h+='<div class="sgk">'+L.sKids.replace('{n}',kids.length)+': '+kids.slice(0,18).map(chip).join(' ')+(kids.length>18?' \u2026':'')+'</div>';
+  return h;
+}
+const POPSTACK=[];
+let SPOP=null;
+function openStrong(t,r,w,anchor){
+  const gr=groupAt(t,r,w); if(!gr) return false;
+  const words=(NUM[t].t[r]||'').split(' ').slice(gr.g,gr.e+1).join(' ').replace(/[\[\]]/g,'');
+  const n=NUM[t], ref=(bookOf[r]===18?'Psalm':bookName(bookOf[r]))+' '+n.c[r]+':'+n.v[r];
+  let h='<div class="poph"><span>'+(t==='kjv'?'\u201c'+esc(words.replace(/[.,;:!?]+$/,''))+'\u201d \u00b7 ':'')+esc(ref)+'</span><button class="x" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>';
+  const ids=gr.nums.map(x=>gr.pre+x), main=gr.key;
+  for(const id of [main,...ids.filter(x=>x!==main)]) h+=strongHTML(id,r);
+  // the word in this verse, parsed
+  let form='', parse='';
+  if(t==='bsb'){ form=gr.form; parse=esc(gr.parse); }
+  else if(t==='kjv'&&gr.pre==='H'){ const hf=hebForm(r,main.slice(1)); if(hf){ form=hf.form; parse=hebParse(hf.morph); } }
+  else if(t==='kjv'){ const g=grkForm(r,main.slice(1),occOf(r,gr.g,main.slice(1)),gr.nums.includes('3588')); if(g){ form=g.form; parse=esc(g.parse); } else parse=gr.morph?grParse(gr.morph):''; }
+  else { form=(n.t[r]||'').split(' ')[w].replace(/\u05c3$/,''); parse=hebParse(gr.morph); }
+  if(form||parse) h+='<div class="sgv">'+L.sVerse+': '+(form?'<span class="f" lang="'+(gr.pre==='H'?'he':'grc')+'" dir="'+(gr.pre==='H'?'rtl':'ltr')+'">'+esc(form)+'</span> ':'')+(parse?'<div>'+parse+'</div>':'')+'</div>';
+  const inList=!!WORDS.list[main], here=!!WORDS.here[hereKey(t,r,gr.g)], always=!!WORDS.always[main];
+  h+='<div class="sga"><button type="button" data-sa="add" class="'+(inList?'on':'')+'">'+(inList?L.sIn:L.sAdd)+'</button>'+
+    (t==='kjv'||t==='bsb'?'<button type="button" data-sa="here" class="'+(here?'on':'')+'">'+(here?L.sHereOff:L.sHere)+'</button><button type="button" data-sa="always" class="'+(always?'on':'')+'">'+(always?L.sAlwaysOff:L.sAlways)+'</button>':'')+'</div>';
+  SPOP={t,r,g:gr.g,id:main};
+  if(inList){ const e=WORDS.list[main]; if(!e.seen.includes(r)){ e.seen.push(r); saveWords(); } }
+  POPSTACK.length=0; pop.innerHTML=h; pop.classList.add('on'); pop.scrollTop=0;
+  const rc=anchor.getBoundingClientRect?anchor.getBoundingClientRect():anchor, pw=pop.offsetWidth, ph=pop.offsetHeight;
+  let x=Math.min(Math.max(12,rc.left+rc.width/2-pw/2),innerWidth-pw-12), y=rc.bottom+8; if(y+ph>innerHeight-12) y=Math.max(12,rc.top-ph-8);
+  pop.style.left=x+'px'; pop.style.top=y+'px';
+  return true;
+}
+pop.addEventListener('click',e=>{
+  const sid=e.target.closest('[data-sid]'), back=e.target.closest('[data-sback]'); if(!sid&&!back) return; e.stopPropagation();
+  if(back){ const prev=POPSTACK.pop(); if(prev!=null){ pop.innerHTML=prev; pop.scrollTop=0; } return; }
+  POPSTACK.push(pop.innerHTML);
+  pop.innerHTML='<div class="poph"><button type="button" class="x" data-sback="1" aria-label="back">\u2190</button><span>'+esc(sid.dataset.sid)+'</span><button class="x" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+strongHTML(sid.dataset.sid)+
+    '<div class="sga"><button type="button" data-sadd="'+sid.dataset.sid+'" class="'+(WORDS.list[sid.dataset.sid]?'on':'')+'">'+(WORDS.list[sid.dataset.sid]?L.sIn:L.sAdd)+'</button></div>';
+  pop.scrollTop=0;
+},true);
+pop.addEventListener('click',e=>{ const b=e.target.closest('[data-sadd]'); if(!b) return; e.stopPropagation(); const id=b.dataset.sadd;
+  if(!WORDS.list[id]){ WORDS.list[id]={n:'',t:todayISO(),seen:[]}; saveWords(); b.classList.add('on'); b.textContent=L.sIn; if(S.notesTab==='w') renderNotes(true); } });
+pop.addEventListener('click',async e=>{ const b=e.target.closest('[data-sa]'); if(!b||!SPOP) return; e.stopPropagation();
+  const {t,r,g,id}=SPOP, a=b.dataset.sa;
+  if(a==='add'){ if(WORDS.list[id]){ S.notesTab='w'; S.notesOpen=true; persist(); applyNotesUI(); renderNotes(true); closePop(); return; }
+    WORDS.list[id]={n:'',t:todayISO(),seen:[r]}; }
+  else if(a==='here'){ const k=hereKey(t,r,g); if(WORDS.here[k]) delete WORDS.here[k]; else WORDS.here[k]=1; }
+  else if(a==='always'){ if(WORDS.always[id]) delete WORDS.always[id]; else WORDS.always[id]=1; }
+  saveWords(); closePop(); if(a!=='add') await relayout(true); else if(S.notesTab==='w') renderNotes(true);
+});
+// with Strong's on, a tap on a word opens its card; a tap beside the text still turns the page
+book.addEventListener('click',e=>{
+  if(S.strongs!=='on'||!SG.dict||PICK.range||String(getSelection()).trim()) return;
+  if(e.target.closest('.xa')) return;
+  const hit=wordAt(e.clientX,e.clientY); if(!hit) return;
+  const t=hit.rw.dataset.t||S.tr, r=+hit.rw.dataset.r, w=domToSrc(hit.rw,hit.w,false);
+  if(t==='bsb'&&!SG.bsb){ ensureBsb(); return; }
+  if(!tokens(t,r)) return;
+  if(openStrong(t,r,w,hit.r)){ e.stopImmediatePropagation(); e.preventDefault(); }
+},true);
+/* my words */
+function renderWords(){
+  const ids=Object.keys(WORDS.list).sort((a,z)=>(WORDS.list[z].t||'').localeCompare(WORDS.list[a].t||'')||a.localeCompare(z));
+  if(!ids.length){ nBody.innerHTML='<p class="wempty">'+esc(L.wEmpty)+'</p><p><button type="button" class="sgr" data-map="H">'+L.mapOpen+'</button></p>'; return; }
+  const ready=!!SG.dict;
+  let h='<div class="wlist"><input class="wfilter" type="search" placeholder="'+esc(L.wFilter)+'"><p class="sgu">'+L.wCount.replace('{n}',ids.length)+' \u00b7 <button type="button" class="sgr" data-map="H">'+L.mapOpen+'</button></p>';
+  for(const id of ids){ const e=WORDS.list[id], d=ready&&SG.dict[id]||['','','','','',''], he=id[0]==='H';
+    const met=(e.seen||[]).slice(-12).map(r=>'<button type="button" data-wgo="'+r+'">'+esc((bookOf[r]===18?'Ps':bookName(bookOf[r]))+' '+NUM[S.tr].c[r]+':'+NUM[S.tr].v[r])+'</button>').join('');
+    h+='<div class="wcard" data-id="'+id+'" data-find="'+esc((id+' '+d[0]+' '+d[1]+' '+d[3]+' '+(e.n||'')).toLowerCase())+'"><div class="sgh"><b class="sgn">'+id+'</b><span class="sgl" lang="'+(he?'he':'grc')+'"'+(he?' dir="rtl"':'')+'>'+esc(d[0])+'</span><span class="sgx">'+esc(d[1])+'</span></div>'+
+      (d[3]?'<div class="sgk">'+esc(d[3])+'</div>':'')+(ready?rootHTML(id):'')+
+      '<textarea data-wn="'+id+'" placeholder="'+esc(L.wNotes)+'">'+esc(e.n||'')+'</textarea>'+
+      (met?'<div class="wmet">'+L.wMet+': '+met+'</div>':'')+
+      '<div class="wrow"><button type="button" data-wal="'+id+'" class="'+(WORDS.always[id]?'on':'')+'">'+L.wAlways+'</button><span class="grow"></span><button type="button" data-wdel="'+id+'">'+L.wRemove+'</button></div></div>'; }
+  nBody.innerHTML=h+'</div>';
+  if(!ready&&S.strongs==='on') ensureStrongs().then(ok=>{ if(ok&&S.notesTab==='w') renderWords(); });
+}
+nBody.addEventListener('input',e=>{ const ta=e.target.closest('[data-wn]'); if(ta){ const w=WORDS.list[ta.dataset.wn]; if(w){ w.n=ta.value; saveWords(); } return; }
+  const f=e.target.closest('.wfilter'); if(f){ const q=f.value.trim().toLowerCase(); nBody.querySelectorAll('.wcard').forEach(c=>{ c.hidden=q&&!c.dataset.find.includes(q); }); } });
+nBody.addEventListener('click',e=>{ const c=e.target.closest('.wcard [data-sid]'); if(!c) return; e.stopPropagation();
+  POPSTACK.length=0; pop.innerHTML='<div class="poph"><span>'+esc(c.dataset.sid)+'</span><button class="x" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+strongHTML(c.dataset.sid)+
+    '<div class="sga"><button type="button" data-sadd="'+c.dataset.sid+'" class="'+(WORDS.list[c.dataset.sid]?'on':'')+'">'+(WORDS.list[c.dataset.sid]?L.sIn:L.sAdd)+'</button></div>';
+  pop.classList.add('on'); pop.scrollTop=0; const rc=c.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight;
+  pop.style.left=Math.min(Math.max(12,rc.left-pw-12),innerWidth-pw-12)+'px'; pop.style.top=Math.max(12,Math.min(innerHeight-ph-12,rc.top-20))+'px'; });
+nBody.addEventListener('click',async e=>{ const b=e.target.closest('[data-wgo],[data-wal],[data-wdel]'); if(!b) return;
+  if(b.dataset.wgo){ const r=+b.dataset.wgo; go(bookOf[r],r,{push:true,flash:true}); return; }
+  if(b.dataset.wal){ const id=b.dataset.wal; if(WORDS.always[id]) delete WORDS.always[id]; else WORDS.always[id]=1; saveWords(); renderWords(); await relayout(true); return; }
+  if(b.dataset.wdel&&confirm(L.wRemove+' '+b.dataset.wdel+'?')){ delete WORDS.list[b.dataset.wdel]; delete WORDS.always[b.dataset.wdel]; saveWords(); renderWords(); await relayout(true); }
+});
+
+
+/* ---------------- the map of Strong's numbers ----------------
+   Strong numbered each lexicon in alphabetical order, so every first letter is one stretch of numbers
+   (\u05d0 = H1\u2013871 \u2026 \u05ea = H8372\u20138674), cut again by the second letter (\u05d0\u05d1 = H1\u201388). The map is worked out from
+   the dictionary itself. \u05e9\u05c2 and \u05e9\u05c1 are one letter here, as in Strong. A few Greek entries sit out of order. */
+const smapEl=$('#smap');
+const HLET='\u05d0\u05d1\u05d2\u05d3\u05d4\u05d5\u05d6\u05d7\u05d8\u05d9\u05db\u05dc\u05de\u05e0\u05e1\u05e2\u05e4\u05e6\u05e7\u05e8\u05e9\u05ea'.split('');
+const HNAME=['Aleph','Bet','Gimel','Dalet','He','Vav','Zayin','Chet','Tet','Yod','Kaf','Lamed','Mem','Nun','Samekh','Ayin','Pe','Tsadi','Qof','Resh','Shin / Sin','Tav'];
+const GLET='\u03b1\u03b2\u03b3\u03b4\u03b5\u03b6\u03b7\u03b8\u03b9\u03ba\u03bb\u03bc\u03bd\u03be\u03bf\u03c0\u03c1\u03c3\u03c4\u03c5\u03c6\u03c7\u03c8\u03c9'.split('');
+const GNAME=['Alpha','Beta','Gamma','Delta','Epsilon','Zeta','Eta','Theta','Iota','Kappa','Lambda','Mu','Nu','Xi','Omicron','Pi','Rho','Sigma','Tau','Upsilon','Phi','Chi','Psi','Omega'];
+const HFIN={'\u05da':'\u05db','\u05dd':'\u05de','\u05df':'\u05e0','\u05e3':'\u05e4','\u05e5':'\u05e6'};
+function lettersOf(pre,lemma){
+  if(pre==='H'){ const o=[]; for(const c of lemma) if(c>='\u05d0'&&c<='\u05ea') o.push(HFIN[c]||c); return o; }
+  const o=[]; for(const c of lemma.toLowerCase().normalize('NFD')) if((c>='\u03b1'&&c<='\u03c9')||c==='\u03c2') o.push(c==='\u03c2'?'\u03c3':c); return o;
+}
+const MAPS={};
+function buildMap(pre){
+  if(MAPS[pre]) return MAPS[pre];
+  const ids=Object.keys(SG.dict).filter(k=>k[0]===pre).map(k=>+k.slice(1)).sort((a,b)=>a-b);
+  const AL=pre==='H'?HLET:GLET, letters=AL.map((l,i)=>({l,i,a:Infinity,z:0,n:0,blocks:[],odd:[]}));
+  const byL=new Map(AL.map((l,i)=>[l,letters[i]]));
+  // each letter's stretch is its longest unbroken run; the odd entries elsewhere are listed apart
+  const seq=ids.map(n=>{ const c=lettersOf(pre,SG.dict[pre+n][0]); return {n,L1:byL.get(c[0]),two:c.slice(0,2).join('')}; }).filter(x=>x.L1);
+  const runsOf=list=>{ const rs=[]; for(const x of list){ const r=rs[rs.length-1]; if(r&&r.L1===x.L1) r.items.push(x); else rs.push({L1:x.L1,items:[x]}); } return rs; };
+  // a few entries of another letter sitting inside a letter's stretch don't break it
+  const r0=runsOf(seq), inset=new Set();
+  for(let i=1;i<r0.length-1;i++){ let j=i, tot=0;
+    while(j<r0.length-1&&tot+r0[j].items.length<=3&&r0[j].L1!==r0[i-1].L1){ tot+=r0[j].items.length; j++; }
+    if(j>i&&r0[j].L1===r0[i-1].L1) for(let k=i;k<j;k++) r0[k].items.forEach(x=>inset.add(x)); }
+  const runs=runsOf(seq.filter(x=>!inset.has(x)));
+  const main=new Map(); for(const r of runs){ const m=main.get(r.L1); if(!m||r.items.length>m.items.length) main.set(r.L1,r); }
+  const inMain=new Set(); for(const r of main.values()) r.items.forEach(x=>inMain.add(x));
+  let prev=null;
+  for(const x of seq){
+    const L1=x.L1, n=x.n, two=x.two;
+    if(!inMain.has(x)){ L1.odd.push(n); continue; }
+    L1.a=Math.min(L1.a,n); L1.z=Math.max(L1.z,n); L1.n++;
+    const bl=L1.blocks[L1.blocks.length-1];
+    if(bl&&bl.p===two&&prev===L1) bl.z=n, bl.n++; else L1.blocks.push({p:two,a:n,z:n,n:1});
+    prev=L1; }
+  const live=letters.filter(x=>x.n), max=Math.max(...live.flatMap(x=>x.blocks.map(b=>b.n)));
+  return MAPS[pre]={pre,letters:live,last:ids[ids.length-1],max};
+}
+const MAPST={pre:'H',letter:-1,block:-1,pin:0,quiz:null,score:[0,0]};
+const hue=(i,cnt)=>Math.round(i*360/cnt);
+function locate(pre,n){ const M=buildMap(pre);
+  for(const L1 of M.letters){ if(L1.odd.includes(n)) return {L1,b:-1};
+    if(n>=L1.a&&n<=L1.z){ const b=L1.blocks.findIndex(x=>n>=x.a&&n<=x.z); return {L1,b}; } } return null; }
+async function openMap(id){
+  if(!SG.dict){ busy(L.sLoading); try{ SG.dict=await (EMBD&&EMBD.sg?Promise.resolve(EMBD.sg.dict):getJSON(CAT.strongs.dict)); }catch(e){ busy(null); alert(L.sNoNet); return; } busy(null); }
+  closePop(); closeFind(); setEl.classList.remove('on');
+  if(id&&id.length===1){ MAPST.pre=id; MAPST.pin=0; }
+  else if(id){ MAPST.pre=id[0]; const n=+id.slice(1), at=locate(MAPST.pre,n); MAPST.pin=n;
+    if(at){ MAPST.letter=buildMap(MAPST.pre).letters.indexOf(at.L1); MAPST.block=at.b; } }
+  drawMap(); smapEl.classList.add('on');
+}
+function drawMap(){
+  const M=buildMap(MAPST.pre), he=M.pre==='H', lang=he?'he':'grc', cnt=M.letters.length, names=he?HNAME:GNAME;
+  let h='<div class="navh"><b>'+L.mapTitle+'</b><button class="x" type="button" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+
+    '<p class="sgk" style="margin:0 0 8px">'+esc(L.mHint)+'</p>'+
+    '<div class="mtools"><div class="seg"><button type="button" data-mp="H" aria-pressed="'+he+'">'+L.mHeb+'</button><button type="button" data-mp="G" aria-pressed="'+!he+'">'+L.mGrk+'</button></div>'+
+    '<input type="number" min="1" max="'+M.last+'" placeholder="'+esc(L.mFind)+'" value="'+(MAPST.pin||'')+'" class="mnum"><span class="mans"></span><span class="grow"></span><button type="button" class="btn" data-mq="1">'+L.mTest+'</button></div>';
+  if(MAPST.quiz) h+=quizHTML(M);
+  // the number line: one coloured stretch per first letter
+  h+='<div class="mline" dir="ltr">'+M.letters.map((x,i)=>'<button type="button" lang="'+lang+'" data-ml="'+i+'" style="flex:'+(x.z-x.a+1)+';--h:'+hue(i,cnt)+'" title="'+esc(names[x.i]+' '+M.pre+x.a+'\u2013'+M.pre+x.z)+'" aria-pressed="'+(i===MAPST.letter)+'">'+x.l+'</button>').join('')+
+    (MAPST.pin?'<i class="mpin" style="left:calc('+(100*(MAPST.pin-1)/(M.last-1))+'% - 1px)"></i>':'')+'</div>';
+  const ticks=[]; for(let n=1000;n<M.last;n+=1000) ticks.push(n);
+  h+='<div class="mticks">'+ticks.map(n=>'<span style="left:'+(100*(n-1)/(M.last-1))+'%">'+n+'</span>').join('')+'</div>';
+  if(MAPST.letter>=0){ const x=M.letters[MAPST.letter], hh=hue(MAPST.letter,cnt);
+    h+='<div class="mletter" style="--h:'+hh+'"><span class="big" lang="'+lang+'">'+x.l+'</span><div><div class="nm">'+names[x.i]+'</div><div class="rg">'+M.pre+x.a+' \u2013 '+M.pre+x.z+' \u00b7 '+L.mWords.replace('{n}',x.n)+' \u00b7 '+L.mBlocks.replace('{n}',x.blocks.length)+(x.odd.length?' \u00b7 + '+x.odd.map(n=>M.pre+n).join(', '):'')+'</div></div></div>';
+    h+='<div class="mblocks">'+x.blocks.map((b,j)=>'<button type="button" data-mb="'+j+'" style="--h:'+hh+';--w:'+(Math.sqrt(b.n/M.max)).toFixed(2)+'" aria-pressed="'+(j===MAPST.block)+'"><span class="pr" lang="'+lang+'"'+(he?' dir="rtl"':'')+'>'+b.p+'</span><span class="nr">'+b.a+(b.z>b.a?'\u2013'+b.z:'')+' \u00b7 '+b.n+'</span></button>').join('')+'</div>';
+    if(MAPST.block>=0){ const b=x.blocks[MAPST.block]; let w='';
+      for(let n=b.a;n<=b.z;n++){ const id=M.pre+n, d=SG.dict[id]; if(!d) continue;
+        w+='<button type="button" data-mw="'+id+'" class="'+(WORDS.list[id]?'mine':'')+'"><span class="n">'+id+'</span><span class="l" lang="'+lang+'"'+(he?' dir="rtl"':'')+'>'+esc(d[0])+'</span><span class="g">'+esc(d[1]+' \u2014 '+(d[4]||d[3]).split(/[,;]/)[0])+'</span></button>'; }
+      h+='<div class="mwords">'+w+'</div>'; } }
+  smapEl.querySelector('.box').innerHTML=h;
+  if(MAPST.pin) answer(MAPST.pin);
+  const sel=smapEl.querySelector('.mblocks [aria-pressed=true]'); if(sel) sel.scrollIntoView({block:'nearest'});
+}
+function answer(n){ const M=buildMap(MAPST.pre), at=locate(MAPST.pre,n), el=smapEl.querySelector('.mans'); if(!el) return;
+  if(!at){ el.textContent=''; return; } const d=SG.dict[M.pre+n]; const b=at.b>=0?at.L1.blocks[at.b]:null;
+  el.innerHTML='<b lang="'+(M.pre==='H'?'he':'grc')+'">'+(b?b.p:at.L1.l)+'</b> '+(d?esc(d[0]+' \u00b7 '+d[1]):''); }
+function quizHTML(M){ const q=MAPST.quiz, he=M.pre==='H';
+  return '<div class="mquiz"><div class="q">'+L.mWhich.replace('{n}',M.pre+q.n)+'</div><div class="opts" lang="'+(he?'he':'grc')+'">'+
+    M.letters.map((x,i)=>'<button type="button" data-qa="'+i+'" class="'+(q.pick===i?(i===q.right?'ok':'no'):(q.pick!=null&&i===q.right?'ok':''))+'">'+x.l+'</button>').join('')+
+    '</div><div class="sgk" style="margin-top:6px">'+L.mScore.replace('{a}',MAPST.score[0]).replace('{b}',MAPST.score[1])+(q.pick!=null?' \u00b7 <button type="button" class="sgr" data-mq="1">'+L.mNext+'</button>':'')+'</div></div>'; }
+function newQuiz(){ const M=buildMap(MAPST.pre); let n, at; do{ n=1+Math.floor(Math.random()*M.last); at=locate(MAPST.pre,n); }while(!at||at.b<0||!SG.dict[M.pre+n]);
+  MAPST.quiz={n,right:M.letters.indexOf(at.L1),pick:null}; MAPST.pin=0; MAPST.letter=-1; MAPST.block=-1; drawMap(); }
+smapEl.addEventListener('click',e=>{
+  if(e.target===smapEl){ smapEl.classList.remove('on'); return; }
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.act==='close'){ smapEl.classList.remove('on'); return; }
+  if(b.dataset.mp){ MAPST.pre=b.dataset.mp; MAPST.letter=-1; MAPST.block=-1; MAPST.pin=0; MAPST.quiz=null; drawMap(); return; }
+  if(b.dataset.ml!=null){ const i=+b.dataset.ml; MAPST.letter=MAPST.letter===i?-1:i; MAPST.block=-1; drawMap(); return; }
+  if(b.dataset.mb!=null){ const j=+b.dataset.mb; MAPST.block=MAPST.block===j?-1:j; drawMap(); return; }
+  if(b.dataset.mq){ newQuiz(); return; }
+  if(b.dataset.qa!=null&&MAPST.quiz&&MAPST.quiz.pick==null){ const q=MAPST.quiz; q.pick=+b.dataset.qa; MAPST.score[1]++; if(q.pick===q.right) MAPST.score[0]++;
+    MAPST.pin=q.n; const at=locate(MAPST.pre,q.n); MAPST.letter=q.right; MAPST.block=at?at.b:-1; drawMap(); return; }
+  if(b.dataset.mw){ const id=b.dataset.mw; POPSTACK.length=0;
+    pop.innerHTML='<div class="poph"><span>'+id+'</span><button class="x" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+strongHTML(id)+
+      '<div class="sga"><button type="button" data-sadd="'+id+'" class="'+(WORDS.list[id]?'on':'')+'">'+(WORDS.list[id]?L.sIn:L.sAdd)+'</button></div>';
+    pop.classList.add('on'); pop.style.zIndex=96; const rc=b.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight;
+    pop.style.left=Math.min(Math.max(12,rc.right-pw),innerWidth-pw-12)+'px'; pop.style.top=Math.max(12,Math.min(innerHeight-ph-12,rc.bottom+6))+'px'; }
+});
+let mT=0;
+smapEl.addEventListener('focusin',e=>{ if(e.target.classList.contains('mnum')) e.target.select(); });
+smapEl.addEventListener('input',e=>{ if(!e.target.classList.contains('mnum')) return; clearTimeout(mT);
+  mT=setTimeout(()=>{ const v=e.target.value, n=+v, at=n?locate(MAPST.pre,n):null;
+    MAPST.pin=n||0; if(at){ MAPST.letter=buildMap(MAPST.pre).letters.indexOf(at.L1); MAPST.block=at.b; }
+    drawMap(); const i=smapEl.querySelector('.mnum'); i.value=v; i.focus(); },450); });
+// the number on a card, and the map button in My words
+document.addEventListener('click',e=>{ const m=e.target.closest('[data-map]'); if(!m) return; e.preventDefault(); e.stopPropagation(); openMap(m.dataset.map); },true);
 
 /* ---------------- two translations side by side ----------------
    On a two-page spread the left page carries the translation you read and the right page a second one,
@@ -1970,28 +2470,30 @@ function parRender(b){
   pages.forEach((pg,i)=>pg.forEach(k=>{ col[k]=2*i; }));
   const rm=new Map(); V.forEach((x,i)=>{ for(const row of x.rows) rm.set(row,i); });
   Object.assign(CUR,{b,t:A,xs,V,rowMap:rm,par:B,parPages:pages,parH:H,parTH:TH,col,end:col.slice(),pages:2*pages.length,spreads:pages.length});
-  flow.className=flowClasses(Object.assign({},S,{layout:'lines'})); styleFlow(flow,G); flow.style.columnCount='1'; flow.lang=A==='aov'?'af':'en';
+  flow.className=flowClasses(Object.assign({},S,{layout:'lines'})); styleFlow(flow,G); flow.style.columnCount='1'; flow.lang=langOf(A,b);
 }
 function parPaint(s){
   const G=CUR.G, b=CUR.b, V=CUR.V, ks=CUR.parPages[s]||[], xs=S.xref==='on';
   const side=(t,left)=>{ let h=s===0?'<div style="min-height:'+CUR.parTH+'px">'+parTitle(t,b)+'</div>':'';
     for(const k of ks) h+=parSide(t,b,V,k,left&&xs).replace('<div class="pu','<div style="min-height:'+CUR.parH[k]+'px" class="pu'+(k===ks[0]?' first':''));
-    return '<div class="pside" lang="'+(t==='aov'?'af':'en')+'" style="left:'+(left?0:G.w+G.g)+'px;width:'+G.cw+'px">'+h+'</div>'; };
+    return '<div class="pside" lang="'+langOf(t,b)+'" style="left:'+(left?0:G.w+G.g)+'px;width:'+G.cw+'px">'+h+'</div>'; };
   flow.innerHTML=side(CUR.t,true)+side(CUR.par,false);
 }
 
 /* ---------------- search ---------------- */
 const findEl=$('#find'), FIND={q:'',scope:'all',book:-1,hits:[],shown:0,t:''};
-const FOLD={};
-function foldText(s){ let o=''; for(let i=0;i<s.length;i++){ const ch=s[i]; let f=FOLD[ch];
-  if(f===undefined){ f=ch.normalize('NFD')[0].toLowerCase(); if(f.length!==1) f=ch; FOLD[ch]=f; } o+=f; } return o; }
-const FOLDED={};
+const FOLD={}, MARKRE=/\p{M}/u;
+function foldChar(ch){ let f=FOLD[ch]; if(f===undefined){ const d=ch.normalize('NFD'); f=MARKRE.test(d[0])?'':d[0].toLowerCase(); if(f==='\u03c2') f='\u03c3'; FOLD[ch]=f; } return f; }
+function foldText(s){ let o=''; for(let i=0;i<s.length;i++) o+=foldChar(s[i]); return o; }
+var FOLDED={};
 function folded(t){ if(!FOLDED[t]){ const n=NUM[t]; FOLDED[t]=n.t.map(x=>x?foldText(x):''); } return FOLDED[t]; }
 const reEsc=x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 function termsOf(q){
   const out=[], f=foldText(q.trim()); let m; const re=/"([^"]+)"|(\S+)/g;
   while((m=re.exec(f))){ const ph=(m[1]||m[2]).split(/[^\p{L}\p{N}]+/u).filter(Boolean); if(!ph.length) continue;
-    out.push(new RegExp('(?<![\\p{L}\\p{N}])'+ph.map(reEsc).join('[^\\p{L}\\p{N}]+'),'gu')); }
+    // Hebrew joins prefixes (\u05d1, \u05d5, \u05d4, \u05dc\u2026) to the word, so a Hebrew term may begin inside a word
+    const heb=/[\u0590-\u05ff]/.test(ph[0]);
+    out.push(new RegExp((heb?'':'(?<![\\p{L}\\p{N}])')+ph.map(reEsc).join('[^\\p{L}\\p{N}]+'),'gu')); }
   return out;
 }
 function runSearch(){
@@ -2005,8 +2507,11 @@ function runSearch(){
   FIND.hits=hits; FIND.book=-1; FIND.shown=0; FIND.terms=terms; drawHits(true);
 }
 function snippetHTML(t,r,terms){
-  const s=NUM[t].t[r], f=folded(t)[r], mark=new Uint8Array(s.length);
-  for(const re of terms){ re.lastIndex=0; for(const m of f.matchAll(re)) mark.fill(1,m.index,m.index+m[0].length); }
+  const s=NUM[t].t[r], pos=[]; let f='';
+  for(let i=0;i<s.length;i++){ const c=foldChar(s[i]); for(let k=0;k<c.length;k++){ f+=c[k]; pos.push(i); } }
+  const mark=new Uint8Array(s.length);
+  for(const re of terms){ re.lastIndex=0; for(const m of f.matchAll(re)){ const a=pos[m.index], lastF=m.index+m[0].length-1;
+    let b=pos[lastF]+1; while(b<s.length&&!foldChar(s[b])) b++; mark.fill(1,a,b); } }
   let a=0, z=s.length; if(s.length>260){ const first=mark.indexOf(1); a=Math.max(0,first-90); a=a?s.lastIndexOf(' ',a)+1:0; z=Math.min(s.length,a+240); }
   let h=a?'\u2026':'', on=false;
   for(let i=a;i<z;i++){ const ch=s[i]; if(ch==='['||ch===']') continue;
@@ -2030,7 +2535,7 @@ function drawHits(reset){
   const more=res.querySelector('.more'); if(more) more.remove();
   const from=FIND.shown, to=Math.min(list.length,from+150); let out='';
   for(let i=from;i<to;i++){ const r=list[i], b=bookOf[r];
-    out+='<button type="button" class="hit" data-r="'+r+'"><span class="rf">'+esc((b===18?'Psalm':bookName(b))+' '+n.c[r]+':'+n.v[r])+'</span>'+snippetHTML(t,r,FIND.terms)+'</button>'; }
+    out+='<button type="button" class="hit" data-r="'+r+'" lang="'+langOf(t,b)+'"><span class="rf">'+esc((b===18?'Psalm':bookName(b))+' '+n.c[r]+':'+n.v[r])+'</span>'+snippetHTML(t,r,FIND.terms)+'</button>'; }
   box.insertAdjacentHTML('beforeend',out); FIND.shown=to;
   if(to<list.length) box.insertAdjacentHTML('afterend','<button type="button" class="btn more lnk">'+L.fMore+' ('+(list.length-to)+')</button>');
 }
@@ -2132,6 +2637,8 @@ ribsEl.addEventListener('click',e=>{ const el=e.target.closest('.rbn'); if(!el) 
 /* ---------------- open ---------------- */
 $('#status').hidden=S.status==='off';
 labelChrome(); loadReg(); labelNotes(); labelMarkbar(); applyNotesUI(); applyPhone();
+if(NUM.orig&&NUM.orig.t) applyAccents();     // the travel copy carries the Hebrew already
+shareOT();
 if(firstRun){
   await ensureTr(S.tr);
   // Your A5 density by default; on smaller screens, fall back to one column at a readable size.

@@ -8,6 +8,7 @@ const CACHE = 'bybel-app';
 const CORE = ['./', 'index.html', 'leesregister.html', 'manifest.webmanifest',
               'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png',
               'fonts/SourceSerif4-Regular.woff2', 'fonts/SourceSerif4-It.woff2', 'fonts/SourceSerif4-Semibold.woff2',
+              'fonts/NotoSerifHebrew-Regular.woff2', 'fonts/NotoSerifHebrew-Bold.woff2', 'fonts/NotoSerifGreek-Regular.woff2', 'fonts/NotoSerifGreek-Italic.woff2', 'fonts/NotoSerifGreek-SemiBold.woff2',
               'data/catalog.json', 'data/base.v1.json', 'data/aov.v1.json', 'boeke.html', 'data/library.json'];
 const FIXED = /\/(data\/.+\.v\d+\.json|fonts\/[^/]+\.woff2)$/;
 

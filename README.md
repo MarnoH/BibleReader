@@ -15,7 +15,16 @@ data/base.v1.json     book names, chapter and verse numbering
 data/aov.v1.json      one file per translation
 data/kjv.v1.json
 data/bsb.v1.json
+data/orig.v1.json     Hebrew Old Testament and Greek New Testament (TR)
+data/sbl.v1.json      Greek New Testament (SBLGNT); its Old Testament is the Hebrew
 data/xrefs.v1.json    the cross-references
+data/strongs.v1.json  Strong's dictionary (Hebrew and Greek)
+data/tags-kjv.v1.json Strong's numbers for each word of the KJV
+data/tags-heb.v1.json Strong's numbers and parsing for each Hebrew word
+data/tags-grk.v1.json Greek words with Strong's numbers and parsing (BSB interlinear), for the KJV's NT
+data/defs.v1.json     BDB outlines and short definitions (BSB interlinear)
+data/tags-bsb.v1.json each BSB word linked to the Hebrew or Greek word it renders
+data/tags-hbsb.v1.json Strong's numbers and parsing of the BSB's Hebrew words
 boeke.html            the library: other Christian books on their own shelves
 data/library.json     the books in the online library
 data/books/           one file per online book
@@ -52,5 +61,8 @@ Open the address in Chrome, tap **⋮** and choose **Install app** or **Add to H
 Readings, notes, sermons and markings are saved only on the device where they are made.
 Use **Stoor rugsteun** (leesregister) and **Save notes backup** (reader) to move them between devices.
 
+Hebrew: Westminster Leningrad Codex via the Open Scriptures Hebrew Bible (public domain text). Greek: Scrivener 1894 Textus Receptus (public domain), and the SBL Greek New Testament, © 2010 Society of Biblical Literature and Logos Bible Software (CC BY 4.0).
+Strong's numbers in the KJV: CrossWire KJV module (general public licence). Strong's dictionary: Open Scriptures (CC BY-SA). Hebrew parsing: Open Scriptures Hebrew Bible (CC BY 4.0). Greek words, parsing and short definitions: BSB interlinear tables (Berean, public domain).
+Hebrew verse mapping: TVTMS, STEPBible / Tyndale House (CC BY 4.0). Noto Serif Hebrew and Greek, SIL Open Font License.
 Text: AOV, KJV, BSB and the Treasury of Scripture Knowledge cross-references from CrossReferences.org
 (cross-references CC BY 4.0). Source Serif 4 © Adobe, SIL Open Font License.
