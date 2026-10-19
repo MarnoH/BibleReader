@@ -737,6 +737,11 @@ body.phone .ntabs button{padding:4px 8px;font-size:14px}
 /* ---------- two translations side by side ---------- */
 .pside{position:absolute;top:0}
 .pu{display:flow-root}
+/* verse under verse: the second translation sits under each verse, softer and a little smaller */
+.flowcss .vb{display:block;font-size:.9em;line-height:1.38;color:var(--soft);margin:.08em 0 .42em .9em;text-align:start}
+.flowcss .vb[dir=rtl]{margin:.08em .9em .42em 0;font-size:1em}
+.vbl{font:600 .62em/1 var(--sans);letter-spacing:.06em;color:var(--faint);margin-inline-end:.55em;vertical-align:.12em;white-space:nowrap}
+.vbn{font-size:.72em;color:var(--faint);margin-inline-end:.35em;font-feature-settings:"lnum"}
 .pu.cs{padding-top:.45em}
 .pu.cs.first{padding-top:0}
 .ptl{display:flow-root}
@@ -847,7 +852,7 @@ const UI={
   strongs:'Strong\u2019s',swapAs:'Original shows as',swWord:'Word',swNum:'Number',sAdd:'Add to my words',sIn:'In my words \u2713',sHere:'Show original here',sHereOff:'Show English here',sAlways:'Always show original',sAlwaysOff:'Stop showing original',sUsed:'{n}\u00d7 in the KJV',sVerse:'In this verse',sLoading:'Fetching Strong\u2019s numbers\u2026',sNoNet:'The Strong\u2019s numbers are not on this device yet. Connect to the internet once and switch them on again.',sNone:'No Strong\u2019s number for this word.',sRoot:'Root',sBrief:'Short definition',sIsRoot:'A root word: it comes from no other entry.',sKids:'Words built on it ({n})',sDeriv:'From',wordsTab:'Words',wEmpty:'No words yet. Switch Strong\u2019s on in the settings, tap a word in the KJV and choose \u201cAdd to my words\u201d.',wNotes:'Your notes\u2026',wMet:'Met in',wRemove:'Remove',wFilter:'Find a word or number\u2026',wAlways:'Original in the text',wCount:'{n} words',
   teamim:'Hebrew accents',
   find:'Search',findPh:'Word or phrase \u2014 use "quotes" for an exact phrase',fAll:'Whole Bible',fOT:'Old Testament',fNT:'New Testament',fAllS:'Bible',fOTS:'OT',fNTS:'NT',fBook:'This book',fCount:'{n} verses',fNone:'Nothing found.',fMore:'Show more',fGo:'Go to {x}',
-  contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',par:'Side by side',
+  contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',parLay:'Side by side as',plFacing:'Facing pages',plStacked:'Verse under verse',par:'Side by side',
   ribbon:'Ribbon',ribHere:'Place here',ribRemove:'Take out',ribName:'Name',ribGo:'Go there',ribEmpty:'not placed yet \u2014 click to place it on this page',ribTip:'click: go there \u00b7 right-click or hold: move or name it',
   cover:'Cover',cvBook:'Book',library:'Library',depth:'{p}% of the Bible behind you \u00b7 {q}% ahead',
   a5tip:'Your A5 Bible\u2019s density \u2014 click to return to it',settings:'Settings',
@@ -895,7 +900,7 @@ const UI={
   strongs:'Strong se',swapAs:'Oorspronklike as',swWord:'Woord',swNum:'Nommer',sAdd:'Voeg by my woorde',sIn:'In my woorde \u2713',sHere:'Wys oorspronklike hier',sHereOff:'Wys Engels hier',sAlways:'Wys altyd oorspronklike',sAlwaysOff:'Wys nie meer oorspronklike nie',sUsed:'{n}\u00d7 in die KJV',sVerse:'In hierdie vers',sLoading:'Strong-nommers word gehaal\u2026',sNoNet:'Die Strong-nommers is nog nie op hierdie toestel nie. Koppel een keer aan die internet en skakel dit weer aan.',sNone:'Geen Strong-nommer vir hierdie woord nie.',sRoot:'Wortel',sBrief:'Kort betekenis',sIsRoot:'\u2019n Wortelwoord: dit kom van geen ander inskrywing nie.',sKids:'Woorde daarop gebou ({n})',sDeriv:'Van',wordsTab:'Woorde',wEmpty:'Nog geen woorde nie. Skakel Strong se aan in die instellings, tik op \u2019n woord in die KJV en kies \u201cVoeg by my woorde\u201d.',wNotes:'Jou notas\u2026',wMet:'Te\u00ebgekom in',wRemove:'Verwyder',wFilter:'Soek \u2019n woord of nommer\u2026',wAlways:'Oorspronklik in die teks',wCount:'{n} woorde',
   teamim:'Hebreeuse aksente',
   find:'Soek',findPh:'Woord of frase \u2014 gebruik "aanhalingstekens" vir \u2019n presiese frase',fAll:'Hele Bybel',fOT:'Ou Testament',fNT:'Nuwe Testament',fAllS:'Bybel',fOTS:'OT',fNTS:'NT',fBook:'Hierdie boek',fCount:'{n} verse',fNone:'Niks gevind nie.',fMore:'Wys meer',fGo:'Gaan na {x}',
-  contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',par:'Langs mekaar',
+  contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',parLay:'Langs mekaar as',plFacing:'Teenoor mekaar',plStacked:'Vers onder vers',par:'Langs mekaar',
   ribbon:'Lint',ribHere:'Plaas hier',ribRemove:'Haal uit',ribName:'Naam',ribGo:'Gaan soontoe',ribEmpty:'nog nie geplaas nie \u2014 klik om dit op hierdie bladsy te plaas',ribTip:'klik: gaan soontoe \u00b7 regskliek of hou vas: skuif of benoem',
   cover:'Band',cvBook:'Boek',library:'Biblioteek',depth:'{p}% van die Bybel agter jou \u00b7 {q}% nog voor',
   a5tip:'Die digtheid van jou A5-Bybel \u2014 klik om terug te keer',settings:'Instellings',
@@ -953,7 +958,7 @@ Object.assign(UI.af,{pTab:'Paleis',pIntro:'\u2019n Geheuepaleis, een A5-vel per 
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={parLay:'facing',chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -1110,7 +1115,20 @@ function rowHTML(t,r,xs){
     map=' data-wmap="'+out.join(',')+'"'; }
   return '<span class="rw" data-r="'+r+'"'+map+'>'+inner+'</span>';
 }
-function bookHTML(t,b,xs){
+/* Verse under verse: the second translation follows each verse of the first, a little smaller and softer, with its
+   own verse number where its numbering differs (the Hebrew Psalms). On a phone this is how two translations are read;
+   on a computer it is a choice beside facing pages. */
+function stackHTML(B,b,rows,c,v){
+  const nB=NUM[B]; if(!nB||!nB.t) return '';
+  const rs=rows.filter(r=>nB.t[r]); if(!rs.length) return '';
+  const lg=langOf(B,b); let h='', lc=c, lv=v, first=true;
+  // a verse of its own numbering gets its number: where it differs from the line above, and at each new verse
+  for(const r of rs){ const bc=nB.c[r], bv=nB.v[r];
+    if(bc!==lc||bv!==lv) h+='<span class="vbn">'+(bc!==c?bc+':':'')+bv+'</span>';
+    h+=sideRow(B,r)+' '; lc=bc; lv=bv; first=false; }
+  return '<span class="vb" lang="'+lg+'"'+(lg==='he'?' dir="rtl"':'')+'><span class="vbl">'+esc(BIB[B].label)+'</span>'+h.trimEnd()+'</span>';
+}
+function bookHTML(t,b,xs,B){
   const n=NUM[t], ord=orderOf(t,b), isPs=b===18;
   let h='<h1 class="bt">'+esc(bookName(b,t))+'</h1>';
   const V=[]; let curC=-1, i=0;
@@ -1118,13 +1136,14 @@ function bookHTML(t,b,xs){
     const r0=ord[i], c=n.c[r0], v=n.v[r0], rows=[r0]; i++;
     while(i<ord.length&&n.c[ord[i]]===c&&n.v[ord[i]]===v){ rows.push(ord[i]); i++; }
     const body=rows.map(r=>rowHTML(t,r,xs)).filter(Boolean).join(' ');
-    if(!body) continue;
+    const sec=B?stackHTML(B,b,rows,c,v):'';
+    if(!body&&!sec) continue;
     let first=false;
     if(c!==curC){ h+=(curC===-1?'':'</p></div>')+'<div class="chp">'+(isPs?'<div class="psh">Psalm '+c+'</div>':'')+'<p class="pa">'; curC=c; first=true; }
     else if(t==='aov'){ const m=PARA.exec(n.t[r0]||''); if(m&&m[1]!=='HERE') h+='</p><p class="pa">'; }
     const cn=first&&!isPs;
     h+='<span class="vs'+(cn?' hascn':'')+'" data-i="'+V.length+'">'+(cn?'<span class="cn">'+c+'</span>':'')
-      +'<span class="vn">'+v+'</span>'+body+'</span> ';
+      +'<span class="vn">'+v+'</span>'+body+sec+'</span> ';
     V.push({r:r0,rows,c,v});
   }
   return {h:h+'</p></div>',V};
@@ -1221,15 +1240,15 @@ function applyGeom(G){
 }
 function layoutBook(b){ if(parOn()) parRender(b); else { render(b); paginate(); } }
 function render(b){
-  CUR.par=null;
-  const t=S.tr, xs=S.xref==='on', r=bookHTML(t,b,xs);
+  CUR.par=null; CUR.stack=stackNow()?S.par:null;
+  const t=S.tr, xs=S.xref==='on', r=bookHTML(t,b,xs,CUR.stack);
   flow.innerHTML=r.h; flow.lang=langOf(t,b);
   Object.assign(CUR,{b,t,xs,V:r.V});
   const rm=new Map(); r.V.forEach((x,i)=>{ for(const row of x.rows) rm.set(row,i); }); CUR.rowMap=rm;
 }
 function paginate(){
   const G=CUR.G;
-  flow.className=flowClasses(S); styleFlow(flow,G); flow.style.transform='none';
+  flow.className=flowClasses(stackOpts()); styleFlow(flow,G); flow.style.transform='none';
   const m=measure(flow,G);
   CUR.col=m.col; CUR.end=m.end; CUR.pages=Math.max(1,Math.ceil(m.cols/G.cpp)); CUR.spreads=Math.ceil(CUR.pages/G.ppv);
   if(typeof CNT!=='undefined'&&CNT.key===countKey()) CNT.pages[CUR.b]=CUR.pages;
@@ -1357,7 +1376,7 @@ function prev(){ closePop(); hideChrome(); if(CUR.spread>0) show(CUR.spread-1,-1
 function go(b,row,o={}){
   closePop();
   if(o.push&&CUR.b>=0){ HIST.push({b:CUR.b,row:CUR.anchor}); }
-  if(b!==CUR.b||CUR.t!==S.tr||CUR.xs!==(S.xref==='on')||(CUR.par||'')!==(parOn()?S.par:'')) layoutBook(b);
+  if(b!==CUR.b||CUR.t!==S.tr||CUR.xs!==(S.xref==='on')||(CUR.par||'')!==(parOn()?S.par:'')||(CUR.stack||'')!==(stackNow()&&!parOn()?S.par:'')) layoutBook(b);
   const i=verseOfRow(row); show(spreadOfVerse(i),0); updateBack();
   if(o.flash){ for(const el of flow.querySelectorAll('.vs[data-i="'+i+'"]')){ el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } }
 }
@@ -1367,15 +1386,15 @@ async function relayout(rerender){
   if(bsbWanted()&&SG.dict) await ensureBsb();
   if(aovWanted()&&SG.dict) await ensureAov();
   const z=stageSize();
-  if(parWanted()&&z.ppv===2&&!await ensureTr(S.par)){ S.par='off'; persist(); }
-  const par=parWanted()&&z.ppv===2, cpp=par?1:S.cols;
-  const k=await calibrate(S.tr,cpp,par?'lines':S.layout);
+  if(parWanted()&&!await ensureTr(S.par)){ S.par='off'; persist(); }
+  const par=parWanted()&&z.ppv===2&&S.parLay!=='stacked', stack=parWanted()&&!par, cpp=par?1:S.cols;
+  const k=await calibrate(S.tr,cpp,par||stack?'lines':S.layout);
   CUR.G=geomFor(z.P,z.ppv,cpp,k,S.scale,z.ratio);
   applyGeom(CUR.G);
   const b=CUR.b<0?(POS?POS.b:0):CUR.b;
   const anchor=CUR.anchor!=null?CUR.anchor:(POS?POS.row:D.bs[b]);
   if(par) parRender(b);
-  else { if(rerender||CUR.b<0||CUR.t!==S.tr||CUR.par) render(b); paginate(); }
+  else { if(rerender||CUR.b<0||CUR.t!==S.tr||CUR.par||(CUR.stack||'')!==(stackNow()?S.par:'')) render(b); paginate(); }
   show(spreadOfVerse(verseOfRow(anchor)),0);
   scheduleCounts();
   busy(null);
@@ -1388,7 +1407,7 @@ async function relayout(rerender){
 const CNT={key:'',pages:new Array(66).fill(0),gen:0};
 try{ const c=JSON.parse(localStorage.getItem('bybel-leser-pages')||'null'); if(c&&c.key&&c.pages&&c.pages.length===66){ CNT.key=c.key; CNT.pages=c.pages; } }catch(e){}
 function countKey(){ const G=CUR.G; if(!G) return '';
-  return [S.tr,S.cols,S.layout,S.verses,S.chapters,S.headings,S.gap,S.xref,G.ppv,Math.round(G.cw*10),Math.round(G.h*10),Math.round(G.fs*100)].join('|'); }
+  return [S.tr,CUR.stack||'',S.cols,CUR.stack?'lines':S.layout,S.verses,S.chapters,S.headings,S.gap,S.xref,G.ppv,Math.round(G.cw*10),Math.round(G.h*10),Math.round(G.fs*100)].join('|'); }
 function testamentPage(p){ const a=CUR.b<39?0:39; let n=0;
   for(let b=a;b<CUR.b;b++){ if(!CNT.pages[b]) return 0; n+=CNT.pages[b]; } return n+p+1; }
 function folioHTML(p){
@@ -1420,7 +1439,7 @@ function scheduleCounts(){
   for(const [a,z] of [first,second]) for(let b=a;b<z;b++) if(!CNT.pages[b]) order.push(b);
   if(!order.length){ updateFolios(); return; }
   const m=$('#measure .cflow');
-  m.className='cflow '+flowClasses(S); m.lang=langOf(S.tr,CUR.b); styleFlow(m,G);
+  m.className='cflow '+flowClasses(stackOpts()); m.lang=langOf(S.tr,CUR.b); styleFlow(m,G); const stk=CUR.stack;
   let i=0;
   // only when the browser has nothing else to do, so turning pages, typing or dragging is never held up
   const later=()=>window.requestIdleCallback?requestIdleCallback(step,{timeout:2000}):setTimeout(step,30);
@@ -1429,7 +1448,8 @@ function scheduleCounts(){
     if(i>=order.length){ m.innerHTML=''; try{ localStorage.setItem('bybel-leser-pages',JSON.stringify({key:CNT.key,pages:CNT.pages})); }catch(e){} return; }
     const b=order[i++];
     if(!CNT.pages[b]){
-      m.lang=langOf(S.tr,b); m.innerHTML=bookHTML(S.tr,b,S.xref==='on').h;
+      if(stk&&!(NUM[stk]&&NUM[stk].t)) return;
+      m.lang=langOf(S.tr,b); m.innerHTML=bookHTML(S.tr,b,S.xref==='on',stk).h;
       const vs=m.querySelectorAll('.vs'), fr=m.getBoundingClientRect(), rs=vs[vs.length-1].getClientRects();
       CNT.pages[b]=Math.max(1,Math.ceil((Math.floor((rs[rs.length-1].left-fr.left+1)/G.pitch)+1)/G.cpp));
       if((b<39)===(CUR.b<39)&&b<CUR.b) updateFolios();
@@ -1496,13 +1516,14 @@ const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['cont
  ['cols',[[1,'1'],[2,'2']]],['layout',[['lines','lines'],['para','para']]],['gap',[['off','off'],['on','on']]],['-'],
  ['xref',[['off','off'],['on','on']]],['status',[['off','off'],['on','on']]],
  ['cover',[['off','off'],['book','cvBook'],...COVERS.map(c=>[c,c])]],['gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']]],['thumbs',[['off','off'],['on','on']]],['-'],
- ['tr',CAT.bibles.map(b=>[b.id,b.label])],['teamim',[['off','off'],['on','on']]],['strongs',[['off','off'],['on','on']]],['swapAs',[['word','swWord'],['num','swNum']]],['wordOrder',[['en','woEn'],['he','woHe']]],['par',[['off','off'],...CAT.bibles.map(b=>[b.id,b.label])]],['lang',[['en','English'],['af','Afrikaans']]]];
+ ['tr',CAT.bibles.map(b=>[b.id,b.label])],['teamim',[['off','off'],['on','on']]],['strongs',[['off','off'],['on','on']]],['swapAs',[['word','swWord'],['num','swNum']]],['wordOrder',[['en','woEn'],['he','woHe']]],['par',[['off','off'],...CAT.bibles.map(b=>[b.id,b.label])]],['parLay',[['facing','plFacing'],['stacked','plStacked']]],['lang',[['en','English'],['af','Afrikaans']]]];
 const setEl=$('#set');
 function buildSettings(){
   let h='<div class="seth"><button class="lnk" type="button" data-act="reset">'+L.reset+'</button>'+
         '<button class="x" type="button" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>';
   for(const [key,opts] of SEGS){
     if(key==='-'){ h+='<div class="sep"></div>'; continue; }
+    if(key==='parLay'&&(!parWanted()||isPhone())) continue;
     h+='<div class="srow"><span>'+L[key]+'</span><div class="seg">';
     if(key==='size'){
       const atA5=Math.abs(S.scale-1)<1e-6;
@@ -2862,7 +2883,10 @@ document.addEventListener('click',e=>{ const m=e.target.closest('[data-align]');
    On a two-page spread the left page carries the translation you read and the right page a second one,
    verse beside verse: each verse gets the height of the taller of the two, so they stay level down the page. */
 const parWanted=()=>S.par&&S.par!=='off'&&S.par!==S.tr&&!!BIB[S.par];
-const parOn=()=>parWanted()&&CUR.G&&CUR.G.ppv===2&&CUR.G.cpp===1&&!!(NUM[S.par]&&NUM[S.par].t);
+const parOn=()=>parWanted()&&S.parLay!=='stacked'&&CUR.G&&CUR.G.ppv===2&&CUR.G.cpp===1&&!!(NUM[S.par]&&NUM[S.par].t);
+// verse under verse: chosen, or the only way on a single page (a phone)
+const stackNow=()=>parWanted()&&!!(NUM[S.par]&&NUM[S.par].t)&&!!CUR.G&&!(CUR.G.ppv===2&&S.parLay!=='stacked');
+const stackOpts=()=>CUR.stack?Object.assign({},S,{layout:'lines'}):S;
 const sideRow=(t,r)=>rowHTML(t,r,false).replace('<span class="rw"','<span class="rw" data-t="'+t+'"');
 function parUnits(b){
   const A=S.tr, nA=NUM[A], nB=NUM[S.par], ord=orderOf(A,b), V=[]; let i=0;
@@ -2903,7 +2927,7 @@ function parRender(b){
   const col=new Int32Array(V.length);
   pages.forEach((pg,i)=>pg.forEach(k=>{ col[k]=2*i; }));
   const rm=new Map(); V.forEach((x,i)=>{ for(const row of x.rows) rm.set(row,i); });
-  Object.assign(CUR,{b,t:A,xs,V,rowMap:rm,par:B,parPages:pages,parH:H,parTH:TH,col,end:col.slice(),pages:2*pages.length,spreads:pages.length});
+  Object.assign(CUR,{b,t:A,xs,V,rowMap:rm,par:B,stack:null,parPages:pages,parH:H,parTH:TH,col,end:col.slice(),pages:2*pages.length,spreads:pages.length});
   flow.className=flowClasses(Object.assign({},S,{layout:'lines'})); styleFlow(flow,G); flow.style.columnCount='1'; flow.lang=langOf(A,b);
 }
 function parPaint(s){
