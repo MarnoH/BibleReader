@@ -203,6 +203,15 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
 @media (prefers-color-scheme:dark){[data-contrast=strong][data-theme=auto]{--desk:#000;--page:#2b2824;--page2:#37332e;--ink:#f5f0e6;--soft:#bcb4a6;--rule:#45403a;--line:#4b4640;
   --fold:rgba(0,0,0,.85);--fold2:rgba(0,0,0,.32);--sheen:rgba(255,255,255,.06);--edgebg:#958b78;--edgeln2:#3e3933;--shadow:rgba(0,0,0,.8)}}
 
+/* ---------- paper tone: softer light pages, for long reading or a bright screen ---------- */
+[data-paper=cream][data-theme=light]{--page:#f4eddc;--page2:#e8dfca;--edgebg:#efe7d4;--sheen:rgba(255,250,236,.38);--panel:#f9f5eb;--desk:#d1ccc0;--case:#e2d9c8}
+[data-paper=soft][data-theme=light]{--page:#ebe5d8;--page2:#ddd6c6;--edgebg:#e6dfcf;--sheen:rgba(255,255,255,.22);--panel:#f2eee5;--desk:#c8c3b8;--case:#dcd4c4}
+@media (prefers-color-scheme:light){
+  [data-paper=cream][data-theme=auto]{--page:#f4eddc;--page2:#e8dfca;--edgebg:#efe7d4;--sheen:rgba(255,250,236,.38);--panel:#f9f5eb;--desk:#d1ccc0;--case:#e2d9c8}
+  [data-paper=soft][data-theme=auto]{--page:#ebe5d8;--page2:#ddd6c6;--edgebg:#e6dfcf;--sheen:rgba(255,255,255,.22);--panel:#f2eee5;--desk:#c8c3b8;--case:#dcd4c4}
+}
+
+
 
 /* gilt page edges, as on a leather Bible: gold, or red under gold */
 #book[data-gilt=gold] .edge{background:linear-gradient(rgba(255,250,220,.4),transparent 28%,transparent 72%,rgba(60,35,0,.28)),repeating-linear-gradient(to right,#e6c874 0 1px,#b08835 1px 2px)}
@@ -262,7 +271,7 @@ const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice
 
 /* ---------------- words ---------------- */
 const UI={
- en:{gilt:'Page edges',gPlain:'Plain',gGold:'Gold',gRed:'Red & gold',contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',bible:'Bible',register:'Reading register',time:'Reading time',settings:'Settings',home:'Library',resume:'Continue',
+ en:{gilt:'Page edges',gPlain:'Plain',gGold:'Gold',gRed:'Red & gold',contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',paper:'Paper',paWhite:'White',paCream:'Cream',paSoft:'Soft',bible:'Bible',register:'Reading register',time:'Reading time',settings:'Settings',home:'Library',resume:'Continue',
   theme:'Theme',auto:'Auto',light:'Light',dark:'Dark',size:'Size',cols:'Columns',status:'Status bar',off:'Off',on:'On',lang:'Language',
   library:'Library',add:'Add books',empty:'No books on the shelves yet. Add a book file (the .json files made from your PDFs) and it is kept on this device.',
   hint:'Click a book to open it where you left off. Right-click (or hold) for its details and contents.',
@@ -274,7 +283,7 @@ const UI={
   logTitle:'Reading time',book:'Book',progress:'Read',nothing:'No reading time yet. It starts counting when you read a book.',
   totalAll:'All books',minutes:' min',hours:' h ',page:'p. ',of:' of ',storage:'This device holds {used} of about {quota} for the app.',
   shelves:{puritans:'Puritans',reformers:'Reformers',confessions:'Confessions & Doctrine',devotional:'Devotional',sermons:'Sermons',history:'Church history',other:'Other'}},
- af:{gilt:'Snykante',gPlain:'Gewoon',gGold:'Goud',gRed:'Rooi & goud',contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',bible:'Bybel',register:'Leesregister',time:'Leestyd',settings:'Instellings',home:'Biblioteek',resume:'Lees verder',
+ af:{gilt:'Snykante',gPlain:'Gewoon',gGold:'Goud',gRed:'Rooi & goud',contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',paper:'Papier',paWhite:'Wit',paCream:'Room',paSoft:'Sag',bible:'Bybel',register:'Leesregister',time:'Leestyd',settings:'Instellings',home:'Biblioteek',resume:'Lees verder',
   theme:'Tema',auto:'Outo',light:'Lig',dark:'Donker',size:'Grootte',cols:'Kolomme',status:'Statusbalk',off:'Af',on:'Aan',lang:'Taal',
   library:'Biblioteek',add:'Voeg boeke by',empty:'Nog geen boeke op die rakke nie. Voeg \u2019n boekl\u00eaer by (die .json-l\u00eaers wat van jou PDF\u2019s gemaak is) en dit word op hierdie toestel gehou.',
   hint:'Klik op \u2019n boek om dit oop te maak waar jy opgehou het. Regskliek (of hou vas) vir besonderhede en inhoud.',
@@ -290,13 +299,13 @@ const UI={
 
 /* ---------------- what is remembered (reading time is kept here, apart from the Bible) ---------------- */
 const KEY='bybel-biblioteek-v1';
-const DEF={theme:'auto',contrast:'normal',gilt:'plain',scale:1,cols:1,status:'on',lang:'en'};
+const DEF={theme:'auto',contrast:'normal',paper:'white',gilt:'plain',scale:1,cols:1,status:'on',lang:'en'};
 let ST={s:Object.assign({},DEF),pos:{},far:{},time:{},cloth:{},shelf:{},last:null};
 try{ const p=JSON.parse(localStorage.getItem(KEY)||'null'); if(p){ Object.assign(ST,p); ST.s=Object.assign({},DEF,p.s||{}); } }catch(e){}
-try{ const b=JSON.parse(localStorage.getItem('bybel-leser-v1')||'null'); if(b&&b.s&&!localStorage.getItem(KEY)){ ST.s.theme=b.s.theme||'auto'; ST.s.lang=b.s.lang||'en'; ST.s.contrast=b.s.contrast||'normal'; } }catch(e){}
+try{ const b=JSON.parse(localStorage.getItem('bybel-leser-v1')||'null'); if(b&&b.s&&!localStorage.getItem(KEY)){ ST.s.theme=b.s.theme||'auto'; ST.s.lang=b.s.lang||'en'; ST.s.contrast=b.s.contrast||'normal'; ST.s.paper=b.s.paper||'white'; } }catch(e){}
 let saveT=0; const persist=()=>{ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify(ST)); }catch(e){} },300); };
 let L=UI[ST.s.lang]||UI.en;
-document.documentElement.dataset.theme=ST.s.theme; document.documentElement.dataset.contrast=ST.s.contrast; document.documentElement.lang=ST.s.lang;
+document.documentElement.dataset.theme=ST.s.theme; document.documentElement.dataset.contrast=ST.s.contrast; document.documentElement.dataset.paper=ST.s.paper; document.documentElement.lang=ST.s.lang;
 const busy=m=>{ const b=$('#busy'); if(m){ b.firstElementChild.textContent=m; b.classList.add('on'); } else b.classList.remove('on'); };
 
 /* ---------------- books kept on this device ---------------- */
@@ -536,7 +545,7 @@ document.addEventListener('click',e=>{
 });
 function settingsHTML(){
   const seg=(k,opts)=>'<div class="srow"><span>'+L[k]+'</span><div class="seg">'+opts.map(([v,lab])=>'<button type="button" data-k="'+k+'" data-v="'+v+'" aria-pressed="'+(String(ST.s[k])===String(v))+'">'+(L[lab]||lab)+'</button>').join('')+'</div></div>';
-  return head(L.settings)+seg('theme',[['auto','auto'],['light','light'],['dark','dark']])+seg('contrast',[['normal','cNormal'],['strong','cStrong']])+seg('gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']])+
+  return head(L.settings)+seg('theme',[['auto','auto'],['light','light'],['dark','dark']])+seg('contrast',[['normal','cNormal'],['strong','cStrong']])+(ST.s.theme==='dark'?'':seg('paper',[['white','paWhite'],['cream','paCream'],['soft','paSoft']]))+seg('gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']])+
     '<div class="srow"><span>'+L.size+'</span><div class="seg"><button type="button" data-act="smaller">A\u2212</button><button type="button" data-act="size0">'+Math.round(CUR.G?CUR.G.fs:17)+'</button><button type="button" data-act="bigger">A+</button></div></div>'+
     seg('cols',[[1,'1'],[2,'2']])+seg('status',[['off','off'],['on','on']])+seg('lang',[['en','English'],['af','Afrikaans']]);
 }
@@ -545,6 +554,8 @@ $('#set').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!
   if(b.dataset.k){ const k=b.dataset.k, v=k==='cols'?+b.dataset.v:b.dataset.v; ST.s[k]=v; persist();
     if(k==='theme') document.documentElement.dataset.theme=v;
     if(k==='contrast') document.documentElement.dataset.contrast=v;
+    if(k==='paper') document.documentElement.dataset.paper=v;
+    if(k==='theme') $('#set').innerHTML=settingsHTML();
     if(k==='gilt'){ if(v==='plain') delete book.dataset.gilt; else book.dataset.gilt=v; }
     if(k==='lang'){ L=UI[v]; document.documentElement.lang=v; label(); if(shelfOpen()) buildShelf(); }
     if(k==='status') chrome(shelfOpen());

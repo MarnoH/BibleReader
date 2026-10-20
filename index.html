@@ -347,7 +347,9 @@ body.phone #regbtn span,body.phone #libbtn span{display:none}
 #notes.open{transform:none;visibility:visible;transition:transform .24s cubic-bezier(.2,.7,.2,1),visibility 0s}
 #notes.open.pinned{position:relative;flex:none;box-shadow:none;transition:none}
 .nhead{display:flex;align-items:center;gap:8px;padding:10px 12px 6px 16px}
-.ntabs button{font-family:var(--serif);font-size:15px;padding:4px 12px}
+.ntabs button{font-family:var(--serif);font-size:14px;padding:4px 7px;flex:none}
+.ntabs{min-width:0;overflow-x:auto;scrollbar-width:none}
+.ntabs::-webkit-scrollbar{display:none}
 .shead{display:flex;gap:6px;align-items:center;margin-bottom:6px}
 .shead input,.sref{font-family:var(--serif);font-size:15px;color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:6px;padding:5px 8px;min-width:0}
 .shead .sp{flex:1}
@@ -471,6 +473,15 @@ body.phone .nbody{padding:10px 10px 16px}
   --fold:rgba(0,0,0,.85);--fold2:rgba(0,0,0,.32);--sheen:rgba(255,255,255,.06);--edgebg:#958b78;--edgeln2:#3e3933;--shadow:rgba(0,0,0,.8)}
 @media (prefers-color-scheme:dark){[data-contrast=strong][data-theme=auto]{--desk:#000;--page:#2b2824;--page2:#37332e;--ink:#f5f0e6;--soft:#bcb4a6;--rule:#45403a;--line:#4b4640;
   --fold:rgba(0,0,0,.85);--fold2:rgba(0,0,0,.32);--sheen:rgba(255,255,255,.06);--edgebg:#958b78;--edgeln2:#3e3933;--shadow:rgba(0,0,0,.8)}}
+
+/* ---------- paper tone: softer light pages, for long reading or a bright screen ---------- */
+[data-paper=cream][data-theme=light]{--page:#f4eddc;--page2:#e8dfca;--edgebg:#efe7d4;--sheen:rgba(255,250,236,.38);--panel:#f9f5eb;--desk:#d1ccc0;--case:#e2d9c8}
+[data-paper=soft][data-theme=light]{--page:#ebe5d8;--page2:#ddd6c6;--edgebg:#e6dfcf;--sheen:rgba(255,255,255,.22);--panel:#f2eee5;--desk:#c8c3b8;--case:#dcd4c4}
+@media (prefers-color-scheme:light){
+  [data-paper=cream][data-theme=auto]{--page:#f4eddc;--page2:#e8dfca;--edgebg:#efe7d4;--sheen:rgba(255,250,236,.38);--panel:#f9f5eb;--desk:#d1ccc0;--case:#e2d9c8}
+  [data-paper=soft][data-theme=auto]{--page:#ebe5d8;--page2:#ddd6c6;--edgebg:#e6dfcf;--sheen:rgba(255,255,255,.22);--panel:#f2eee5;--desk:#c8c3b8;--case:#dcd4c4}
+}
+
 
 
 /* gilt page edges, as on a leather Bible: gold, or red under gold */
@@ -612,10 +623,39 @@ body.phone .pbhelp{display:none}
 .prooms{display:flex;flex-wrap:wrap}
 .nmore .lnkb.here{border-color:var(--soft);color:var(--ink)}
 .prooms small{color:var(--faint);font-family:var(--sans);font-size:11px}
-body.phone .ntabs button{padding:4px 8px;font-size:14px}
+body.phone .ntabs button{padding:4px 5px;font-size:13px}
 #notes.nopal .ntools{display:none}
 #notes[data-view=p] .npass{visibility:hidden}
 @media print{#palbar{display:none!important}}
+
+
+/* ---------- questions ---------- */
+.vs.q>.vn{position:relative;color:var(--rubric)}
+.vs.q>.vn::after{content:"?";position:absolute;left:100%;top:-.75em;margin-left:.02em;font:700 1.3em/1 var(--serif);color:var(--rubric);pointer-events:none}
+.qtop{display:flex;gap:8px;align-items:center;margin:0 0 12px;flex-wrap:wrap}
+.qshow button{font-size:13px;padding:4px 10px}
+.qshow small{color:var(--faint);font-size:11px;margin-left:2px}
+.qshow [aria-pressed=true] small{color:inherit;opacity:.75}
+.qtop .rprac{margin-left:auto}
+.qgrp{font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:16px 2px 6px}
+.qcard{background:var(--page);border:1px solid var(--line);border-radius:8px;padding:9px 12px 10px;margin:0 0 10px;box-shadow:0 1px 2px var(--shadow)}
+.qcard.here{border-left:3px solid var(--rubric)}
+.qcard.done{opacity:.78}
+.qh{display:flex;align-items:center;gap:8px}
+.qref{border:0;background:none;padding:0;font:600 14.5px var(--serif);color:var(--rubric);cursor:pointer}
+.qref:hover{text-decoration:underline}
+.qtr{font-size:11px;color:var(--faint)}
+.qdate{margin-left:auto;font-size:11.5px;color:var(--faint)}
+.qh .sdel{margin:0}
+.qquote{margin:6px 0 4px;font:italic 14.5px/1.45 var(--serif);color:var(--soft)}
+.qcard textarea{display:block;width:100%;box-sizing:border-box;resize:none;overflow:hidden;border:0;background:transparent;color:var(--ink);padding:3px 0;outline:0}
+.qq{font:600 15.5px/1.45 var(--serif);margin-top:4px}
+.qa{font:15px/1.5 var(--serif);border-top:1px dashed var(--line)!important;margin-top:6px;padding-top:7px!important}
+.qcard textarea::placeholder{color:var(--faint);opacity:.75;font-weight:400;font-style:italic}
+.qcard.done .qa{color:var(--ink)}
+.qf{display:flex;justify-content:flex-end;margin-top:6px}
+.qf .qdone{border-color:var(--soft)}
+#markbar [data-ask]{font:700 17px/1 var(--serif);color:var(--rubric)}
 
 /* ---------- the map of Strong's numbers ---------- */
 #smap .box{max-width:980px}
@@ -798,7 +838,7 @@ body.phone .ntabs button{padding:4px 8px;font-size:14px}
 <aside id="notes" aria-label="Notes">
   <div class="ngrab" aria-hidden="true"></div>
   <div class="nhead">
-    <div class="seg ntabs"><button type="button" data-tab="n"></button><button type="button" data-tab="s"></button><button type="button" data-tab="w"></button><button type="button" data-tab="p"></button></div><span class="npass"></span>
+    <div class="seg ntabs"><button type="button" data-tab="n"></button><button type="button" data-tab="s"></button><button type="button" data-tab="w"></button><button type="button" data-tab="p"></button><button type="button" data-tab="q"></button></div><span class="npass"></span>
     <button type="button" class="nbtn" data-n="pin" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3h6l-1 5 3 3H5l3-3z M10 11v6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
     <button type="button" class="x" data-n="close">×</button>
   </div>
@@ -818,7 +858,7 @@ body.phone .ntabs button{padding:4px 8px;font-size:14px}
 <div id="pop" role="dialog"></div>
 <div id="hA" class="hdl" aria-hidden="true"></div><div id="hB" class="hdl" aria-hidden="true"></div>
 <div id="ribmenu" role="dialog"></div>
-<div id="markbar" role="toolbar"><div class="mg"><button type="button" data-h="y"></button><button type="button" data-h="o"></button><button type="button" data-h="g"></button><button type="button" data-h="b"></button><button type="button" data-h="p"></button><button type="button" data-h="v"></button></div><i class="msep top"></i><div class="mg"><button type="button" data-c="r">A</button><button type="button" data-c="o">A</button><button type="button" data-c="y">A</button><button type="button" data-c="v">A</button><button type="button" data-c="b">A</button><button type="button" data-c="g">A</button><i class="msep"></i><button type="button" data-x="1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6"/></svg></button></div></div>
+<div id="markbar" role="toolbar"><div class="mg"><button type="button" data-h="y"></button><button type="button" data-h="o"></button><button type="button" data-h="g"></button><button type="button" data-h="b"></button><button type="button" data-h="p"></button><button type="button" data-h="v"></button></div><i class="msep top"></i><div class="mg"><button type="button" data-c="r">A</button><button type="button" data-c="o">A</button><button type="button" data-c="y">A</button><button type="button" data-c="v">A</button><button type="button" data-c="b">A</button><button type="button" data-c="g">A</button><i class="msep"></i><button type="button" data-x="1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6"/></svg></button><i class="msep"></i><button type="button" data-ask="1">?</button></div></div>
 <div id="chap" role="dialog"></div>
 <input type="file" id="regfile" accept=".json,application/json" hidden>
 <div id="measure" aria-hidden="true"><div class="mflow flowcss"></div><div class="cflow flowcss"></div></div>
@@ -852,7 +892,7 @@ const UI={
   strongs:'Strong\u2019s',swapAs:'Original shows as',swWord:'Word',swNum:'Number',sAdd:'Add to my words',sIn:'In my words \u2713',sHere:'Show original here',sHereOff:'Show English here',sAlways:'Always show original',sAlwaysOff:'Stop showing original',sUsed:'{n}\u00d7 in the KJV',sVerse:'In this verse',sLoading:'Fetching Strong\u2019s numbers\u2026',sNoNet:'The Strong\u2019s numbers are not on this device yet. Connect to the internet once and switch them on again.',sNone:'No Strong\u2019s number for this word.',sRoot:'Root',sBrief:'Short definition',sIsRoot:'A root word: it comes from no other entry.',sKids:'Words built on it ({n})',sDeriv:'From',wordsTab:'Words',wEmpty:'No words yet. Switch Strong\u2019s on in the settings, tap a word in the KJV and choose \u201cAdd to my words\u201d.',wNotes:'Your notes\u2026',wMet:'Met in',wRemove:'Remove',wFilter:'Find a word or number\u2026',wAlways:'Original in the text',wCount:'{n} words',
   teamim:'Hebrew accents',
   find:'Search',findPh:'Word or phrase \u2014 use "quotes" for an exact phrase',fAll:'Whole Bible',fOT:'Old Testament',fNT:'New Testament',fAllS:'Bible',fOTS:'OT',fNTS:'NT',fBook:'This book',fCount:'{n} verses',fNone:'Nothing found.',fMore:'Show more',fGo:'Go to {x}',
-  contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',parLay:'Side by side as',plFacing:'Facing pages',plStacked:'Verse under verse',par:'Side by side',
+  contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',parLay:'Side by side as',paper:'Paper',paWhite:'White',paCream:'Cream',paSoft:'Soft',plFacing:'Facing pages',plStacked:'Verse under verse',par:'Side by side',
   ribbon:'Ribbon',ribHere:'Place here',ribRemove:'Take out',ribName:'Name',ribGo:'Go there',ribEmpty:'not placed yet \u2014 click to place it on this page',ribTip:'click: go there \u00b7 right-click or hold: move or name it',
   cover:'Cover',cvBook:'Book',library:'Library',depth:'{p}% of the Bible behind you \u00b7 {q}% ahead',
   a5tip:'Your A5 Bible\u2019s density \u2014 click to return to it',settings:'Settings',
@@ -900,7 +940,7 @@ const UI={
   strongs:'Strong se',swapAs:'Oorspronklike as',swWord:'Woord',swNum:'Nommer',sAdd:'Voeg by my woorde',sIn:'In my woorde \u2713',sHere:'Wys oorspronklike hier',sHereOff:'Wys Engels hier',sAlways:'Wys altyd oorspronklike',sAlwaysOff:'Wys nie meer oorspronklike nie',sUsed:'{n}\u00d7 in die KJV',sVerse:'In hierdie vers',sLoading:'Strong-nommers word gehaal\u2026',sNoNet:'Die Strong-nommers is nog nie op hierdie toestel nie. Koppel een keer aan die internet en skakel dit weer aan.',sNone:'Geen Strong-nommer vir hierdie woord nie.',sRoot:'Wortel',sBrief:'Kort betekenis',sIsRoot:'\u2019n Wortelwoord: dit kom van geen ander inskrywing nie.',sKids:'Woorde daarop gebou ({n})',sDeriv:'Van',wordsTab:'Woorde',wEmpty:'Nog geen woorde nie. Skakel Strong se aan in die instellings, tik op \u2019n woord in die KJV en kies \u201cVoeg by my woorde\u201d.',wNotes:'Jou notas\u2026',wMet:'Te\u00ebgekom in',wRemove:'Verwyder',wFilter:'Soek \u2019n woord of nommer\u2026',wAlways:'Oorspronklik in die teks',wCount:'{n} woorde',
   teamim:'Hebreeuse aksente',
   find:'Soek',findPh:'Woord of frase \u2014 gebruik "aanhalingstekens" vir \u2019n presiese frase',fAll:'Hele Bybel',fOT:'Ou Testament',fNT:'Nuwe Testament',fAllS:'Bybel',fOTS:'OT',fNTS:'NT',fBook:'Hierdie boek',fCount:'{n} verse',fNone:'Niks gevind nie.',fMore:'Wys meer',fGo:'Gaan na {x}',
-  contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',parLay:'Langs mekaar as',plFacing:'Teenoor mekaar',plStacked:'Vers onder vers',par:'Langs mekaar',
+  contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',parLay:'Langs mekaar as',paper:'Papier',paWhite:'Wit',paCream:'Room',paSoft:'Sag',plFacing:'Teenoor mekaar',plStacked:'Vers onder vers',par:'Langs mekaar',
   ribbon:'Lint',ribHere:'Plaas hier',ribRemove:'Haal uit',ribName:'Naam',ribGo:'Gaan soontoe',ribEmpty:'nog nie geplaas nie \u2014 klik om dit op hierdie bladsy te plaas',ribTip:'klik: gaan soontoe \u00b7 regskliek of hou vas: skuif of benoem',
   cover:'Band',cvBook:'Boek',library:'Biblioteek',depth:'{p}% van die Bybel agter jou \u00b7 {q}% nog voor',
   a5tip:'Die digtheid van jou A5-Bybel \u2014 klik om terug te keer',settings:'Instellings',
@@ -934,6 +974,18 @@ const UI={
   cred:'AOV-, KJV- en BSB-teks en die Treasury of Scripture Knowledge-kruisverwysings van CrossReferences.org (kruisverwysings CC BY 4.0). Geset in Source Serif 4, \u00a9 Adobe, SIL Open Font License. Hebreeus: Westminster Leningrad Codex (vrye gebruik), uit die Open Scriptures Hebrew Bible. Grieks: Scrivener se Textus Receptus van 1894 (vrye gebruik). Hebreeuse versindeling volgens TVTMS, STEPBible / Tyndale House (CC BY 4.0). Hebreeuse en Griekse letters in Noto Serif, SIL Open Font License. Grieks ook: SBL Greek New Testament, \u00a9 2010 Society of Biblical Literature en Logos Bible Software (CC BY 4.0). Strong-nommers in die KJV uit CrossWire se KJV-module (algemene openbare lisensie). Strong se woordeboek van Open Scriptures (CC BY-SA). Hebreeuse ontleding uit die Open Scriptures Hebrew Bible (CC BY 4.0). Griekse woorde en ontleding vir die KJV se Nuwe Testament, BDB-uiteensettings en kort betekenisse uit die BSB-interlineêre tabelle (Berean, vrye gebruik).'}
 };
 
+// questions
+Object.assign(UI.en,{qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
+  qIntro:'Questions that come up while you read, gathered here to answer later. Select words in the text and tap ? in the colour bar, or tap \u201c+ Question\u201d for the pages that are open. Verses with an open question carry a small ? by their number.',
+  qNoneOpen:'No open questions.',qNoneDone:'No answered questions yet.',qHere:'On these pages',qPsalms:'Psalms',
+  qAskPh:'Your question\u2026',qAnswerPh:'The answer, when you find it\u2026',qMarkDone:'Answered \u2713',qReopen:'Open again',
+  qAnsweredOn:'answered {d}',qDelete:'Delete this question',qDelConfirm:'Delete this question and its answer?',mkAsk:'Ask a question about this'});
+Object.assign(UI.af,{qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
+  qIntro:'Vrae wat opkom terwyl jy lees, hier bymekaar om later te beantwoord. Kies woorde in die teks en tik ? in die kleurbalk, of tik \u201c+ Vraag\u201d vir die bladsye wat oop is. Verse met \u2019n oop vraag dra \u2019n klein ? by hul nommer.',
+  qNoneOpen:'Geen oop vrae nie.',qNoneDone:'Nog geen beantwoorde vrae nie.',qHere:'Op hierdie bladsye',qPsalms:'Psalms',
+  qAskPh:'Jou vraag\u2026',qAnswerPh:'Die antwoord, wanneer jy dit kry\u2026',qMarkDone:'Beantwoord \u2713',qReopen:'Weer oop',
+  qAnsweredOn:'beantwoord {d}',qDelete:'Skrap hierdie vraag',qDelConfirm:'Skrap hierdie vraag en sy antwoord?',mkAsk:'Vra \u2019n vraag hieroor'});
+
 // the memory palace
 Object.assign(UI.en,{pTab:'Palace',pIntro:'A memory palace, one A5 sheet per room: the passage is split into rooms of a few verses. In each room choose 3\u20134 keywords per verse; they are numbered as places, and beside each place you note the spot and the image you put there. Draw the room on the top half of the sheet.',
   pNew:'New palace',pPassage:'Passage',pPassPh:'e.g. Eph 1, or Eph 1:15\u20132:10',pSize:'Verses per room',pMake:'Build the palace',pCancel:'Cancel',
@@ -958,7 +1010,7 @@ Object.assign(UI.af,{pTab:'Paleis',pIntro:'\u2019n Geheuepaleis, een A5-vel per 
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={parLay:'facing',chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={paper:'white',parLay:'facing',chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -968,7 +1020,7 @@ let saveT=0;
 function persist(){ clearTimeout(saveT); saveT=setTimeout(()=>{
   try{ localStorage.setItem(KEY,JSON.stringify({s:S,pos:POS,cal:CAL})); }catch(e){} },250); }
 let L=UI[S.lang]||UI.en;
-document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast||'normal';
+document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast||'normal'; document.documentElement.dataset.paper=S.paper||'white';
 document.documentElement.lang=S.lang;
 
 const busyEl=$('#busy');
@@ -1245,6 +1297,7 @@ function render(b){
   flow.innerHTML=r.h; flow.lang=langOf(t,b);
   Object.assign(CUR,{b,t,xs,V:r.V});
   const rm=new Map(); r.V.forEach((x,i)=>{ for(const row of x.rows) rm.set(row,i); }); CUR.rowMap=rm;
+  qPaint();
 }
 function paginate(){
   const G=CUR.G;
@@ -1510,7 +1563,7 @@ pop.addEventListener('click',e=>{
 
 /* ---------------- settings panel ---------------- */
 const COVERS=['#1d1b1a','#5a1f22','#4a3020','#1f2b44','#22382c'];
-const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['contrast',[['normal','cNormal'],['strong','cStrong']]],['size'],['-'],
+const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['contrast',[['normal','cNormal'],['strong','cStrong']]],['paper',[['white','paWhite'],['cream','paCream'],['soft','paSoft']]],['size'],['-'],
  ['verses',[['off','off'],['dim','dim'],['on','on']]],['chapters',[['off','off'],['dim','dim'],['on','on']]],
  ['headings',[['off','off'],['dim','dim'],['on','on']]],['chapNo',[['off','off'],['bible','cnBible'],['testament','cnTest']]],['folio',[['book','fBook'],['testament','fTest'],['both','fBoth']]],['-'],
  ['cols',[[1,'1'],[2,'2']]],['layout',[['lines','lines'],['para','para']]],['gap',[['off','off'],['on','on']]],['-'],
@@ -1524,6 +1577,7 @@ function buildSettings(){
   for(const [key,opts] of SEGS){
     if(key==='-'){ h+='<div class="sep"></div>'; continue; }
     if(key==='parLay'&&(!parWanted()||isPhone())) continue;
+    if(key==='paper'&&S.theme==='dark') continue;        // the paper tone is for light pages
     h+='<div class="srow"><span>'+L[key]+'</span><div class="seg">';
     if(key==='size'){
       const atA5=Math.abs(S.scale-1)<1e-6;
@@ -1548,6 +1602,7 @@ async function setSetting(k,v){
   else if(k==='status'){ $('#status').hidden=v==='off'; await relayout(false); }
   else if(k==='cover'){ await relayout(false); }
   else if(k==='contrast'){ document.documentElement.dataset.contrast=v; }
+  else if(k==='paper'){ document.documentElement.dataset.paper=v; nBody.querySelectorAll('.sheet').forEach(drawSheet); }
   else if(k==='gilt'){ book.dataset.gilt=v; if(v==='plain') delete book.dataset.gilt; }
   else if(k==='thumbs'){ await relayout(false); }
   else if(k==='teamim'){ applyAccents(); await relayout(true); }
@@ -1564,7 +1619,7 @@ setEl.addEventListener('click',async e=>{
   if(b.dataset.k){ await setSetting(b.dataset.k,b.dataset.v); return; }
   const a=b.dataset.act;
   if(a==='close') setEl.classList.remove('on');
-  else if(a==='reset'){ S=Object.assign({},DEF,{tr:S.tr,lang:S.lang}); document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast; delete book.dataset.gilt;
+  else if(a==='reset'){ S=Object.assign({},DEF,{tr:S.tr,lang:S.lang}); document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast; document.documentElement.dataset.paper=S.paper; delete book.dataset.gilt;
     $('#status').hidden=false; persist(); await relayout(true); buildSettings(); }
   else if(a==='smaller'||a==='bigger'||a==='a5'){
     S.scale= a==='a5'?1 : Math.min(4,Math.max(.6,S.scale*(a==='bigger'?1.08:1/1.08)));
@@ -1822,7 +1877,7 @@ const sermFilled=n=>filled(n)||!!(n&&n.p&&n.p.trim());
 function saveNotes(){ clearTimeout(nSaveT);
   for(const k in NOTES) if(!filled(NOTES[k])) delete NOTES[k];
   try{ localStorage.setItem(NKEY,JSON.stringify(NOTES,packInk)); localStorage.setItem(SKEY,JSON.stringify(SERM,packInk)); }catch(e){ alert(L.nFull); }
-  savePal(); }
+  savePal(); saveQ(); }
 function saveMarks(){ try{ localStorage.setItem(MKEY,JSON.stringify(MARKS)); }catch(e){ alert(L.nFull); } }
 const saveNotesSoon=()=>{ clearTimeout(nSaveT); nSaveT=setTimeout(saveNotes,350); };
 const notesOpen=()=>notesEl.classList.contains('open');
@@ -1864,8 +1919,9 @@ function renderNotes(force){
   notesEl.dataset.view=S.notesTab==='w'?'w':S.notesTab==='p'?'p':'';   // not data-tab: the tab buttons are found by that
   if(S.notesTab==='w'){ notesEl.classList.remove('nopal'); if(nSig!=='w'||force){ saveNotes(); nSig='w'; renderWords(); } return; }
   if(S.notesTab==='p'){ notesEl.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tab==='p')); renderPalace(force); return; }
+  if(S.notesTab==='q'){ notesEl.dataset.view='q'; notesEl.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tab==='q')); renderQuestions(force); return; }
   notesEl.classList.remove('nopal');
-  if(nSig==='w'||nSig.startsWith('p|')) nSig='';
+  if(nSig==='w'||nSig.startsWith('p|')||nSig.startsWith('q|')) nSig='';
   const tab=S.notesTab==='s'?'s':'n';
   const cs=spreadChapters(), keys=cs.map(c=>OSIS[CUR.b]+'.'+c);
   if(tab==='s') for(const id in SERM) if(id!==justMade&&!sermFilled(SERM[id])) delete SERM[id];   // an empty sermon left behind is not kept
@@ -2006,7 +2062,7 @@ nBody.addEventListener('click',e=>{
   if(a.dataset.n==='snew') newSermon();
   else if(a.dataset.n==='sdel'){ const sec=a.closest('.sheet'); if(confirm(L.sDelConfirm)){ delete SERM[sec.dataset.k]; saveNotes(); renderNotes(true); } }
   else if(a.dataset.n==='backup'){ saveNotes();
-    const url=URL.createObjectURL(new Blob([JSON.stringify({app:'bybel-notas',v:4,saved:todayISO(),notes:NOTES,sermons:SERM,marks:MARKS,palaces:PAL},packInk)],{type:'application/json'}));
+    const url=URL.createObjectURL(new Blob([JSON.stringify({app:'bybel-notas',v:4,saved:todayISO(),notes:NOTES,sermons:SERM,marks:MARKS,palaces:PAL,questions:QS},packInk)],{type:'application/json'}));
     const l=document.createElement('a'); l.href=url; l.download='notas-'+todayISO()+'.json'; l.click(); setTimeout(()=>URL.revokeObjectURL(url),2000); }
   else if(a.dataset.n==='restore') $('#notesfile').click();
 });
@@ -2019,6 +2075,7 @@ $('#notesfile').onchange=e=>{
       if(p.palaces&&p.palaces.list){ unpackInk(p.palaces.ink||{});
         for(const id in p.palaces.list){ const a=PAL.list[id], b=p.palaces.list[id]; if(!a||(b.u||'')>(a.u||'')){ PAL.list[id]=b; n++; } }
         merge(PAL.ink,p.palaces.ink||{}); if(!PAL.cur) PAL.cur=p.palaces.cur||Object.keys(PAL.list)[0]||''; PALV++; }
+      if(Array.isArray(p.questions)){ for(const b of p.questions){ const a=QS.find(x=>x.id===b.id); if(!a){ QS.push(b); n++; } else if((b.u||'')>(a.u||'')){ Object.assign(a,b); n++; } } QV++; qPaint(); }
       saveNotes(); saveMarks(); renderNotes(true); if((p.marks||p.palaces)&&CUR.b>=0) relayout(true); alert(n+L.nLoaded);
     }catch(x){ alert(L.regBad); } e.target.value=''; };
   rd.readAsText(f);
@@ -2030,13 +2087,13 @@ function applyNotesUI(){
   notesEl.dataset.tool=S.notesTool;
   $('#notesbtn').setAttribute('aria-pressed',open);
   const q=(sel,attr,val)=>notesEl.querySelectorAll(sel).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[attr])===String(val)));
-  q('[data-tool]','tool',S.notesTool); q('[data-ink]','ink',S.penColor); q('[data-size]','size',S.penSize); q('[data-tab]','tab',['s','w','p'].includes(S.notesTab)?S.notesTab:'n');
+  q('[data-tool]','tool',S.notesTool); q('[data-ink]','ink',S.penColor); q('[data-size]','size',S.penSize); q('[data-tab]','tab',['s','w','p','q'].includes(S.notesTab)?S.notesTab:'n');
   notesEl.querySelector('[data-n=pin]').setAttribute('aria-pressed',pin);
   notesEl.querySelector('[data-n=lines]').setAttribute('aria-pressed',!!S.notesLines);
   if(typeof palSync==='function') palSync();
 }
 function labelNotes(){
-  notesEl.querySelector('[data-tab=n]').textContent=L.notes; notesEl.querySelector('[data-tab=s]').textContent=L.sermons; notesEl.querySelector('[data-tab=w]').textContent=L.wordsTab; notesEl.querySelector('[data-tab=p]').textContent=L.pTab;
+  notesEl.querySelector('[data-tab=n]').textContent=L.notes; notesEl.querySelector('[data-tab=s]').textContent=L.sermons; notesEl.querySelector('[data-tab=w]').textContent=L.wordsTab; notesEl.querySelector('[data-tab=p]').textContent=L.pTab; notesEl.querySelector('[data-tab=q]').textContent=L.qTab;
   const t={type:L.nType,pen:L.nPen,erase:L.nErase}; notesEl.querySelectorAll('[data-tool]').forEach(b=>b.textContent=t[b.dataset.tool]);
   const ink={ink:L.nInk,blue:L.nBlue,red:L.nRed,green:L.nGreen}; notesEl.querySelectorAll('[data-ink]').forEach(b=>{ b.title=ink[b.dataset.ink]; b.setAttribute('aria-label',ink[b.dataset.ink]); });
   const sz={'1.4':L.nFine,'2.4':L.nMed,'4':L.nBold}; notesEl.querySelectorAll('[data-size]').forEach(b=>{ b.title=sz[b.dataset.size]; b.setAttribute('aria-label',sz[b.dataset.size]); });
@@ -2193,12 +2250,14 @@ function handleUp(){ if(!HDRAG) return; HDRAG.el.classList.remove('drag'); HDRAG
 for(const h of [HA,HB]){ h.addEventListener('pointerdown',handleDown); h.addEventListener('pointermove',handleMove);
   h.addEventListener('pointerup',handleUp); h.addEventListener('pointercancel',handleUp); h.addEventListener('contextmenu',e=>e.preventDefault()); }
 markbar.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.ask){ askFromSelection(); return; }
   if(b.dataset.h) applyMark('h',b.dataset.h); else if(b.dataset.c) applyMark('c',b.dataset.c); else applyMark('x'); });
 function labelMarkbar(){
   const hn={y:L.mkYellow,o:L.mkOrange,g:L.mkGreen,b:L.mkBlue,p:L.mkPink,v:L.mkPurple}, cn={r:L.mkRed,o:L.mkOrange,y:L.mkYellow,v:L.mkPurple,b:L.mkBlue,g:L.mkGreen};
   markbar.querySelectorAll('[data-h]').forEach(b=>{ b.title=L.mkHl+': '+hn[b.dataset.h]; b.setAttribute('aria-label',b.title); });
   markbar.querySelectorAll('[data-c]').forEach(b=>{ b.title=L.mkCol+': '+cn[b.dataset.c]; b.setAttribute('aria-label',b.title); });
   const x=markbar.querySelector('[data-x]'); x.title=L.mkClear; x.setAttribute('aria-label',L.mkClear);
+  const ask=markbar.querySelector('[data-ask]'); ask.title=L.mkAsk; ask.setAttribute('aria-label',L.mkAsk);
 }
 
 /* ---------------- phone ---------------- */
@@ -2936,6 +2995,7 @@ function parPaint(s){
     for(const k of ks) h+=parSide(t,b,V,k,left&&xs).replace('<div class="pu','<div style="min-height:'+CUR.parH[k]+'px" class="pu'+(k===ks[0]?' first':''));
     return '<div class="pside" lang="'+langOf(t,b)+'" style="left:'+(left?0:G.w+G.g)+'px;width:'+G.cw+'px">'+h+'</div>'; };
   flow.innerHTML=side(CUR.t,true)+side(CUR.par,false);
+  qPaint();
 }
 
 /* ---------------- search ---------------- */
@@ -3152,6 +3212,98 @@ findEl.addEventListener('click',e=>{
 $('#findbtn').addEventListener('click',e=>{ if(CONC.id&&findEl.classList.contains('on')){ e.stopImmediatePropagation(); CONC.id=''; openFind(); } else CONC.id=''; },true);
 document.addEventListener('click',e=>{ const m=e.target.closest('[data-conc]'); if(!m) return; e.preventDefault(); e.stopPropagation(); openConc(m.dataset.conc); },true);
 
+
+/* ---------------- questions ----------------
+   Questions that come up while reading, tied to the verse (and the words) that raised them, gathered in one place to
+   be answered later. Asked from the selection bar ("?") or with "+ Question" for the open pages. An open question
+   puts a small ? beside its verse number; answering it keeps the answer with the question. */
+const QKEY='bybel-vrae-v1';
+let QS=[]; try{ const q=JSON.parse(localStorage.getItem(QKEY)||'null'); if(Array.isArray(q)) QS=q; }catch(e){}
+let QV=0, qSaveT=0;
+const QST={show:'open'};
+function saveQ(){ clearTimeout(qSaveT); try{ localStorage.setItem(QKEY,JSON.stringify(QS)); }catch(e){ alert(L.nFull); } }
+const saveQSoon=()=>{ clearTimeout(qSaveT); qSaveT=setTimeout(saveQ,400); };
+const qRef=q=>{ const n=NUM[q.t]&&NUM[q.t].t?NUM[q.t]:NUM[S.tr]; const c=n.c[q.r], v=n.v[q.r];
+  let s=(q.b===18?'Psalm':bookName(q.b))+' '+c+':'+v;
+  if(q.r2!=null&&q.r2!==q.r){ const c2=n.c[q.r2], v2=n.v[q.r2]; s+='\u2013'+(c2===c?v2:c2+':'+v2); } return s; };
+const qOrder=(a,z)=>(a.b-z.b)||(a.r-z.r)||(a.made||'').localeCompare(z.made||'');
+// the ? beside verse numbers on the page
+function qPaint(){
+  if(!CUR.V||!CUR.V.length) return;
+  for(const el of flow.querySelectorAll('.vs.q')) el.classList.remove('q');
+  for(const q of QS){ if(q.done||q.b!==CUR.b) continue; const i=CUR.rowMap.get(q.r); if(i==null) continue;
+    const el=flow.querySelector('.vs[data-i="'+i+'"]'); if(el) el.classList.add('q'); }
+}
+function qOnPages(){
+  if(!CUR.G||!CUR.V.length) return new Set();
+  const p0=CUR.spread*CUR.G.ppv, fv=firstOnPage(p0), lv=lastOnPage(Math.min(CUR.pages-1,p0+CUR.G.ppv-1));
+  return new Set(QS.filter(q=>{ if(q.b!==CUR.b) return false; const i=CUR.rowMap.get(q.r); return i>=fv&&i<=lv; }).map(q=>q.id));
+}
+function newQuestion(o){
+  const q=Object.assign({id:'q'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:S.tr,q:'',a:'',made:todayISO(),u:todayISO()},o);
+  QS.push(q); QV++; saveQ(); qPaint();
+  QST.show=QST.show==='done'?'open':QST.show;
+  S.notesTab='q'; S.notesOpen=true; persist(); applyNotesUI(); renderNotes(true);
+  const ta=nBody.querySelector('.qcard[data-q="'+q.id+'"] .qq'); if(ta){ ta.scrollIntoView({block:'center'}); ta.focus(); }
+}
+// from the selection bar: the selected words become the question's quotation
+function askFromSelection(){
+  const ws=selectedWords(); if(!ws||!ws.length) return;
+  const quote=(PICK.range?PICK.range.toString():String(getSelection())).replace(/\s+/g,' ').trim();
+  const r=ws[0].r, r2=ws[ws.length-1].r;
+  clearPick(); getSelection().removeAllRanges(); hideMarkbar();
+  newQuestion({b:bookOf[r],r,r2:r2!==r?r2:null,t:ws[0].t,quote:quote.length>400?quote.slice(0,400)+'\u2026':quote});
+}
+function qCard(q,here){
+  return '<div class="qcard'+(q.done?' done':'')+(here?' here':'')+'" data-q="'+q.id+'">'+
+    '<div class="qh"><button type="button" class="qref" data-qgo="'+q.id+'">'+esc(qRef(q))+'</button>'+(q.t!==S.tr?'<span class="qtr">'+esc(BIB[q.t]?BIB[q.t].label:q.t)+'</span>':'')+
+    '<span class="qdate">'+esc(q.done?L.qAnsweredOn.replace('{d}',fmtDate(q.done)):fmtDate(q.made))+'</span>'+
+    '<button type="button" class="sdel" data-qdel="'+q.id+'" title="'+escA(L.qDelete)+'" aria-label="'+escA(L.qDelete)+'">'+TRASH+'</button></div>'+
+    (q.quote?'<p class="qquote">\u201c'+esc(q.quote)+'\u201d</p>':'')+
+    '<textarea class="qq" rows="1" placeholder="'+escA(L.qAskPh)+'">'+esc(q.q)+'</textarea>'+
+    '<textarea class="qa" rows="1" placeholder="'+escA(L.qAnswerPh)+'">'+esc(q.a||'')+'</textarea>'+
+    '<div class="qf"><button type="button" class="rb'+(q.done?'':' qdone')+'" data-qdone="'+q.id+'">'+esc(q.done?L.qReopen:L.qMarkDone)+'</button></div></div>';
+}
+function renderQuestions(force){
+  const here=qOnPages();
+  const sig='q|'+QV+'|'+QST.show+'|'+[...here].join()+'|'+S.lang+'|'+S.tr;
+  if(!force&&sig===nSig) return;
+  saveNotes(); nSig=sig;
+  notesEl.querySelector('.npass').textContent='';
+  notesEl.classList.add('nopal');                       // no pen tools here: questions are typed
+  const open=QS.filter(q=>!q.done), done=QS.filter(q=>q.done);
+  const list=(QST.show==='open'?open:QST.show==='done'?done:QS).slice().sort(qOrder);
+  let h='<div class="qtop"><div class="seg qshow">'+[['open',L.qOpen,open.length],['done',L.qAnswered,done.length],['all',L.qAll,QS.length]].map(([k,lab,n])=>
+      '<button type="button" data-qshow="'+k+'" aria-pressed="'+(QST.show===k)+'">'+esc(lab)+' <small>'+n+'</small></button>').join('')+'</div>'+
+    '<button type="button" class="rb rprac" data-qnew="1">+ '+esc(L.qNew)+'</button></div>';
+  if(!QS.length) h+='<p class="pintro">'+esc(L.qIntro)+'</p>';
+  else if(!list.length) h+='<p class="sempty">'+esc(QST.show==='open'?L.qNoneOpen:L.qNoneDone)+'</p>';
+  const on=list.filter(q=>here.has(q.id)), rest=list.filter(q=>!here.has(q.id));
+  if(on.length) h+='<h3 class="qgrp">'+esc(L.qHere)+'</h3>'+on.map(q=>qCard(q,true)).join('');
+  let lastB=-1;
+  for(const q of rest){ if(q.b!==lastB){ h+='<h3 class="qgrp">'+esc(q.b===18?L.qPsalms:bookName(q.b))+'</h3>'; lastB=q.b; } h+=qCard(q,false); }
+  h+='<div class="nmore"><div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button></div>'+storageLine()+'</div>';
+  const top=nBody.scrollTop, same=(nBody.dataset.qs||'')===QST.show; nBody.innerHTML=h; nBody.dataset.qs=QST.show;
+  nBody.querySelectorAll('.qcard textarea').forEach(growQ);
+  nBody.scrollTop=same?top:0;
+}
+function growQ(ta){ ta.style.height='auto'; ta.style.height=(ta.scrollHeight+2)+'px'; }
+nBody.addEventListener('input',e=>{
+  if(S.notesTab!=='q') return; const ta=e.target.closest('.qcard textarea'); if(!ta) return;
+  const q=QS.find(x=>x.id===ta.closest('.qcard').dataset.q); if(!q) return;
+  q[ta.classList.contains('qq')?'q':'a']=ta.value; q.u=todayISO(); growQ(ta); saveQSoon();
+});
+nBody.addEventListener('click',e=>{
+  if(S.notesTab!=='q') return;
+  const b=e.target.closest('[data-qshow],[data-qnew],[data-qgo],[data-qdel],[data-qdone]'); if(!b) return;
+  if(b.dataset.qshow){ QST.show=b.dataset.qshow; renderNotes(true); return; }
+  if(b.dataset.qnew){ if(!CUR.V.length) return; const x=CUR.V[firstOnPage(CUR.spread*CUR.G.ppv)]; newQuestion({b:CUR.b,r:x.r}); return; }
+  const q=QS.find(x=>x.id===(b.dataset.qgo||b.dataset.qdel||b.dataset.qdone)); if(!q) return;
+  if(b.dataset.qgo){ if(isPhone()&&!S.notesPinned){ S.notesOpen=false; applyNotesUI(); } go(q.b,q.r,{push:true,flash:true}); return; }
+  if(b.dataset.qdel){ if((q.q.trim()||q.a.trim())&&!confirm(L.qDelConfirm)) return; QS.splice(QS.indexOf(q),1); }
+  else if(b.dataset.qdone){ q.done=q.done?null:todayISO(); }
+  q.u=todayISO(); QV++; saveQ(); qPaint(); renderNotes(true);
+});
 
 /* ---------------- memory palace ----------------
    The A5-sheet method (all of Ephesians was learned this way): a passage is split into rooms of about five verses;
