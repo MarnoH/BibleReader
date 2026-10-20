@@ -67,3 +67,9 @@ Strong's numbers in the KJV: CrossWire KJV module (general public licence). Stro
 Hebrew verse mapping: TVTMS, STEPBible / Tyndale House (CC BY 4.0). Noto Serif Hebrew and Greek, SIL Open Font License.
 Text: AOV, KJV, BSB and the Treasury of Scripture Knowledge cross-references from CrossReferences.org
 (cross-references CC BY 4.0). Source Serif 4 © Adobe, SIL Open Font License.
+
+Greek texts compared (tekste.html, data/nt-compare.v2.json): Textus Receptus, Scrivener 1894 (public domain);
+Byzantine Textform, M. A. Robinson & W. G. Pierpont (CrossWire module "Byz", CC BY-NC-SA 4.0); Nestle 1904
+(CrossWire module "Nestle1904", public domain); Westcott & Hort 1881 with the NA27/UBS4 readings (CrossWire module
+"WHNU", CC BY-NC-SA 4.0); SBL Greek New Testament, © 2010 Society of Biblical Literature and Logos Bible Software
+(CC BY 4.0). The comparison data is shared under CC BY-NC-SA 4.0, as the Byz and WHNU modules require.

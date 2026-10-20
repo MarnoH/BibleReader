@@ -331,9 +331,9 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .lg{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;font-size:11.5px;color:var(--soft)}
 .lg i{display:inline-block;width:15px;height:12px;border:1px solid var(--line);vertical-align:middle}
 #resume{font-family:var(--serif);font-size:15px;border:1px solid var(--line)}
-#regbtn,#libbtn{display:flex;align-items:center;gap:7px;text-decoration:none;font-family:var(--serif);font-size:15px}
-#regbtn svg,#libbtn svg{width:17px;height:17px}
-body.phone #regbtn span,body.phone #libbtn span{display:none}
+#regbtn,#libbtn,#cmpbtn{display:flex;align-items:center;gap:7px;text-decoration:none;font-family:var(--serif);font-size:15px}
+#regbtn svg,#libbtn svg,#cmpbtn svg{width:17px;height:17px}
+body.phone #regbtn span,body.phone #libbtn span,body.phone #cmpbtn span{display:none}
 #home svg{width:20px;height:20px;display:block}
 
 /* ---------- notes ---------- */
@@ -808,6 +808,7 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
   <button id="bookbtn" class="tb" type="button" aria-haspopup="dialog"><span id="bookname"></span>
     <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
   <div class="grow"></div>
+  <a id="cmpbtn" class="tb" href="tekste.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h9M3 15h12" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M14.5 8.5l2.5 2-2.5 2" stroke="currentColor" stroke-width="1.3" fill="none"/></svg><span></span></a>
   <a id="libbtn" class="tb" href="boeke.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h3v12H3zM7.5 6h3v10h-3zM12.3 5.2l2.8-.9 3.2 11-2.9.8z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 16.6h17" stroke="currentColor" stroke-width="1.3"/></svg><span></span></a>
   <a id="regbtn" class="tb" href="leesregister.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h4v4H3zM8 3h4v4H8zM13 3h4v4h-4zM3 8h4v4H3zM8 8h4v4H8zM3 13h4v4H3z" fill="currentColor" opacity=".85"/><path d="M13 8h4v4h-4zM8 13h4v4H8zM13 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1"/></svg><span></span></a>
   <button id="resume" class="tb" type="button" hidden></button>
@@ -975,12 +976,12 @@ const UI={
 };
 
 // questions
-Object.assign(UI.en,{qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
+Object.assign(UI.en,{greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
   qIntro:'Questions that come up while you read, gathered here to answer later. Select words in the text and tap ? in the colour bar, or tap \u201c+ Question\u201d for the pages that are open. Verses with an open question carry a small ? by their number.',
   qNoneOpen:'No open questions.',qNoneDone:'No answered questions yet.',qHere:'On these pages',qPsalms:'Psalms',
   qAskPh:'Your question\u2026',qAnswerPh:'The answer, when you find it\u2026',qMarkDone:'Answered \u2713',qReopen:'Open again',
   qAnsweredOn:'answered {d}',qDelete:'Delete this question',qDelConfirm:'Delete this question and its answer?',mkAsk:'Ask a question about this'});
-Object.assign(UI.af,{qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
+Object.assign(UI.af,{greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
   qIntro:'Vrae wat opkom terwyl jy lees, hier bymekaar om later te beantwoord. Kies woorde in die teks en tik ? in die kleurbalk, of tik \u201c+ Vraag\u201d vir die bladsye wat oop is. Verse met \u2019n oop vraag dra \u2019n klein ? by hul nommer.',
   qNoneOpen:'Geen oop vrae nie.',qNoneDone:'Nog geen beantwoorde vrae nie.',qHere:'Op hierdie bladsye',qPsalms:'Psalms',
   qAskPh:'Jou vraag\u2026',qAnswerPh:'Die antwoord, wanneer jy dit kry\u2026',qMarkDone:'Beantwoord \u2713',qReopen:'Weer oop',
@@ -1673,6 +1674,7 @@ $('#status').onkeydown=e=>{ if(e.target.closest('.mk')) return; if(e.key==='Ente
 function labelChrome(){ $('#aa').title=L.settings; $('#aa').setAttribute('aria-label',L.settings); $('#findbtn').title=L.find; $('#findbtn').setAttribute('aria-label',L.find);
   $('#regbtn span').textContent=L.register; $('#regbtn').title=L.register;
   $('#libbtn span').textContent=L.library; $('#libbtn').title=L.library;
+  $('#cmpbtn span').textContent=L.greekTexts; $('#cmpbtn').title=L.greekTextsTip;
   $('#home').title=L.home; $('#home').setAttribute('aria-label',L.home);
   $('#bookbtn').title=L.chooseBook; }
 
@@ -1757,7 +1759,7 @@ function buildShelf(fit=1){
     :esc(L.noReg)+' <button type="button" data-act="loadreg">'+esc(L.loadReg)+'</button>');
 }
 function chromeForShelf(on){
-  $('#home').hidden=on; $('#bookbtn').hidden=on; $('#resume').hidden=!on; $('#regbtn').hidden=!on; $('#libbtn').hidden=!on||!'boeke.html';
+  $('#home').hidden=on; $('#bookbtn').hidden=on; $('#resume').hidden=!on; $('#regbtn').hidden=!on; $('#libbtn').hidden=!on||!'boeke.html'; $('#cmpbtn').hidden=!on||!'tekste.html';
   if(on){ $('#back').hidden=true; const v=CUR.V[firstOnPage(CUR.spread*CUR.G.ppv)];
           $('#resume').textContent=L.resume+' \u00b7 '+bookName(CUR.b)+(v?' '+v.c:''); }
   else updateBack();
@@ -3629,6 +3631,8 @@ if(firstRun){
 await relayout(true);
 openShelf();
 renderNotes(true);
+{ const r=+new URLSearchParams(location.search).get('r');
+  if(r>=0&&r<bookOf.length&&new URLSearchParams(location.search).has('r')){ closeShelf(); go(bookOf[r],r,{push:false,flash:true}); history.replaceState(null,'',location.pathname); } }
 window.__reader={CNT:()=>CNT,CAL:()=>CAL,PAL:()=>PAL,CUR,S,D,calibrate,next,prev,go,relayout,a5page,geomFor,openShelf,closeShelf,buildShelf};
 })();
 </script>
