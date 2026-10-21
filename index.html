@@ -444,6 +444,12 @@ body.phone #top{position:absolute;left:0;right:0;top:0;z-index:58;height:auto;mi
   background:color-mix(in srgb,var(--desk) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);transform:translateY(-105%);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
 body.phone.chrome #top{transform:none}
+body.land #top{position:absolute;left:0;right:0;top:0;z-index:58;padding:0 calc(10px + env(safe-area-inset-right,0px)) 0 calc(10px + env(safe-area-inset-left,0px));
+  background:color-mix(in srgb,var(--desk) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);transform:translateY(-105%);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+body.land.chrome #top{transform:none}
+body.land #status{min-height:0;padding-top:3px;padding-bottom:3px}
+body.land #set{top:54px;max-height:calc(100% - 60px)}
 body.phone #shelf{padding-top:58px}
 body.phone #nav,body.phone #find,body.phone #smap,body.phone #amap{padding-top:60px}
 body.phone #set{top:58px;right:8px;max-height:calc(100% - 66px)}
@@ -873,7 +879,9 @@ const SQ2=Math.SQRT2;
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let grabbing=null;
 const PHONEQ=matchMedia('(max-width: 760px)'), isPhone=()=>PHONEQ.matches;
-document.body.classList.toggle('phone',isPhone());
+// a phone held sideways: a touch screen in landscape, too low for the computer's spread
+const LANDQ=matchMedia('(orientation: landscape) and (max-height: 500px) and (pointer: coarse)'), isLand=()=>LANDQ.matches;
+document.body.classList.toggle('phone',isPhone()); document.body.classList.toggle('land',isLand());
 
 /* ---------------- interface language ---------------- */
 const UI={
@@ -1213,14 +1221,20 @@ function geomFor(P,ppv,cpp,k,scale,ratio=SQ2){
   let g,mo,mi;
   if(ppv===2){ if(cpp===2){ g=.055*P; mi=g/2; mo=.07*P; } else { mi=.055*P; g=2*mi; mo=.075*P; } }
   else { mo=cpp===2?.07*P:.08*P; g=cpp===2?.055*P:2*mo; mi=mo; }
-  const w=ppv===2? P-mo-mi : P-2*mo;
+  // whole pixels: the browser rounds a column's width (to 1/64 px) but not the gap, and the small difference
+  // between the pitch worked out here and the one laid out grew page by page (9 px by Genesis 50 on a phone
+  // held sideways, cutting off the first letters of each line)
+  g=Math.round(g);
+  let w=Math.floor(ppv===2? P-mo-mi : P-2*mo);
+  if(cpp===2) w=g+2*Math.floor((w-g)/2);
   const cw=cpp===2?(w-g)/2:w;
   const H=P*ratio, mt=.085*P, mb=.075*P;
   return {P,ppv,cpp,g,mo,mi,w,cw,H,mt,mb,h:H-mt-mb,vw:ppv===2?2*w+g:w,fs:k*scale*P,pitch:cw+g};
 }
 function stageSize(){
   const st=$('#stage'), W=st.clientWidth, H=st.clientHeight;
-  const phone=isPhone(), pad=phone?6:Math.max(14,Math.min(W,H)*.035);
+  const phone=isPhone(), land=isLand(), pad=phone||land?6:Math.max(14,Math.min(W,H)*.035);
+  if(land&&W>=560){ const P=Math.floor((W-2*pad)/2); return {P,ppv:2,ratio:Math.max(.5,(H-2*pad)/P)}; }
   const two=W/H>1.08&&W>=640&&H>=480&&!phone;
   let P, ratio;
   if(two){ P=Math.min((W-2*pad)/2,(H-2*pad)/SQ2); ratio=SQ2; }
@@ -1370,8 +1384,8 @@ function depthOf(r){
   if(DEPTH.t!==t){ const c=new Float64Array(N+1); for(let i=0;i<N;i++) c[i+1]=c[i]+(n.t[i]?n.t[i].length:0); DEPTH.t=t; DEPTH.cum=c; }
   return DEPTH.cum[r]/DEPTH.cum[N];
 }
-const coverOn=()=>S.cover!=='off'&&!isPhone();
-const thumbsOn=()=>S.thumbs!=='off'&&!isPhone();
+const coverOn=()=>S.cover!=='off'&&!isPhone()&&!isLand();
+const thumbsOn=()=>S.thumbs!=='off'&&!isPhone()&&!isLand();
 const GFIRST=[0,5,17,22,27,39,44,57,65];
 function drawThumbs(f,wl,wr){
   const el=$('#thumbs'); if(!thumbsOn()||!CUR.G){ el.innerHTML=''; return; }
@@ -1443,9 +1457,9 @@ async function relayout(rerender){
   if(aovWanted()&&SG.dict) await ensureAov();
   const z=stageSize();
   if(parWanted()&&!await ensureTr(S.par)){ S.par='off'; persist(); }
-  const par=parWanted()&&z.ppv===2&&S.parLay!=='stacked', stack=parWanted()&&!par, cpp=par?1:S.cols;
+  const par=parWanted()&&z.ppv===2&&S.parLay!=='stacked', stack=parWanted()&&!par, cpp=par||isLand()?1:S.cols;
   const k=await calibrate(S.tr,cpp,par||stack?'lines':S.layout);
-  CUR.G=geomFor(z.P,z.ppv,cpp,k,S.scale,z.ratio);
+  CUR.G=geomFor(z.P,z.ppv,cpp,k,S.scale*(isLand()?.86:1),z.ratio);
   applyGeom(CUR.G);
   const b=CUR.b<0?(POS?POS.b:0):CUR.b;
   const anchor=CUR.anchor!=null?CUR.anchor:(POS?POS.row:D.bs[b]);
@@ -1579,7 +1593,7 @@ function buildSettings(){
         '<button class="x" type="button" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>';
   for(const [key,opts] of SEGS){
     if(key==='-'){ h+='<div class="sep"></div>'; continue; }
-    if(key==='parLay'&&(!parWanted()||isPhone())) continue;
+    if(key==='parLay'&&(!parWanted()||(isPhone()&&!isLand()))) continue;
     if(key==='paper'&&S.theme==='dark') continue;        // the paper tone is for light pages
     h+='<div class="srow"><span>'+L[key]+'</span><div class="seg">';
     if(key==='size'){
@@ -1768,7 +1782,7 @@ function chromeForShelf(on){
 }
 function openShelf(){ closePop(); closeChap(); closeNav(); setEl.classList.remove('on'); document.body.classList.add('chrome');
   shelf.classList.add('on'); buildShelf(); chromeForShelf(true); }
-function closeShelf(){ closeChap(); shelf.classList.remove('on'); chromeForShelf(false); if(isPhone()) showChrome(); }
+function closeShelf(){ closeChap(); shelf.classList.remove('on'); chromeForShelf(false); if(isPhone()||isLand()) showChrome(); }
 function firstRowOfChapter(b,c){ const n=NUM[S.tr]; for(const r of orderOf(S.tr,b)) if(n.c[r]===c&&n.t[r]) return r; return D.bs[b]; }
 function openAt(b,c){ if(!(b>=0)) return; closeShelf(); go(b,firstRowOfChapter(b,c),{push:CUR.b>=0,flash:c>1}); }
 
@@ -2269,13 +2283,13 @@ let chromeT=0;
 function overlaysOpen(){ return shelfOpen()||setEl.classList.contains('on')||navEl.classList.contains('on')||findEl.classList.contains('on')||chap.classList.contains('on')||
   (document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#top')); }
 function armChromeHide(){ clearTimeout(chromeT);
-  chromeT=setTimeout(function tick(){ if(!isPhone()) return; if(overlaysOpen()){ chromeT=setTimeout(tick,1500); return; }
+  chromeT=setTimeout(function tick(){ if(!isPhone()&&!isLand()) return; if(overlaysOpen()){ chromeT=setTimeout(tick,1500); return; }
     document.body.classList.remove('chrome'); },3500); }
 function showChrome(){ document.body.classList.add('chrome'); armChromeHide(); }
-function hideChrome(){ if(!isPhone()||overlaysOpen()) return; clearTimeout(chromeT); document.body.classList.remove('chrome'); }
-$('#top').addEventListener('pointerdown',()=>{ if(isPhone()) armChromeHide(); });
-function applyPhone(){ document.body.classList.toggle('phone',isPhone()); if(isPhone()) showChrome(); labelNotes(); }
-PHONEQ.addEventListener('change',applyPhone);
+function hideChrome(){ if((!isPhone()&&!isLand())||overlaysOpen()) return; clearTimeout(chromeT); document.body.classList.remove('chrome'); }
+$('#top').addEventListener('pointerdown',()=>{ if(isPhone()||isLand()) armChromeHide(); });
+function applyPhone(){ document.body.classList.toggle('phone',isPhone()); document.body.classList.toggle('land',isLand()); if(isPhone()) showChrome(); labelNotes(); if(isLand()) showChrome(); }
+PHONEQ.addEventListener('change',applyPhone); LANDQ.addEventListener('change',applyPhone);
 // drag the notes sheet's handle: higher or lower, or down and away
 // the handle and the whole title row of the sheet can be dragged (a finger lands on the row as often as on the handle)
 function startGrab(e){
@@ -2312,7 +2326,8 @@ book.addEventListener('click',e=>{
   if(String(getSelection()).trim().length) return;
   if(pop.classList.contains('on')){ closePop(); return; }
   const x=e.clientX-book.getBoundingClientRect().left, P=CUR.G.P;
-  if(CUR.G.ppv===2) (x<P?prev:next)();
+  if(isLand()){ const W=book.getBoundingClientRect().width; if(x<W*.33) prev(); else if(x>W*.67) next(); else document.body.classList.contains('chrome')?hideChrome():showChrome(); }
+  else if(CUR.G.ppv===2) (x<P?prev:next)();
   else if(isPhone()){ if(x<P*.3) prev(); else if(x>P*.7) next(); else document.body.classList.contains('chrome')?hideChrome():showChrome(); }
   else (x<P*.35?prev:next)();
 });
