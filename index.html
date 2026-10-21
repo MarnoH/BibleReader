@@ -1055,6 +1055,8 @@ function numberFor(id,d){
   return {c,v,s,t:TEXT[id]||null};
 }
 for(const b of CAT.bibles){ BIB[b.id]=b; NUM[b.id]=numberFor(b.id,(D.num[b.id]||{}).d); }
+// the travel copy carries the word tags of Heb/Byz and Heb/NA27 with their text
+if(typeof EMBD!=='undefined'&&EMBD&&EMBD.g) for(const k in EMBD.g) if(NUM[k]) NUM[k].g=EMBD.g[k];
 function buildFirstX(){ firstX=new Int32Array(N+1); let j=0; for(let r=0;r<N;r++){ firstX[r]=j; while(j<X.length&&X[j][0]===r) j++; } firstX[N]=X.length; }
 if(X) buildFirstX();
 const ACCENTS=/[\u0591-\u05AF\u05BD\u05C4\u05C5]/g;
@@ -1067,7 +1069,7 @@ async function ensureTr(t){
   if(!NUM[t]) return false; if(NUM[t].t) return true;
   if(BIB[t].ot&&!await ensureTr(BIB[t].ot)) return false;
   const b=BIB[t]; busy(L.loadingTr.replace('{x}',b.label));
-  try{ const j=await getJSON(b.file); if(j.d) Object.assign(NUM[t],numberFor(t,j.d)); NUM[t].t=j.t; ORD.clear(); if(t==='orig') applyAccents(); shareOT(); return true; }
+  try{ const j=await getJSON(b.file); if(j.d) Object.assign(NUM[t],numberFor(t,j.d)); NUM[t].t=j.t; if(j.g) NUM[t].g=j.g; ORD.clear(); if(t==='orig') applyAccents(); shareOT(); return true; }
   catch(e){ console.warn(e); busy(null); alert(L.notSaved.replace('{x}',b.label)); return false; }
 }
 async function ensureX(){
@@ -2413,11 +2415,15 @@ function kjvTokens(r){ const base=SG.kjv&&SG.kjv[r]; if(!base) return null; cons
     else out.push(t[w]); }
   return out;
 }
+// the Hebrew-Greek texts: Hebrew word tags in the Old Testament; Byz and NA27 bring their own Greek tags ("strong/parsing")
+const ORIGS=new Set(['orig','sbl','byz','na']);
+const gTags=(t,r)=>{ const g=NUM[t]&&NUM[t].g; return g&&g[r]?g[r].split(' '):null; };
 function tokens(t,r){
   if(t==='aov') return aovTokens(r);
   if(t==='kjv') return kjvTokens(r);
   if(t==='bsb'){ const b=bsbParts(r); return b?b.p:null; }
-  if((t==='orig'||t==='sbl')&&r<D.bs[39]) return SG.heb&&SG.heb[r]?SG.heb[r].split(' '):null;
+  if(ORIGS.has(t)&&r<D.bs[39]) return SG.heb&&SG.heb[r]?SG.heb[r].split(' '):null;
+  if(t==='byz'||t==='na') return gTags(t,r);
   return null;
 }
 // the phrase a word belongs to, its Strong's numbers and parsing
@@ -2615,7 +2621,7 @@ function openStrong(t,r,w,anchor){
   let form='', parse='';
   if(t==='bsb'||t==='aov'){ form=gr.form; parse=gr.html?gr.parse:esc(gr.parse); }
   else if(t==='kjv'){ const o=kjvOrig(r,gr); if(o){ form=o.form; parse=o.parse; } else if(gr.pre==='G') parse=gr.morph?grParse(gr.morph):''; }
-  else { form=(n.t[r]||'').split(' ')[w].replace(/\u05c3$/,''); parse=hebParse(gr.morph); }
+  else { form=(n.t[r]||'').split(' ')[w].replace(/\u05c3$/,'').replace(/[\[\]]/g,''); parse=gr.pre==='G'?(gr.morph?grParse(gr.morph):''):hebParse(gr.morph); }
   if(form||parse) h+='<div class="sgv">'+L.sVerse+': '+(form?'<span class="f" lang="'+(gr.pre==='H'?'he':'grc')+'" dir="'+(gr.pre==='H'?'rtl':'ltr')+'">'+esc(form)+'</span> ':'')+(parse?'<div>'+parse+'</div>':'')+'</div>';
   const inList=!!WORDS.list[main], here=!!WORDS.here[hereKey(t,r,gr.g)], always=!!WORDS.always[main];
   h+='<div class="sga"><button type="button" data-sa="add" class="'+(inList?'on':'')+'">'+(inList?L.sIn:L.sAdd)+'</button>'+
@@ -3165,7 +3171,7 @@ function concRows(t,id){
     let ws=null;
     if(t==='kjv'){ const tk=SG.kjv[r]; if(!tk||tk.indexOf(num)<0) continue; const p=tk.split(' '); let head=null;
       p.forEach((x,w)=>{ if(x!=='+') head=x; if(head&&head!=='-'&&hasNum(head.split('/')[0])) (ws||(ws=[])).push(w); }); }
-    else if(t==='orig'||t==='sbl'){ const tk=SG.heb&&SG.heb[r]; if(!tk||tk.indexOf(num)<0) continue;
+    else if(ORIGS.has(t)){ const tk=pre==='H'?SG.heb&&SG.heb[r]:NUM[t].g&&NUM[t].g[r]; if(!tk||tk.indexOf(num)<0) continue;
       tk.split(' ').forEach((x,w)=>{ if(hasNum(x.split('/')[0])) (ws||(ws=[])).push(w); }); }
     else { const tk=tokens(t,r); if(!tk) continue; const src=srcWords(r); if(!src.some(x=>x.nums.includes(num))) continue;
       tk.forEach((x,w)=>{ const gr=x!=='-'&&groupAt(t,r,w); if(gr&&gr.nums.includes(num)) (ws||(ws=[])).push(w); }); }
@@ -3176,7 +3182,7 @@ function concRows(t,id){
 async function openConc(id){
   if(!await ensureStrongs()) return;
   let t=S.tr; if(t==='bsb') await ensureBsb(); if(t==='aov') await ensureAov();
-  const ok=t==='kjv'||(t==='bsb'&&SG.bsb)||(t==='aov'&&SG.aov)||((t==='orig'||t==='sbl')&&id[0]==='H'); if(!ok) t='kjv';
+  const ok=t==='kjv'||(t==='bsb'&&SG.bsb)||(t==='aov'&&SG.aov)||(ORIGS.has(t)&&id[0]==='H')||((t==='byz'||t==='na')&&NUM[t].g); if(!ok) t='kjv';
   CONC.id=id; CONC.t=t; CONC.book=-1; CONC.hits=concRows(t,id);
   closePop(); smapEl.classList.remove('on'); amapEl.classList.remove('on');
   drawConc(true); findEl.classList.add('on');

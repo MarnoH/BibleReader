@@ -209,7 +209,7 @@ $('#busy').textContent=L.loading;
 /* the texts */
 let DATA, BASE;
 try{
-  const [a,b]=await Promise.all([fetch('data/nt-compare.v2.json').then(r=>{ if(!r.ok) throw 0; return r.json(); }),fetch('data/base.v1.json').then(r=>r.json())]);
+  const [a,b]=await Promise.all([fetch('data/nt-compare.v3.json').then(r=>{ if(!r.ok) throw 0; return r.json(); }),fetch('data/base.v1.json').then(r=>r.json())]);
   DATA=a; BASE=b;
 }catch(e){ $('#busy').textContent=L.failed; return; }
 const TX=DATA.texts, U=DATA.u, NU=U.length, IDS=TX.map(t=>t.id), LAB=Object.fromEntries(TX.map(t=>[t.id,t.label]));
