@@ -1450,6 +1450,17 @@ function go(b,row,o={}){
   const i=verseOfRow(row); show(spreadOfVerse(i),0); updateBack();
   if(o.flash){ for(const el of flow.querySelectorAll('.vs[data-i="'+i+'"]')){ el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } }
 }
+// the Greek and Hebrew faces load only when their letters first appear; measuring before they are in gives the
+// wrong line breaks (the facing Greek page of Luke 1 ran past its foot). Loaded once, this costs nothing.
+let FONTS_OK=false;
+async function scriptFonts(){
+  if(FONTS_OK) return;
+  try{ await Promise.all(['400 16px SS4','600 16px SS4','italic 400 16px SS4'].map(f=>document.fonts.load(f,'\u03b1\u03b2\u03b3\u1f00'))
+    .concat([document.fonts.load('400 16px SS4','\u05d0\u05d1\u05d2'),document.fonts.load('700 16px SS4','\u05d0\u05d1')])); }catch(e){}
+  FONTS_OK=true;
+}
+// a face that still arrives later: measure the facing pages again
+document.fonts.addEventListener('loadingdone',()=>{ if(CUR.G&&CUR.par) relayout(false); });
 async function relayout(rerender){
   if(!await ensureTr(S.tr)){ S.tr=Object.keys(NUM).find(t=>NUM[t].t)||'aov'; persist(); if(!await ensureTr(S.tr)) return; }
   if(S.xref==='on'&&!await ensureX()){ S.xref='off'; persist(); }
@@ -1457,6 +1468,7 @@ async function relayout(rerender){
   if(aovWanted()&&SG.dict) await ensureAov();
   const z=stageSize();
   if(parWanted()&&!await ensureTr(S.par)){ S.par='off'; persist(); }
+  await scriptFonts();
   const par=parWanted()&&z.ppv===2&&S.parLay!=='stacked', stack=parWanted()&&!par, cpp=par||isLand()?1:S.cols;
   const k=await calibrate(S.tr,cpp,par||stack?'lines':S.layout);
   CUR.G=geomFor(z.P,z.ppv,cpp,k,S.scale*(isLand()?.86:1),z.ratio);
@@ -2998,7 +3010,8 @@ function parRender(b){
   m.className=flowClasses(Object.assign({},S,{layout:'lines'}));
   m.style.cssText='position:fixed;left:-9999px;top:0;visibility:hidden;width:'+G.cw+'px;font-size:'+G.fs+'px;height:auto;column-count:auto';
   document.body.appendChild(m);
-  const heights=t=>{ let h=parTitle(t,b); for(let k=0;k<V.length;k++) h+=parSide(t,b,V,k,t===A&&xs); m.innerHTML=h;
+  // measured in the language each side is shown in: line breaking (and the Hebrew's own size) depends on it
+  const heights=t=>{ let h=parTitle(t,b); for(let k=0;k<V.length;k++) h+=parSide(t,b,V,k,t===A&&xs); m.lang=langOf(t,b); m.innerHTML=h;
     const els=m.querySelectorAll('.pu'), out=new Float64Array(V.length); els.forEach((e,i)=>{ out[i]=e.getBoundingClientRect().height; });
     return {u:out,t:m.querySelector('.ptl').getBoundingClientRect().height}; };
   const ha=heights(A), hb=heights(B); m.remove();
