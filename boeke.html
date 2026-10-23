@@ -39,6 +39,26 @@
     --edgeln:#33302c; --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
   }
 }
+/* marking colours, as in the Bible reader */
+:root{--hy:rgba(255,212,0,.42);--hg:rgba(90,190,110,.36);--hb:rgba(90,160,240,.33);--hp:rgba(240,110,170,.32);--ho:rgba(255,150,40,.36);--hv:rgba(155,95,220,.30);--cr:#b3261e;--cb:#1f4fa3;--cg:#2e7d32;--cy:#a07800;--co:#c25400;--cv:#7b3fa0}
+[data-theme=dark]{--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}
+@media (prefers-color-scheme:dark){[data-theme=auto]{--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}}
+.h-y,.h-g,.h-b,.h-p,.h-o,.h-v{border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.h-y{background:var(--hy)}.h-g{background:var(--hg)}.h-b{background:var(--hb)}.h-p{background:var(--hp)}.h-o{background:var(--ho)}.h-v{background:var(--hv)}
+.c-r{color:var(--cr)}.c-b{color:var(--cb)}.c-g{color:var(--cg)}.c-y{color:var(--cy)}.c-o{color:var(--co)}.c-v{color:var(--cv)}
+#markbar{position:fixed;z-index:90;display:none;align-items:center;gap:4px;padding:5px 6px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;box-shadow:0 12px 30px -10px var(--shadow);flex-wrap:wrap;max-width:calc(100vw - 16px)}
+#markbar.on{display:flex}
+#markbar button{width:28px;height:28px;border-radius:7px;border:1px solid transparent;background:none;cursor:pointer;padding:0;
+  font-family:var(--serif);font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center}
+#markbar button:hover{border-color:var(--line)}
+#markbar [data-h]{background-clip:content-box;padding:4px}
+#markbar [data-h=y]{background-color:var(--hy)}#markbar [data-h=g]{background-color:var(--hg)}#markbar [data-h=b]{background-color:var(--hb)}#markbar [data-h=p]{background-color:var(--hp)}#markbar [data-h=o]{background-color:var(--ho)}#markbar [data-h=v]{background-color:var(--hv)}
+#markbar [data-c=r]{color:var(--cr)}#markbar [data-c=b]{color:var(--cb)}#markbar [data-c=g]{color:var(--cg)}#markbar [data-c=y]{color:var(--cy)}#markbar [data-c=o]{color:var(--co)}#markbar [data-c=v]{color:var(--cv)}
+#markbar [data-x]{color:var(--soft)} #markbar [data-x] svg{width:16px;height:16px}
+.mg{display:flex;align-items:center;gap:4px}
+.msep{width:1px;height:20px;background:var(--line);margin:0 3px}
+body.phone #markbar button{width:36px;height:36px}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{height:100%}
@@ -61,6 +81,38 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--rubric);outline-off
 #titlebtn:hover{filter:brightness(1.1);background:linear-gradient(90deg,rgba(0,0,0,.3),rgba(255,255,255,.11) 28%,rgba(255,255,255,.04) 60%,rgba(0,0,0,.3)),var(--c,#4a4642)}
 #resume{border:1px solid var(--line)}
 .grow{flex:1}
+#notes{position:fixed;top:48px;right:0;bottom:0;width:min(380px,92vw);z-index:40;display:none;flex-direction:column;background:var(--panel);border-left:1px solid var(--line);box-shadow:-10px 0 30px -18px var(--shadow)}
+body.notes #notes{display:flex}
+body.notes:not(.phone) #stage,body.notes:not(.phone) #status{margin-right:min(380px,92vw)}
+body.phone #notes{top:auto;left:0;right:0;width:auto;height:48vh;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;box-shadow:0 -12px 30px -16px var(--shadow)}
+body.phone.notes #stage{margin-bottom:calc(48vh - 36px)}
+.nh{display:flex;align-items:center;padding:10px 12px 6px 16px;font:600 16px var(--serif)}
+.nh b{flex:1}
+.nh .x{border:0;background:none;font-size:22px;cursor:pointer;color:var(--soft)}
+#nlist{flex:1;overflow:auto;padding:4px 14px 20px}
+.nadd{margin:2px 0 12px}
+.nc{background:var(--page);border:1px solid var(--line);border-radius:8px;margin:0 0 10px;box-shadow:0 1px 2px var(--shadow)}
+.nch{display:flex;align-items:flex-start;gap:6px;padding:7px 8px 0 11px;font:13px/1.35 var(--serif);color:var(--soft)}
+.nch span{flex:1;min-width:0}
+.nch b{color:var(--ink);font-weight:600}
+.ndel{border:0;background:none;color:var(--faint);font-size:17px;cursor:pointer;line-height:1;padding:0 2px}
+.ndel:hover{color:var(--rubric)}
+.nc textarea{display:block;width:100%;border:0;background:transparent;resize:none;padding:6px 11px 10px;font:15.5px/1.5 var(--serif);color:var(--ink);outline:0;
+  background-image:linear-gradient(transparent calc(1.5em - 1px),var(--rule) calc(1.5em - 1px),var(--rule) 1.5em,transparent 1.5em);background-size:100% 1.5em;background-position:0 6px}
+.nc textarea::placeholder{color:var(--faint);font-style:italic}
+.nnone{color:var(--faint);font:italic 14px var(--serif);margin:4px 2px 12px}
+.nall{margin-top:16px;padding-top:10px;border-top:1px solid var(--line)}
+.nall>b{display:block;font:600 11.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 6px}
+.nlink{display:block;width:100%;text-align:left;border:0;background:none;border-radius:7px;padding:5px 7px;cursor:pointer;color:var(--ink)}
+.nlink:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.nlink.here{border-left:3px solid var(--rubric)}
+.nlink span{display:block;font:14px var(--serif)}
+.nlink small{display:block;font:12px var(--sans);color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#notesbtn{position:relative}
+#notesbtn .dot{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--rubric)}
+#notesbtn[aria-pressed=true]{background:color-mix(in srgb,var(--ink) 9%,transparent)}
+.bkrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.bkrow p{flex-basis:100%;margin:0 0 4px;font-size:12.5px;color:var(--soft)}
 #stage{flex:1;min-height:0;min-width:0;position:relative;display:flex;align-items:center;justify-content:center}
 #status{flex:none;height:36px;display:flex;align-items:center;justify-content:center;gap:12px;border-top:1px solid var(--rule);
   font-family:var(--serif);font-size:14px;color:var(--soft);padding:0 10px;white-space:nowrap;overflow:hidden}
@@ -109,6 +161,11 @@ body.phone .flow{text-align:left;hyphens:manual}
 .flow .bh1{font-size:1.32em;letter-spacing:.04em}
 .flow .bh1,.flow .bh2{break-before:column}
 .flow .bh1+.bh2,.flow .bh1:first-child,.flow .bh2:first-child,.flow .tp+.bk{break-before:auto}
+.flow p.note{font-size:.8em;line-height:1.4;text-indent:0;color:var(--soft);margin:0 0 .25em}
+.flow p.note.n1{margin-top:1.2em;padding-top:.5em;border-top:1px solid var(--line)}
+.flow sup.fn{font-size:.62em;line-height:0;color:var(--rubric);padding:0 .08em;font-feature-settings:"lnum"}
+.flow a.sref{color:inherit;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--rubric) 45%,transparent);text-underline-offset:.15em}
+.flow a.sref:hover{color:var(--rubric)}
 .flow p.c{text-align:center;text-indent:0;letter-spacing:.04em;margin:.2em 0}
 .flow .bh2{font-size:1.14em;letter-spacing:.03em}
 .flow .bh3{font-size:1em;letter-spacing:.02em}
@@ -246,6 +303,7 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
   <div class="grow"></div>
   <button id="resume" class="tb" type="button" hidden></button>
   <button id="logbtn" class="tb" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10 6.5v4.2l2.8 1.8M8 2.5h4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg><span class="lbl"></span></button>
+  <button id="notesbtn" class="tb" type="button" hidden aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3.5h9l3 3V16.5H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 8h7M6.5 10.8h7M6.5 13.6h4.5" stroke="currentColor" stroke-width="1.1"/></svg><i class="dot" hidden></i></button>
   <button id="aa" class="tb" type="button">Aa</button>
 </header>
 <main id="stage">
@@ -262,10 +320,13 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
   <div id="info" class="panel scroll"></div>
   <div id="log" class="panel scroll"></div>
   <div id="busy" class="on"><span>…</span></div>
+<div id="markbar" role="toolbar"><div class="mg"><button type="button" data-h="y"></button><button type="button" data-h="o"></button><button type="button" data-h="g"></button><button type="button" data-h="b"></button><button type="button" data-h="p"></button><button type="button" data-h="v"></button></div><i class="msep"></i><div class="mg"><button type="button" data-c="r">A</button><button type="button" data-c="o">A</button><button type="button" data-c="y">A</button><button type="button" data-c="v">A</button><button type="button" data-c="b">A</button><button type="button" data-c="g">A</button><i class="msep"></i><button type="button" data-x="1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6"/></svg></button></div></div>
 </main>
 <footer id="status"></footer>
 <div id="measure" aria-hidden="true"></div>
-<input type="file" id="addfile" accept=".pdf,application/pdf,.md,.markdown,text/markdown,.txt,text/plain,.json,application/json" multiple hidden>
+<aside id="notes"><div class="nh"><b data-l="nTitle"></b><button type="button" id="nclose" class="x" aria-label="close">×</button></div><div id="nlist" class="scroll"></div></aside>
+<input type="file" id="libfile" accept=".json,application/json" hidden>
+<input type="file" id="addfile" accept=".pdf,application/pdf,.xml,.thml,application/xml,text/xml,.md,.markdown,text/markdown,.txt,text/plain,.json,application/json" multiple hidden>
 
 <script>
 'use strict';
@@ -283,7 +344,8 @@ const UI={
   library:'Library',add:'Add books',empty:'No books on the shelves yet. Add a PDF (one with real text, not a scan), a Markdown or text file (.md, .txt) or a book file (.json), and it is kept on this device.',
   pdfReading:'Reading the PDF: page {n} of {t}\u2026',pdfShaping:'Setting the pages as a book\u2026',pdfTitle:'Add this PDF to the shelves',pdfBookTitle:'Title',pdfAuthor:'Author',pdfYear:'Year',pdfStats:'{p} pages \u00b7 {w} words \u00b7 {h} headings',mdStats:'{w} words \u00b7 {h} headings',pdfAdd:'Add to the shelves',pdfCancel:'Cancel',
   pdfScanned:'\u201c{f}\u201d is a scanned PDF: its pages are pictures, without text to read, so it cannot be added here. Only PDFs with real text can be. A scanned book can be read (OCR) and made into a book file in a chat.',
-  pdfFailed:'\u201c{f}\u201d could not be read as a book.',pdfPersonal:'Personal copy \u2014 not for redistribution',
+  pdfFailed:'\u201c{f}\u201d could not be read as a book.',pdfPersonal:'Personal copy \u2014 not for redistribution',thmlTr:'Translated by {t}',nTitle:'Notes',nNew:'Note on this page',nPh:'Write as you read\u2026',nNone:'No notes on these pages yet.',nAll:'All notes in this book ({n})',nDelete:'Delete this note',nDelQ:'Delete this note?',notes:'Notes',
+  bkAbout:'A backup of your own books, their notes and marks, where you are in each book and your reading time \u2014 to keep safe, or to move to another device.',bkSave:'Save library backup',bkLoad:'Load library backup',bkSaving:'Making the backup\u2026',bkLoading:'Loading the backup\u2026',bkBad:'That file is not a library backup.',bkDone:'Backup loaded: {b} book(s) added, {n} note(s) brought in.',thmlBad:'\u201c{f}\u201d is not a ThML book (the XML of the Christian Classics Ethereal Library).',
   hint:'Click a book to open it where you left off. Right-click (or hold) for its details and contents.',
   contents:'Contents',details:'Details',read:'read',lastRead:'last read',total:'time read',week:'this week',days:'days read',never:'not opened yet',
   cloth:'Cover colour',shelfOf:'Shelf',remove:'Remove from this device',removeQ:'Remove this book from this device? Your reading time is kept.',
@@ -298,7 +360,8 @@ const UI={
   library:'Biblioteek',add:'Voeg boeke by',empty:'Nog geen boeke op die rakke nie. Voeg \u2019n PDF by (een met regte teks, nie \u2019n skandering nie), \u2019n Markdown- of tekslêer (.md, .txt) of \u2019n boekl\u00eaer (.json), en dit word op hierdie toestel gehou.',
   pdfReading:'Die PDF word gelees: bladsy {n} van {t}\u2026',pdfShaping:'Die bladsye word as \u2019n boek geset\u2026',pdfTitle:'Voeg hierdie PDF by die rakke',pdfBookTitle:'Titel',pdfAuthor:'Skrywer',pdfYear:'Jaar',pdfStats:'{p} bladsye \u00b7 {w} woorde \u00b7 {h} opskrifte',mdStats:'{w} woorde \u00b7 {h} opskrifte',pdfAdd:'Sit op die rak',pdfCancel:'Kanselleer',
   pdfScanned:'\u201c{f}\u201d is \u2019n geskandeerde PDF: sy bladsye is prente, sonder teks om te lees, en dit kan nie hier bygevoeg word nie. Net PDF\u2019s met regte teks kan. \u2019n Geskandeerde boek kan in \u2019n gesprek gelees (OCR) en \u2019n boekl\u00eaer gemaak word.',
-  pdfFailed:'\u201c{f}\u201d kon nie as \u2019n boek gelees word nie.',pdfPersonal:'Persoonlike kopie \u2014 nie vir verspreiding nie',
+  pdfFailed:'\u201c{f}\u201d kon nie as \u2019n boek gelees word nie.',pdfPersonal:'Persoonlike kopie \u2014 nie vir verspreiding nie',thmlTr:'Vertaal deur {t}',nTitle:'Notas',nNew:'Nota op hierdie bladsy',nPh:'Skryf terwyl jy lees\u2026',nNone:'Nog geen notas op hierdie bladsye nie.',nAll:'Alle notas in hierdie boek ({n})',nDelete:'Skrap hierdie nota',nDelQ:'Skrap hierdie nota?',notes:'Notas',
+  bkAbout:'\u2019n Rugsteun van jou eie boeke, hul notas en merke, waar jy in elke boek is en jou leestyd \u2014 om veilig te hou, of na \u2019n ander toestel te skuif.',bkSave:'Stoor biblioteek-rugsteun',bkLoad:'Laai biblioteek-rugsteun',bkSaving:'Die rugsteun word gemaak\u2026',bkLoading:'Die rugsteun word gelaai\u2026',bkBad:'Daardie l\u00eaer is nie \u2019n biblioteek-rugsteun nie.',bkDone:'Rugsteun gelaai: {b} boek(e) bygevoeg, {n} nota(s) ingebring.',thmlBad:'\u201c{f}\u201d is nie \u2019n ThML-boek nie (die XML van die Christian Classics Ethereal Library).',
   hint:'Klik op \u2019n boek om dit oop te maak waar jy opgehou het. Regskliek (of hou vas) vir besonderhede en inhoud.',
   contents:'Inhoud',details:'Besonderhede',read:'gelees',lastRead:'laas gelees',total:'tyd gelees',week:'hierdie week',days:'dae gelees',never:'nog nie oopgemaak nie',
   cloth:'Bandkleur',shelfOf:'Rak',remove:'Verwyder van hierdie toestel',removeQ:'Verwyder hierdie boek van hierdie toestel? Jou leestyd bly behoue.',
@@ -394,8 +457,8 @@ function titlePage(bk){
 function unitHTML(bk,u){
   const [a,z]=bk._units[u]; let h=u===0?titlePage(bk):'';
   for(let i=a;i<z;i++){ const [k,t]=bk.b[i];
-    if(k==='p'||k==='pr'||k==='ps'){ const caps=k==='p'&&t.length<160&&t===t.toUpperCase()&&/[A-Z]{2}/.test(t);
-      h+='<p class="bk'+(k==='pr'?' r':k==='ps'?' sub':caps?' c':'')+(i===a?' first':'')+'" data-i="'+i+'">'+t+'</p>'; }
+    if(k==='p'||k==='pr'||k==='ps'||k==='pn'){ const caps=k==='p'&&t.length<160&&t===t.toUpperCase()&&/[A-Z]{2}/.test(t);
+      h+='<p class="bk'+(k==='pr'?' r':k==='ps'?' sub':k==='pn'?' note'+(i===0||bk.b[i-1][0]!=='pn'?' n1':''):caps?' c':'')+(i===a?' first':'')+'" data-i="'+i+'">'+t+'</p>'; }
     else { const lv=k==='h1'?'h2':k==='h2'?'h3':'h4'; h+='<'+lv+' class="bk b'+k+'" data-i="'+i+'">'+esc(t)+'</'+lv+'>'; } }
   return h;
 }
@@ -414,7 +477,7 @@ function applyGeom(G){
   for(const [k,v] of [['--fs',G.fs],['--mo',G.mo],['--mt',G.mt],['--mb',G.mb]]) book.style.setProperty(k,v+'px');
 }
 function renderUnit(u){
-  CUR.u=u; flow.innerHTML=unitHTML(CUR.bk,u); flow.lang=CUR.bk.lang||'en'; styleFlow(flow,CUR.G); flow.style.transform='none';
+  CUR.u=u; flow.innerHTML=unitHTML(CUR.bk,u); paintMarks(); flow.lang=CUR.bk.lang||'en'; styleFlow(flow,CUR.G); flow.style.transform='none';
   const fr=flow.getBoundingClientRect(), at=x=>Math.max(0,Math.floor((x-fr.left+1)/CUR.G.pitch));
   const els=flow.querySelectorAll('.bk'), n=els.length;
   CUR.col=new Int32Array(n); CUR.end=new Int32Array(n); CUR.idx=new Int32Array(n);
@@ -451,6 +514,7 @@ function show(s,dir){
     for(const [el,w] of [[book.querySelector('.edge.l'),1.5+T*f],[book.querySelector('.edge.r'),1.5+T*(1-f)]]){
       el.style.setProperty('--w',w+'px'); el.style.setProperty('--sag',(w*.12)+'px'); el.title=pc+'% \u00b7 '+(100-pc)+'%'; } }
   $('#status').innerHTML='<span class="st">'+esc(h>=0?bk.b[h][1]:bk.title)+'</span><span class="pc">'+pctAt(first)+'%</span><span class="pc">'+fmtMin(todayTime(bk.id))+' '+(ST.s.lang==='af'?'vandag':'today')+'</span>';
+  renderNotes(false);
   if(dir&&!reduceMotion) vp.animate([{opacity:.15,transform:'translateX('+(dir*18)+'px)'},{opacity:1,transform:'none'}],{duration:190,easing:'cubic-bezier(.2,.7,.2,1)'});
 }
 function next(){ act(); if(CUR.spread<CUR.spreads-1) show(CUR.spread+1,1); else if(CUR.u<CUR.bk._units.length-1){ renderUnit(CUR.u+1); show(0,1); } }
@@ -515,7 +579,7 @@ function buildShelf(){
     const s=shelf.querySelector('.stor'); if(s&&e.quota) s.textContent=L.storage.replace('{used}',f(e.usage||0)).replace('{quota}',f(e.quota)); }).catch(()=>{});
 }
 function chrome(onShelf){
-  $('#home').hidden=onShelf; $('#titlebtn').hidden=onShelf; $('#resume').hidden=!(onShelf&&ST.last&&catalogue().some(b=>b.id===ST.last));
+  $('#home').hidden=onShelf; $('#titlebtn').hidden=onShelf; $('#notesbtn').hidden=onShelf; if(onShelf&&notesOpen()) setNotes(false); $('#resume').hidden=!(onShelf&&ST.last&&catalogue().some(b=>b.id===ST.last));
   $('#biblebtn').hidden=!onShelf; $('#regbtn').hidden=!onShelf; $('#status').hidden=onShelf||ST.s.status==='off';
   if(onShelf&&ST.last){ const m=catalogue().find(b=>b.id===ST.last); if(m) $('#resume').textContent=L.resume+' \u00b7 '+(m.short||m.title); }
 }
@@ -546,6 +610,8 @@ async function pdfjs(){
   if(!PDFJS){ PDFJS=await import('./vendor/pdfjs/pdf.min.js'); PDFJS.GlobalWorkerOptions.workerSrc='vendor/pdfjs/pdf.worker.min.js'; }
   return PDFJS;
 }
+const bookId=(pre,title,b)=>{ let h=2166136261; const s=title+'|'+b.length+'|'+b.slice(0,40).map(x=>x[1]).join('|'); for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619)>>>0; }
+  return pre+'-'+title.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)+'-'+h.toString(36); };
 const escT=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 async function pdfToBook(file){
   const lib=await pdfjs();
@@ -657,7 +723,7 @@ async function pdfToBook(file){
   let title=(info.Title||'').trim();
   if(!title||/^(untitled|microsoft word|document)/i.test(title)){ const big=p0&&[...p0.lines].sort((a,b)=>b.size-a.size)[0]; title=start&&big?big.txt:file.name.replace(/\.pdf$/i,''); }
   const words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
-  return {v:1,id:'pdf-'+title.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)+'-'+Date.now().toString(36),
+  return {v:1,id:bookId('pdf',title,B),
     title,short:title.length>30?title.slice(0,30).replace(/\s+\S*$/,''):title,author:(info.Author||'').trim(),year:'',shelf:'other',lang:ST.s.lang==='af'&&/\b(die|en|van|het)\b/.test(B.slice(0,30).map(x=>x[1]).join(' '))?'af':'en',
     source:file.name,license:L.pdfPersonal,cover,words,b:B,_pages:N,_heads:B.filter(x=>x[0][0]==='h').length};
 }
@@ -746,7 +812,7 @@ function mdToBook(text,name){
   const sh=(meta.shelf||meta.rak||'').toLowerCase();
   const shelf=SHELF_ORDER.find(s=>s===sh||[UI.en.shelves[s],UI.af.shelves[s]].some(n=>n&&n.toLowerCase()===sh))||'other';
   const words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
-  return {v:1,id:'md-'+title.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)+'-'+Date.now().toString(36),
+  return {v:1,id:bookId('md',title,B),
     title,short:title.length>30?title.slice(0,30).replace(/\s+\S*$/,''):title,subtitle:meta.subtitle||'',author:meta.author||meta.skrywer||'',year:meta.year||meta.jaar||'',
     shelf,lang:/\b(die|het|van|nie)\b/.test(B.slice(0,20).map(x=>x[1]).join(' '))?'af':'en',source:name,license:L.pdfPersonal,words,b:B,
     _stats:L.mdStats.replace('{w}',words.toLocaleString()).replace('{h}',B.filter(x=>x[0][0]==='h').length)};
@@ -758,11 +824,100 @@ async function addText(f){
   return storeBook(bk);
 }
 
+/* ---------------- a ThML book (Christian Classics Ethereal Library) ----------------
+   ThML marks a book's parts by what they are, so it is read as such: the div1/div2 titles are the chapters and
+   sections (the capitalised heading CCEL repeats under each title is left out, as are the title page and the
+   indexes at the end); the author, translator and title come from the head; footnotes keep their number in the
+   text and are printed at the end of their chapter; a Scripture reference becomes a link that opens the Bible
+   there; poetry keeps its lines. */
+const OSIS66=['Gen','Exod','Lev','Num','Deut','Josh','Judg','Ruth','1Sam','2Sam','1Kgs','2Kgs','1Chr','2Chr','Ezra','Neh','Esth','Job','Ps','Prov','Eccl','Song','Isa','Jer','Lam','Ezek','Dan','Hos','Joel','Amos','Obad','Jonah','Mic','Nah','Hab','Zeph','Hag','Zech','Mal','Matt','Mark','Luke','John','Acts','Rom','1Cor','2Cor','Gal','Eph','Phil','Col','1Thess','2Thess','1Tim','2Tim','Titus','Phlm','Heb','Jas','1Pet','2Pet','1John','2John','3John','Jude','Rev'];
+function parseThml(text){
+  let d=new DOMParser().parseFromString(text,'application/xml');
+  if(d.querySelector('parsererror')){
+    // ThML often uses HTML's named characters (&nbsp; &mdash; …), which plain XML does not know
+    const tmp=document.createElement('textarea');
+    const fixed=text.replace(/<!DOCTYPE[^>]*>/i,'').replace(/&([a-zA-Z][a-zA-Z0-9]+);/g,(m,n)=>['amp','lt','gt','quot','apos'].includes(n)?m:(tmp.innerHTML=m,tmp.value.length===1||tmp.value!==m?'&#'+tmp.value.codePointAt(0)+';':m));
+    d=new DOMParser().parseFromString(fixed,'application/xml');
+    if(d.querySelector('parsererror')) return null;
+  }
+  return d.documentElement&&d.documentElement.nodeName==='ThML'?d:null;
+}
+function thmlToBook(d,name){
+  const q=(sel,root=d)=>[...root.getElementsByTagName(sel)];
+  const titles=q('DC.Title'), creators=q('DC.Creator');
+  const title=(titles.find(t=>!t.getAttribute('sub'))||titles[0]||{textContent:''}).textContent.replace(/\s+/g,' ').trim()||name.replace(/\.(xml|thml)$/i,'');
+  const who=(sub)=>{ const c=creators.find(c=>c.getAttribute('sub')===sub&&c.getAttribute('scheme')==='short-form')||creators.find(c=>c.getAttribute('sub')===sub); return c?c.textContent.replace(/\s+/g,' ').trim():''; };
+  const author=who('Author'), translator=who('Translator');
+  const rights=(q('DC.Rights')[0]||{textContent:''}).textContent.trim();
+  const B=[]; let notes=[];
+  const norm=s=>s.toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g,'');
+  const inline=el=>{ let h='';
+    for(const n of el.childNodes){
+      if(n.nodeType===3){ h+=escT(n.nodeValue.replace(/\s+/g,' ')); continue; }
+      if(n.nodeType!==1) continue;
+      const t=n.nodeName.toLowerCase();
+      if(t==='note'){ const k=n.getAttribute('n')||String(notes.length+1); notes.push([k,inline(n).trim()]); h+='<sup class="fn">'+escT(k)+'</sup>'; }
+      else if(t==='scripref'){ const o=(n.getAttribute('osisRef')||'').replace(/^Bible(\.[a-z]+)?:/i,'').split(/[-\s]/)[0], m=/^([1-3]?[A-Za-z]+)\.(\d+)(?:\.(\d+))?/.exec(o);
+        h+=m&&OSIS66.includes(m[1])?'<a class="sref" href="./?ref='+m[1]+'.'+m[2]+'.'+(m[3]||1)+'">'+inline(n)+'</a>':inline(n); }
+      else if(t==='i'||t==='em'||t==='cite') h+='<i>'+inline(n)+'</i>';
+      else if(t==='b'||t==='strong') h+='<b>'+inline(n)+'</b>';
+      else if(t==='sup') h+='<sup>'+inline(n)+'</sup>';
+      else if(t==='br') h+='<br>';
+      else if(t==='img'||t==='pb'||t==='insertindex') {}
+      else h+=inline(n);
+    }
+    return h; };
+  const flushNotes=()=>{ notes.forEach(([k,t],i)=>B.push(['pn','<sup>'+escT(k)+'</sup> '+t])); notes=[]; };
+  const skipDiv=t=>/^(title page|table of contents|contents|indexes|index\b|index of)/i.test(t||'');
+  // a heading's own words, without its footnotes (those still go with the chapter's notes)
+  const headText=n=>{ const c=n.cloneNode(true); for(const x of [...c.getElementsByTagName('note')]){ notes.push([x.getAttribute('n')||String(notes.length+1),inline(x).trim()]); x.remove(); }
+    return c.textContent.replace(/\s+/g,' ').trim(); };
+  let sinceTitle=-1;     // where the last div title went: a heading right after it repeats it
+  const walk=(el,depth,divTitle)=>{
+    for(const n of el.children){
+      const t=n.nodeName.toLowerCase(), dm=/^div(\d)?$/.exec(t);
+      if(dm){ const ti=(n.getAttribute('title')||'').replace(/\s+/g,' ').trim(); if(skipDiv(ti)) continue;
+        const lv=dm[1]?+dm[1]:depth+1;
+        if(ti){ B.push(['h'+Math.min(3,lv),ti]); sinceTitle=B.length; }
+        walk(n,lv,ti); if(lv===1) flushNotes(); continue; }
+      if(/^h[1-6]$/.test(t)){ const tx=headText(n), a=norm(tx), z=norm(divTitle||'');
+        // the heading CCEL repeats under the div's own title (often in capitals)
+        if(B.length===sinceTitle&&z&&(a===z||z.startsWith(a)||a.startsWith(z.slice(0,20)))) continue;
+        // the same heading with another chapter number (CCEL's title for XXV says "Chapter XV"): the printed one wins
+        const num=/^\s*(chapter|book|part|section|hoofstuk)\s+([ivxlcdm]+|\d+)\b\.?\s*/i, ma=num.exec(tx), mz=num.exec(divTitle||'');
+        if(B.length===sinceTitle&&ma&&mz&&norm(tx.slice(ma[0].length))===norm(divTitle.slice(mz[0].length))){
+          B[sinceTitle-1][1]=mz[1]+' '+ma[2].toUpperCase()+'. '+divTitle.slice(mz[0].length); continue; }
+        if(tx) B.push(['h3',tx]); continue; }
+      if(t==='p'){ const h=inline(n).trim(); if(h) B.push(['p',h]); }
+      else if(t==='verse'){ const ls=[...n.children].filter(c=>c.nodeName.toLowerCase()==='l').map(l=>inline(l).trim()).filter(Boolean); B.push(['ps',(ls.length?ls:[inline(n).trim()]).join('<br>')]); }
+      else if(t==='ul'||t==='ol'){ let i=0; for(const li of n.children) if(li.nodeName.toLowerCase()==='li') B.push(['p',(t==='ol'?(++i)+'. ':'\u2022 ')+inline(li).trim()]); }
+      else if(t==='blockquote'){ const ps=[...n.children].filter(c=>c.nodeName.toLowerCase()==='p'); for(const p of (ps.length?ps:[n])) B.push(['ps',inline(p).trim()]); }
+      else if(t==='table'||t==='style'||t==='insertindex') {}
+      else walk(n,depth,divTitle);
+    }
+  };
+  const body=q('ThML.body')[0]; if(!body) return null;
+  walk(body,0,''); flushNotes();
+  const words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
+  return {v:1,id:bookId('thml',title,B),
+    title,short:title.length>30?title.slice(0,30).replace(/\s+\S*$/,''):title,subtitle:translator?L.thmlTr.replace('{t}',translator):'',author,year:'',shelf:'other',lang:'en',
+    source:'Christian Classics Ethereal Library (ccel.org)'+(name?' \u00b7 '+name:''),license:rights||L.pdfPersonal,words,b:B,
+    _stats:L.mdStats.replace('{w}',words.toLocaleString()).replace('{h}',B.filter(x=>x[0][0]==='h').length)};
+}
+async function addThml(f){
+  const d=parseThml(await f.text());
+  const bk=d&&thmlToBook(d,f.name);
+  if(!bk||!bk.b.length){ alert(L.thmlBad.replace('{f}',f.name)); return 0; }
+  const ok=await confirmPdf(bk); if(!ok) return 0;
+  return storeBook(ok);
+}
+
 /* ---------------- adding books (kept on this device) ---------------- */
 $('#addfile').onchange=async e=>{
   let n=0;
   for(const f of e.target.files){
     if(/\.pdf$/i.test(f.name)||f.type==='application/pdf'){ n+=await addPdf(f); continue; }
+    if(/\.(xml|thml)$/i.test(f.name)||/xml/.test(f.type)){ n+=await addThml(f); continue; }
     if(/\.(md|markdown|txt)$/i.test(f.name)||/^text\/(markdown|plain)/.test(f.type)){ n+=await addText(f); continue; }
     try{ const j=JSON.parse(await f.text()); const list=Array.isArray(j.books)?j.books:[j];
       for(const bk of list){ if(!bk||!bk.id||!Array.isArray(bk.b)) throw new Error('bad');
@@ -787,7 +942,8 @@ function settingsHTML(){
   const seg=(k,opts)=>'<div class="srow"><span>'+L[k]+'</span><div class="seg">'+opts.map(([v,lab])=>'<button type="button" data-k="'+k+'" data-v="'+v+'" aria-pressed="'+(String(ST.s[k])===String(v))+'">'+(L[lab]||lab)+'</button>').join('')+'</div></div>';
   return head(L.settings)+seg('theme',[['auto','auto'],['light','light'],['dark','dark']])+seg('contrast',[['normal','cNormal'],['strong','cStrong']])+(ST.s.theme==='dark'?'':seg('paper',[['white','paWhite'],['cream','paCream'],['soft','paSoft']]))+seg('gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']])+
     '<div class="srow"><span>'+L.size+'</span><div class="seg"><button type="button" data-act="smaller">A\u2212</button><button type="button" data-act="size0">'+Math.round(CUR.G?CUR.G.fs:17)+'</button><button type="button" data-act="bigger">A+</button></div></div>'+
-    seg('cols',[[1,'1'],[2,'2']])+seg('status',[['off','off'],['on','on']])+seg('lang',[['en','English'],['af','Afrikaans']]);
+    seg('cols',[[1,'1'],[2,'2']])+seg('status',[['off','off'],['on','on']])+seg('lang',[['en','English'],['af','Afrikaans']])+
+    '<div class="bkrow"><p>'+esc(L.bkAbout)+'</p><button type="button" class="btn" data-act="bksave">'+esc(L.bkSave)+'</button><button type="button" class="btn" data-act="bkload">'+esc(L.bkLoad)+'</button></div>';
 }
 $('#aa').onclick=e=>{ e.stopPropagation(); if($('#set').classList.contains('on')) closePanels(); else openPanel($('#set'),settingsHTML()); };
 $('#set').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
@@ -801,6 +957,8 @@ $('#set').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!
     if(k==='status') chrome(shelfOpen());
     if(k==='cols'||k==='status') relayout();
     if(CUR.bk&&!shelfOpen()) show(CUR.spread,0); }
+  else if(b.dataset.act==='bksave'){ saveLibBackup(); return; }
+  else if(b.dataset.act==='bkload'){ $('#libfile').click(); return; }
   else if(b.dataset.act==='smaller'||b.dataset.act==='bigger'||b.dataset.act==='size0'){
     ST.s.scale=b.dataset.act==='size0'?1:Math.min(2.5,Math.max(.6,ST.s.scale*(b.dataset.act==='bigger'?1.08:1/1.08))); persist(); relayout(); }
   else return;
@@ -853,14 +1011,192 @@ $('#resume').onclick=()=>{ const m=catalogue().find(b=>b.id===ST.last); if(m) op
 function label(){
   for(const [id,k] of [['#biblebtn','bible'],['#regbtn','register'],['#logbtn','time']]){ const el=$(id); el.title=L[k]; el.setAttribute('aria-label',L[k]); const s=el.querySelector('.lbl'); if(s) s.textContent=L[k]; }
   $('#home').title=L.home; $('#aa').title=L.settings; document.title=L.library;
+  $('#notesbtn').title=L.notes; $('#notesbtn').setAttribute('aria-label',L.notes); document.querySelector('[data-l=nTitle]').textContent=L.nTitle; if(typeof renderNotes==='function'&&CUR.bk) renderNotes(true);
 }
+
+/* ---------------- marking in a book ----------------
+   As in the Bible: select words (drag, or hold on a phone) and the bar offers six highlight colours, six text
+   colours and "clear". Marks are kept per book on this device, by block and word number (words as the page shows
+   them, footnote numbers included), and only colour the text, so the pages never move. */
+const markbar=$('#markbar');
+ST.marks=ST.marks||{};
+function blockWords(el){ return (el.textContent.match(/\S+/g)||[]).length; }
+// a block's marks, word by word: [highlight, colour]
+function expand(list,n){ const H=new Array(n).fill(''), C=new Array(n).fill('');
+  for(const [a,z,k,c] of list||[]) for(let w=a;w<=Math.min(z,n-1);w++) (k==='h'?H:C)[w]=c;
+  return [H,C]; }
+function compress(H,C){ const out=[];
+  for(const [k,A] of [['h',H],['c',C]]){ let w=0; while(w<A.length){ if(!A[w]){ w++; continue; } let z=w; while(z+1<A.length&&A[z+1]===A[w]) z++; out.push([w,z,k,A[w]]); w=z+1; } }
+  return out; }
+// paint the marks of the blocks on the page: each text run gets the classes of its words
+function paintMarks(){
+  const bm=CUR.bk&&ST.marks[CUR.bk.id]; if(!bm) return;
+  for(const el of flow.querySelectorAll('.bk[data-i]')){
+    const list=bm[el.dataset.i]; if(!list||!list.length) continue;
+    const txt=el.textContent, n=(txt.match(/\S+/g)||[]).length, [H,C]=expand(list,n);
+    const ch=new Array(txt.length).fill(-1); { const re=/\S+/g; let m,w=0; while((m=re.exec(txt))){ for(let i=m.index;i<m.index+m[0].length;i++) ch[i]=w; w++; }
+      // the space between two marked words of the same colour is marked too, so a highlight runs on unbroken
+      for(let i=0;i<txt.length;i++) if(ch[i]<0){ let a=i-1; while(a>=0&&ch[a]<0) a--; let z=i+1; while(z<txt.length&&ch[z]<0) z++;
+        if(a>=0&&z<txt.length&&H[ch[a]]&&H[ch[a]]===H[ch[z]]) ch[i]=-2-ch[a]; } }
+    const cls=i=>{ const w=ch[i]; if(w===-1) return ''; if(w<=-2) return 'h-'+H[-2-w]; return [H[w]?'h-'+H[w]:'',C[w]?'c-'+C[w]:''].filter(Boolean).join(' '); };
+    const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT), nodes=[]; let x; while((x=tw.nextNode())) nodes.push(x);
+    let pos=0;
+    for(const tn of nodes){
+      const s=tn.nodeValue, base=pos; pos+=s.length;
+      let any=false; for(let i=0;i<s.length;i++) if(cls(base+i)){ any=true; break; } if(!any) continue;
+      const frag=document.createDocumentFragment(); let i=0;
+      while(i<s.length){ const c=cls(base+i); let j=i+1; while(j<s.length&&cls(base+j)===c) j++;
+        const part=document.createTextNode(s.slice(i,j));
+        if(c){ const sp=document.createElement('span'); sp.className=c; sp.appendChild(part); frag.appendChild(sp); } else frag.appendChild(part);
+        i=j; }
+      tn.parentNode.replaceChild(frag,tn);
+    }
+  }
+}
+// the selection as word ranges per block
+function wordAt(el,node,off,end){
+  const r=document.createRange(); r.setStart(el,0); try{ r.setEnd(node,off); }catch(e){ return 0; }
+  const before=r.toString(), txt=el.textContent;
+  let ci=before.length; if(end) ci=Math.max(0,ci-1);
+  // the word this character belongs to (or the next one, from a space)
+  const re=/\S+/g; let m,w=0,last=0; while((m=re.exec(txt))){ if(ci<m.index+m[0].length) return (end&&ci<m.index)?Math.max(0,w-1):w; last=w; w++; } return last;
+}
+function selectedRanges(){
+  const sel=getSelection(); if(!sel.rangeCount||sel.isCollapsed) return null;
+  const r=sel.getRangeAt(0); if(!flow.contains(r.commonAncestorContainer)) return null;
+  const bk=n=>(n.nodeType===1?n:n.parentElement).closest('.bk[data-i]');
+  let a=bk(r.startContainer), z=bk(r.endContainer); if(!a||!z) return null;
+  const els=[...flow.querySelectorAll('.bk[data-i]')], ia=els.indexOf(a), iz=els.indexOf(z); if(ia<0||iz<ia) return null;
+  const out=[];
+  for(let k=ia;k<=iz;k++){ const el=els[k], n=blockWords(el); if(!n) continue;
+    const w0=k===ia?wordAt(el,r.startContainer,r.startOffset,false):0, w1=k===iz?wordAt(el,r.endContainer,r.endOffset,true):n-1;
+    if(w1>=w0) out.push([el.dataset.i,w0,Math.min(w1,n-1),n]); }
+  return out.length?out:null;
+}
+function applyMark(kind,code){
+  const rs=selectedRanges(); if(!rs) return;
+  const id=CUR.bk.id, bm=ST.marks[id]||(ST.marks[id]={});
+  for(const [i,a,z,n] of rs){ const [H,C]=expand(bm[i],n);
+    for(let w=a;w<=z;w++){ if(kind==='h') H[w]=code; else if(kind==='c') C[w]=code; else { H[w]=''; C[w]=''; } }
+    const l=compress(H,C); if(l.length) bm[i]=l; else delete bm[i]; }
+  if(!Object.keys(bm).length) delete ST.marks[id];
+  persist(); getSelection().removeAllRanges(); hideMarkbar();
+  const s=CUR.spread; renderUnit(CUR.u); show(s,0);       // the same page, now marked
+}
+function hideMarkbar(){ markbar.classList.remove('on'); }
+function placeMarkbar(){
+  const rs=selectedRanges(); if(!rs){ hideMarkbar(); return; }
+  const rect=getSelection().getRangeAt(0).getBoundingClientRect();
+  markbar.classList.add('on'); const w=markbar.offsetWidth, h=markbar.offsetHeight;
+  let x=rect.left+rect.width/2-w/2, y=rect.top-h-10;
+  if(y<8) y=rect.bottom+10;                                // no room above: below the words
+  x=Math.max(8,Math.min(innerWidth-w-8,x)); y=Math.min(innerHeight-h-8,y);
+  markbar.style.left=x+'px'; markbar.style.top=y+'px';
+}
+let selT=0;
+document.addEventListener('selectionchange',()=>{ clearTimeout(selT); selT=setTimeout(()=>{ if(!CUR.bk||shelfOpen()) return hideMarkbar(); placeMarkbar(); },220); });
+markbar.addEventListener('pointerdown',e=>e.preventDefault());     // keep the selection while a colour is chosen
+markbar.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.h) applyMark('h',b.dataset.h); else if(b.dataset.c) applyMark('c',b.dataset.c); else applyMark('x'); });
+
+/* ---------------- notes in a book ----------------
+   As in the Bible: a panel beside the book (from below on a phone) for notes written while reading. A note belongs
+   to the paragraph its page began with, so it stays with that text whatever the screen or type size, and shows
+   whenever that paragraph is on the open pages. Kept with the book on this device, and in the library backup. */
+ST.notes=ST.notes||{};
+const notesEl=$('#notes'), nList=$('#nlist');
+const notesOpen=()=>document.body.classList.contains('notes');
+const plain=s=>s.replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+function spreadBlocks(){ // the first and last paragraph on the open pages
+  if(!CUR.bk||!CUR.idx||!CUR.idx.length) return null;
+  const G=CUR.G, p0=CUR.spread*G.ppv; return [CUR.idx[firstOnPage(p0)],CUR.idx[lastOnPage(Math.min(CUR.pages-1,p0+G.ppv-1))]];
+}
+function noteRef(bk,i){ const h=headBefore(bk,i), w=plain(bk.b[i]?bk.b[i][1]:'').split(' ').slice(0,7).join(' ');
+  return {head:h>=0&&h!==i?bk.b[h][1]:'', start:w+(w?'\u2026':'')}; }
+function notesDot(){ const r=spreadBlocks(), bn=CUR.bk&&ST.notes[CUR.bk.id];
+  $('#notesbtn .dot').hidden=!(r&&bn&&Object.keys(bn).some(i=>+i>=r[0]&&+i<=r[1])); }
+let nSig='';
+function renderNotes(force){
+  notesDot(); if(!notesOpen()||!CUR.bk) return;
+  const bk=CUR.bk, bn=ST.notes[bk.id]||{}, r=spreadBlocks()||[0,-1];
+  const here=Object.keys(bn).map(Number).filter(i=>i>=r[0]&&i<=r[1]).sort((a,b)=>a-b);
+  const sig=bk.id+'|'+r+'|'+Object.keys(bn).length+'|'+ST.s.lang;
+  if(!force&&sig===nSig) return; nSig=sig;
+  const card=i=>{ const n=bn[i], f=noteRef(bk,i);
+    return '<div class="nc" data-n="'+i+'"><div class="nch"><span>'+(f.head?'<b>'+esc(f.head)+'</b> ':'')+esc(f.start)+'</span>'+
+      '<button type="button" class="ndel" data-del="'+i+'" title="'+esc(L.nDelete)+'" aria-label="'+esc(L.nDelete)+'">\u00d7</button></div>'+
+      '<textarea rows="3" data-note="'+i+'" placeholder="'+esc(L.nPh)+'">'+esc(n.t||'')+'</textarea></div>'; };
+  const all=Object.keys(bn).map(Number).sort((a,b)=>a-b);
+  nList.innerHTML='<button type="button" class="btn main nadd" data-act="nnew">+ '+esc(L.nNew)+'</button>'+
+    (here.length?here.map(card).join(''):'<p class="nnone">'+esc(L.nNone)+'</p>')+
+    (all.length?'<div class="nall"><b>'+esc(L.nAll.replace('{n}',all.length))+'</b>'+all.map(i=>{ const f=noteRef(bk,i);
+      return '<button type="button" class="nlink'+(here.includes(i)?' here':'')+'" data-go="'+i+'"><span>'+esc(f.head||f.start)+'</span><small>'+esc(plain(bn[i].t||'').slice(0,80)||'\u2026')+'</small></button>'; }).join('')+'</div>':'');
+  nList.querySelectorAll('textarea').forEach(grow);
+}
+const grow=ta=>{ ta.style.height='auto'; ta.style.height=Math.max(70,ta.scrollHeight+2)+'px'; };
+function setNotes(on){ document.body.classList.toggle('notes',on); $('#notesbtn').setAttribute('aria-pressed',on); nSig=''; renderNotes(true); }
+$('#notesbtn').onclick=e=>{ e.stopPropagation(); closePanels(); setNotes(!notesOpen()); };
+$('#nclose').onclick=()=>setNotes(false);
+nList.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act=nnew],[data-del],[data-go]'); if(!b||!CUR.bk) return;
+  const id=CUR.bk.id, bn=ST.notes[id]||(ST.notes[id]={});
+  if(b.dataset.act==='nnew'){ const r=spreadBlocks(); if(!r) return; const i=r[0];
+    if(!bn[i]) bn[i]={t:'',made:iso(new Date()),u:Date.now()}; renderNotes(true);
+    const ta=nList.querySelector('textarea[data-note="'+i+'"]'); if(ta){ ta.focus(); ta.scrollIntoView({block:'center'}); } return; }
+  if(b.dataset.del){ const i=b.dataset.del; if((bn[i].t||'').trim()&&!confirm(L.nDelQ)) return; delete bn[i]; if(!Object.keys(bn).length) delete ST.notes[id]; persist(); renderNotes(true); return; }
+  if(b.dataset.go){ goBlock(+b.dataset.go,true); if(isPhone()) setNotes(false); }
+});
+nList.addEventListener('input',e=>{ const ta=e.target.closest('textarea[data-note]'); if(!ta||!CUR.bk) return;
+  const bn=ST.notes[CUR.bk.id]||(ST.notes[CUR.bk.id]={}), i=ta.dataset.note; (bn[i]||(bn[i]={made:iso(new Date())})).t=ta.value; bn[i].u=Date.now(); grow(ta); persist(); notesDot();
+  const sm=nList.querySelector('.nlink[data-go="'+i+'"] small'); if(sm) sm.textContent=plain(ta.value).slice(0,80)||'\u2026'; });
+// an empty note is put away when left
+nList.addEventListener('focusout',e=>{ const ta=e.target.closest('textarea[data-note]'); if(!ta||!CUR.bk) return; const bn=ST.notes[CUR.bk.id];
+  if(bn&&bn[ta.dataset.note]&&!(bn[ta.dataset.note].t||'').trim()){ delete bn[ta.dataset.note]; if(!Object.keys(bn).length) delete ST.notes[CUR.bk.id]; persist(); setTimeout(()=>renderNotes(true),150); } });
+
+/* ---------------- the library backup ----------------
+   One file with what the library keeps on this device: your own books, their notes and marks, where you are in
+   each book and how far you read, reading time, cover colours and shelves. Loading it adds what is missing and
+   keeps the newer of two versions of a note. */
+async function saveLibBackup(){
+  busy(L.bkSaving);
+  let books=[]; try{ books=await idbAll('books'); }catch(e){}
+  const keep=k=>JSON.parse(JSON.stringify(ST[k]||{}));
+  const data={app:'bybel-biblioteek-rugsteun',v:1,saved:new Date().toISOString(),books,notes:keep('notes'),marks:keep('marks'),pos:keep('pos'),far:keep('far'),time:keep('time'),cloth:keep('cloth'),shelf:keep('shelf'),last:ST.last};
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'}));
+  a.download='biblioteek-rugsteun-'+iso(new Date())+'.json'; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },800);
+  busy(null);
+}
+async function loadLibBackup(f){
+  let d; try{ d=JSON.parse(await f.text()); }catch(e){ d=null; }
+  if(!d||d.app!=='bybel-biblioteek-rugsteun'){ alert(L.bkBad); return; }
+  busy(L.bkLoading); let nb=0, nn=0;
+  for(const bk of d.books||[]){ if(!bk||!bk.id||!Array.isArray(bk.b)) continue;
+    let have=null; try{ have=await idbGet('books',bk.id); }catch(e){}
+    if(!(have&&have.id)){ const meta={id:bk.id,title:bk.title,short:bk.short,subtitle:bk.subtitle,author:bk.author,year:bk.year,shelf:bk.shelf,cloth:bk.cloth,words:bk.words,source:bk.source,license:bk.license};
+      try{ await idbPut('books',bk); await idbPut('meta',meta); nb++; }catch(e){ alert(L.full); break; } } }
+  for(const [id,bn] of Object.entries(d.notes||{})){ const mine=ST.notes[id]||(ST.notes[id]={});
+    for(const [i,n] of Object.entries(bn)) if(!mine[i]||(n.u||0)>(mine[i].u||0)){ mine[i]=n; nn++; } }
+  for(const [id,bm] of Object.entries(d.marks||{})){ const mine=ST.marks[id]||(ST.marks[id]={}); for(const [i,l] of Object.entries(bm)) if(!mine[i]) mine[i]=l; }
+  for(const k of ['pos','cloth','shelf']) for(const [id,v] of Object.entries(d[k]||{})) if(ST[k][id]==null) ST[k][id]=v;
+  for(const [id,v] of Object.entries(d.far||{})) ST.far[id]=Math.max(ST.far[id]||0,v||0);
+  for(const [id,t] of Object.entries(d.time||{})){ const mine=ST.time[id]||(ST.time[id]={total:0,days:{}});
+    for(const [day,s] of Object.entries(t.days||{})) mine.days[day]=Math.max(mine.days[day]||0,s);
+    mine.total=Math.max(mine.total||0,Object.values(mine.days).reduce((a,b)=>a+b,0),t.total||0); }
+  if(!ST.last&&d.last) ST.last=d.last;
+  persist(); MINE=await idbAll('meta'); BOOKS.clear(); busy(null);
+  if(shelfOpen()) buildShelf(); else if(CUR.bk){ const s=CUR.spread; renderUnit(CUR.u); show(s,0); }
+  alert(L.bkDone.replace('{b}',nb).replace('{n}',nn));
+}
+$('#libfile').onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(f) await loadLibBackup(f); };
 
 /* ---------------- turning pages ---------------- */
 let downX=0,downY=0,swiped=false;
-book.addEventListener('pointerdown',e=>{ downX=e.clientX; downY=e.clientY; swiped=false; });
+let swallow=false;   // a tap that only puts away the marking bar does not turn the page
+book.addEventListener('pointerdown',e=>{ downX=e.clientX; downY=e.clientY; swiped=false; swallow=markbar.classList.contains('on'); });
 book.addEventListener('pointerup',e=>{ if(e.pointerType!=='touch') return; const dx=e.clientX-downX, dy=e.clientY-downY;
   if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3){ swiped=true; dx<0?next():prev(); } });
 book.addEventListener('click',e=>{
+  if(swallow){ swallow=false; return; }
   if(swiped){ swiped=false; return; } if(Math.hypot(e.clientX-downX,e.clientY-downY)>6) return; if(String(getSelection()).trim()) return;
   const x=e.clientX-book.getBoundingClientRect().left, P=CUR.G.P;
   if(CUR.G.ppv===2) (x<P?prev:next)(); else (x<P*.35?prev:next)();

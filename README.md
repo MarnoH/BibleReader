@@ -56,9 +56,27 @@ be uploaded here.
 |---|---|
 | **PDF** (`.pdf`) with real text | Read on the device: chapters from the larger type, paragraphs rebuilt, page headers and page numbers left out, italics and footnotes kept, the first page as the cover. The first time, PDF.js (1.8 MB) is downloaded; after that it works offline. |
 | **Scanned PDF** (pages that are pictures) | Turned away: there is no text in it to read. Have it read (OCR) and made into a book file in a chat, or save the recognised text as Markdown. |
+| **ThML** (`.xml`) from the [Christian Classics Ethereal Library](https://www.ccel.org) | Read as the book is marked up: chapters from its titles, author and translator from its details, footnotes at the end of each chapter, Scripture references as links that open the Bible at that verse, poetry kept in lines; the title page and indexes left out. On a book's page at CCEL, download the **ThML** (XML) file. |
 | **Markdown** (`.md`) | Your own text as a book, in the simple format below. |
 | **Text** (`.txt`) | Plain paragraphs, one blank line between them. |
 | **Book file** (`.json`) | A book already made for the library (for example converted in a chat). |
+
+### Marking in a book
+
+Select words in a book (drag with the mouse, or hold on a phone) and the same bar as in the Bible appears: six
+highlight colours, six text colours and × to clear. Marks are kept on the device, with the book.
+
+### Notes in a book
+
+The notes button beside **Aa** opens a panel next to the book (from below on a phone). **Note on this page** starts
+a note for the passage you are reading; it stays with that text on any screen, and all notes of a book are listed
+to jump to.
+
+### Library backup
+
+In the library's settings (**Aa**): **Save library backup** makes one file with your own books, their notes and
+marks, where you are in each book and your reading time. **Load library backup** on another device (or after a
+reset) brings it all back. Keep the file private, since it holds your own books.
 
 ### Writing a book in Markdown
 
@@ -122,7 +140,7 @@ Open the address in Chrome, tap **⋮** and choose **Install app** or **Add to H
 ## Your data
 
 Readings, notes, sermons and markings are saved only on the device where they are made.
-Use **Stoor rugsteun** (leesregister) and **Save notes backup** (reader) to move them between devices.
+Use **Stoor rugsteun** (leesregister), **Save notes backup** (reader) and **Save library backup** (library) to move them between devices.
 
 Hebrew: Westminster Leningrad Codex via the Open Scriptures Hebrew Bible (public domain text). Greek: Scrivener 1894 Textus Receptus (public domain), and the SBL Greek New Testament, © 2010 Society of Biblical Literature and Logos Bible Software (CC BY 4.0).
 Strong's numbers in the KJV: CrossWire KJV module (general public licence). Strong's dictionary: Open Scriptures (CC BY-SA). Hebrew parsing: Open Scriptures Hebrew Bible (CC BY 4.0). Greek words, parsing and short definitions: BSB interlinear tables (Berean, public domain).
