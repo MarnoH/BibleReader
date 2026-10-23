@@ -66,6 +66,13 @@ be uploaded here.
 Select words in a book (drag with the mouse, or hold on a phone) and the same bar as in the Bible appears: six
 highlight colours, six text colours and × to clear. Marks are kept on the device, with the book.
 
+### Bookmarks and shelves
+
+The ribbon button in a book's top bar (or **B** on the keyboard) bookmarks the open pages, and a ribbon hangs from
+the page; tap it again to take it away. The bookmarks are listed at the top of the book's contents (its title
+button). On the bookshelf, small categories share a shelf, each with its name plate, until the shelf is full;
+**Aa → Shelves → One per shelf** gives every category its own shelf again.
+
 ### Notes in a book
 
 The notes button beside **Aa** opens a panel next to the book (from below on a phone). **Note on this page** starts
