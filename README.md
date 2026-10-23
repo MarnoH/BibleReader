@@ -78,6 +78,16 @@ In the library's settings (**Aa**): **Save library backup** makes one file with 
 marks, where you are in each book and your reading time. **Load library backup** on another device (or after a
 reset) brings it all back. Keep the file private, since it holds your own books.
 
+### Writing your own book
+
+**New book** on the bookshelf asks for a title, author and shelf, and opens the book with the **Write** panel (the pen
+in the top bar) beside it. A book is a list of pages, each written in Markdown (below); a chapter usually begins with
+`# …`. **New page** adds one, ↑ ↓ move a page, × deletes it. As you type, the book beside the panel is set again, so the
+page is its own preview, Bible links included. Notes and marks stay with their text when pages grow or move.
+**Save as Markdown** exports the whole book as one `.md` file. The library backup keeps it too, with its notes and
+marks; loading a backup on another device brings a book you write there up to date, and never replaces it with an
+older copy.
+
 ### Writing a book in Markdown
 
 Start from [`boek-sjabloon.md`](boek-sjabloon.md): a small example book with these instructions inside it.
@@ -115,7 +125,12 @@ run on as one paragraph; a blank line starts the next.
 | `> words` | a quotation in small type |
 | `- item`, `1. item` | list items |
 | `***` on its own line | a break (* * *) |
+| `[[Rom 8:28]]` | a Bible reference as a link: tap it and the Bible opens there |
+| `[the love chapter](1 Kor 13)` | your own words as the link to a Bible passage |
 | `<!-- a note -->` | a note to yourself, not shown in the book |
+
+Bible references take book names in English or Afrikaans, in full or abbreviated (`Rom`, `Romeine`, `1 Kor`,
+`1 Corinthians`, `Ps 23`, `Joh 3:16-18`); a reference to a whole chapter opens at its first verse.
 
 The block between the two `---` lines is optional. `shelf` can be Puritans, Reformers, Confessions, Devotional,
 Sermons, Church history or Other, in English or Afrikaans (Puriteine, Hervormers, Stigtelik, Preke …). Without it,

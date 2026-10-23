@@ -81,6 +81,36 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--rubric);outline-off
 #titlebtn:hover{filter:brightness(1.1);background:linear-gradient(90deg,rgba(0,0,0,.3),rgba(255,255,255,.11) 28%,rgba(255,255,255,.04) 60%,rgba(0,0,0,.3)),var(--c,#4a4642)}
 #resume{border:1px solid var(--line)}
 .grow{flex:1}
+#write{position:fixed;top:48px;right:0;bottom:0;width:min(420px,94vw);z-index:41;display:none;flex-direction:column;background:var(--panel);border-left:1px solid var(--line);box-shadow:-10px 0 30px -18px var(--shadow)}
+body.writing #write{display:flex}
+body.writing:not(.phone) #stage,body.writing:not(.phone) #status{margin-right:min(420px,94vw)}
+body.phone #write{top:auto;left:0;right:0;width:auto;height:52vh;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;box-shadow:0 -12px 30px -16px var(--shadow)}
+body.phone.writing #stage{margin-bottom:calc(52vh - 36px)}
+#wbody{flex:1;overflow:auto;padding:4px 14px 18px;display:flex;flex-direction:column}
+#wbody .pf{flex:none}
+.wh{font:600 11.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:16px 2px 6px}
+.wh small{text-transform:none;letter-spacing:0;font-weight:400;margin-left:4px}
+.wrow{display:flex;align-items:center;gap:4px;border-bottom:1px solid var(--rule);padding:3px 0}
+.wn{width:1.6em;text-align:right;color:var(--faint);font:12px var(--sans);flex:none}
+.wlab{flex:1;min-width:0;text-align:left;border:0;background:none;cursor:pointer;padding:5px 6px;border-radius:7px;font:15px var(--serif);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wlab:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.wlab small{display:block;font:11.5px var(--sans);color:var(--faint)}
+.wb{border:0;background:none;cursor:pointer;color:var(--soft);font-size:15px;padding:4px 7px;border-radius:6px}
+.wb:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.wb:disabled{opacity:.25;cursor:default}
+.wdel:hover{color:var(--rubric)}
+.wadd{margin:12px 0 0;align-self:flex-start}
+.wexp{display:flex;gap:8px;margin-top:18px;padding-top:12px;border-top:1px solid var(--line)}
+.wtop{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.wcount{margin-left:auto;font-size:12px;color:var(--faint)}
+.wtools{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 6px}
+.wtools button{border:1px solid var(--line);background:var(--page);border-radius:6px;padding:3px 9px;cursor:pointer;font:600 13.5px var(--serif);color:var(--ink);min-width:32px}
+.wtools button:hover{border-color:var(--soft)}
+#wtext{flex:1;min-height:240px;width:100%;resize:none;border:1px solid var(--line);border-radius:8px;background:var(--page);color:var(--ink);padding:10px 12px;
+  font:15px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;outline:0}
+#wtext:focus{border-color:var(--soft)}
+.whelp{font-size:12px;color:var(--faint);margin:6px 2px 0;line-height:1.45}
+#writebtn[aria-pressed=true]{background:color-mix(in srgb,var(--ink) 9%,transparent)}
 #notes{position:fixed;top:48px;right:0;bottom:0;width:min(380px,92vw);z-index:40;display:none;flex-direction:column;background:var(--panel);border-left:1px solid var(--line);box-shadow:-10px 0 30px -18px var(--shadow)}
 body.notes #notes{display:flex}
 body.notes:not(.phone) #stage,body.notes:not(.phone) #status{margin-right:min(380px,92vw)}
@@ -303,6 +333,7 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
   <div class="grow"></div>
   <button id="resume" class="tb" type="button" hidden></button>
   <button id="logbtn" class="tb" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10 6.5v4.2l2.8 1.8M8 2.5h4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg><span class="lbl"></span></button>
+  <button id="writebtn" class="tb" type="button" hidden aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.6 3.4l3 3-8.9 8.9-3.6.6.6-3.6z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M11.8 5.2l3 3" stroke="currentColor" stroke-width="1.2"/></svg></button>
   <button id="notesbtn" class="tb" type="button" hidden aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3.5h9l3 3V16.5H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 8h7M6.5 10.8h7M6.5 13.6h4.5" stroke="currentColor" stroke-width="1.1"/></svg><i class="dot" hidden></i></button>
   <button id="aa" class="tb" type="button">Aa</button>
 </header>
@@ -324,6 +355,7 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
 </main>
 <footer id="status"></footer>
 <div id="measure" aria-hidden="true"></div>
+<aside id="write"><div class="nh"><b data-l="ownWrite"></b><button type="button" id="wclose" class="x" aria-label="close">×</button></div><div id="wbody" class="scroll"></div></aside>
 <aside id="notes"><div class="nh"><b data-l="nTitle"></b><button type="button" id="nclose" class="x" aria-label="close">×</button></div><div id="nlist" class="scroll"></div></aside>
 <input type="file" id="libfile" accept=".json,application/json" hidden>
 <input type="file" id="addfile" accept=".pdf,application/pdf,.xml,.thml,application/xml,text/xml,.md,.markdown,text/markdown,.txt,text/plain,.json,application/json" multiple hidden>
@@ -344,8 +376,8 @@ const UI={
   library:'Library',add:'Add books',empty:'No books on the shelves yet. Add a PDF (one with real text, not a scan), a Markdown or text file (.md, .txt) or a book file (.json), and it is kept on this device.',
   pdfReading:'Reading the PDF: page {n} of {t}\u2026',pdfShaping:'Setting the pages as a book\u2026',pdfTitle:'Add this PDF to the shelves',pdfBookTitle:'Title',pdfAuthor:'Author',pdfYear:'Year',pdfStats:'{p} pages \u00b7 {w} words \u00b7 {h} headings',mdStats:'{w} words \u00b7 {h} headings',pdfAdd:'Add to the shelves',pdfCancel:'Cancel',
   pdfScanned:'\u201c{f}\u201d is a scanned PDF: its pages are pictures, without text to read, so it cannot be added here. Only PDFs with real text can be. A scanned book can be read (OCR) and made into a book file in a chat.',
-  pdfFailed:'\u201c{f}\u201d could not be read as a book.',pdfPersonal:'Personal copy \u2014 not for redistribution',thmlTr:'Translated by {t}',nTitle:'Notes',nNew:'Note on this page',nPh:'Write as you read\u2026',nNone:'No notes on these pages yet.',nAll:'All notes in this book ({n})',nDelete:'Delete this note',nDelQ:'Delete this note?',notes:'Notes',
-  bkAbout:'A backup of your own books, their notes and marks, where you are in each book and your reading time \u2014 to keep safe, or to move to another device. On a phone, Share backup can put it straight into Google Drive; Load library backup can open it from there.',bkSave:'Save library backup',bkShare:'Share backup',bkLoad:'Load library backup',bkSaving:'Making the backup\u2026',bkLoading:'Loading the backup\u2026',bkBad:'That file is not a library backup.',bkDone:'Backup loaded: {b} book(s) added, {n} note(s) brought in.',thmlBad:'\u201c{f}\u201d is not a ThML book (the XML of the Christian Classics Ethereal Library).',
+  pdfFailed:'\u201c{f}\u201d could not be read as a book.',pdfPersonal:'Personal copy \u2014 not for redistribution',thmlTr:'Translated by {t}',ownWrite:'Write',ownNew:'New book',ownTitlePh:'The title of your book',ownCreate:'Begin the book',ownUntitled:'My book',ownSource:'Written in the library',ownLicense:'Own work',ownFirst:'Chapter I',ownChapter:'Chapter {n}',ownPages:'Pages',ownNewPage:'New page',ownWords:'{n} words',ownUp:'Move up',ownDown:'Move down',ownDel:'Delete this page',ownDelQ:'Delete this page and what is written on it?',ownLast:'A book keeps at least one page.',ownExport:'Save as Markdown (.md)',ownPh:'# Chapter title\n\nWrite here. A blank line starts a new paragraph.',ownWordsPh:'words',ownHelp:'# chapter \u00b7 ## section \u00b7 *italic* \u00b7 **bold** \u00b7 > quotation \u00b7 [[Rom 8:28]] or [your words](1 Kor 13) for a Bible link. The book beside you is set as you type.',ownT1:'Chapter heading',ownT2:'Section heading',ownTi:'Italic',ownTb:'Bold',ownTq:'Quotation',ownTl:'List item',ownTr:'Bible reference',nTitle:'Notes',nNew:'Note on this page',nPh:'Write as you read\u2026',nNone:'No notes on these pages yet.',nAll:'All notes in this book ({n})',nDelete:'Delete this note',nDelQ:'Delete this note?',notes:'Notes',
+  bkAbout:'A backup of your own books, their notes and marks, where you are in each book and your reading time \u2014 to keep safe, or to move to another device. On a phone, Share backup can put it straight into Google Drive; Load library backup can open it from there.',bkSave:'Save library backup',bkShare:'Share backup',bkLoad:'Load library backup',bkSaving:'Making the backup\u2026',bkLoading:'Loading the backup\u2026',bkBad:'That file is not a library backup.',bkDone:'Backup loaded: {b} book(s) added or brought up to date, {n} note(s) brought in.',thmlBad:'\u201c{f}\u201d is not a ThML book (the XML of the Christian Classics Ethereal Library).',
   hint:'Click a book to open it where you left off. Right-click (or hold) for its details and contents.',
   contents:'Contents',details:'Details',read:'read',lastRead:'last read',total:'time read',week:'this week',days:'days read',never:'not opened yet',
   cloth:'Cover colour',shelfOf:'Shelf',remove:'Remove from this device',removeQ:'Remove this book from this device? Your reading time is kept.',
@@ -360,8 +392,8 @@ const UI={
   library:'Biblioteek',add:'Voeg boeke by',empty:'Nog geen boeke op die rakke nie. Voeg \u2019n PDF by (een met regte teks, nie \u2019n skandering nie), \u2019n Markdown- of tekslêer (.md, .txt) of \u2019n boekl\u00eaer (.json), en dit word op hierdie toestel gehou.',
   pdfReading:'Die PDF word gelees: bladsy {n} van {t}\u2026',pdfShaping:'Die bladsye word as \u2019n boek geset\u2026',pdfTitle:'Voeg hierdie PDF by die rakke',pdfBookTitle:'Titel',pdfAuthor:'Skrywer',pdfYear:'Jaar',pdfStats:'{p} bladsye \u00b7 {w} woorde \u00b7 {h} opskrifte',mdStats:'{w} woorde \u00b7 {h} opskrifte',pdfAdd:'Sit op die rak',pdfCancel:'Kanselleer',
   pdfScanned:'\u201c{f}\u201d is \u2019n geskandeerde PDF: sy bladsye is prente, sonder teks om te lees, en dit kan nie hier bygevoeg word nie. Net PDF\u2019s met regte teks kan. \u2019n Geskandeerde boek kan in \u2019n gesprek gelees (OCR) en \u2019n boekl\u00eaer gemaak word.',
-  pdfFailed:'\u201c{f}\u201d kon nie as \u2019n boek gelees word nie.',pdfPersonal:'Persoonlike kopie \u2014 nie vir verspreiding nie',thmlTr:'Vertaal deur {t}',nTitle:'Notas',nNew:'Nota op hierdie bladsy',nPh:'Skryf terwyl jy lees\u2026',nNone:'Nog geen notas op hierdie bladsye nie.',nAll:'Alle notas in hierdie boek ({n})',nDelete:'Skrap hierdie nota',nDelQ:'Skrap hierdie nota?',notes:'Notas',
-  bkAbout:'\u2019n Rugsteun van jou eie boeke, hul notas en merke, waar jy in elke boek is en jou leestyd \u2014 om veilig te hou, of na \u2019n ander toestel te skuif. Op \u2019n foon kan Deel rugsteun dit reguit in Google Drive sit; Laai biblioteek-rugsteun kan dit van daar af oopmaak.',bkSave:'Stoor biblioteek-rugsteun',bkShare:'Deel rugsteun',bkLoad:'Laai biblioteek-rugsteun',bkSaving:'Die rugsteun word gemaak\u2026',bkLoading:'Die rugsteun word gelaai\u2026',bkBad:'Daardie l\u00eaer is nie \u2019n biblioteek-rugsteun nie.',bkDone:'Rugsteun gelaai: {b} boek(e) bygevoeg, {n} nota(s) ingebring.',thmlBad:'\u201c{f}\u201d is nie \u2019n ThML-boek nie (die XML van die Christian Classics Ethereal Library).',
+  pdfFailed:'\u201c{f}\u201d kon nie as \u2019n boek gelees word nie.',pdfPersonal:'Persoonlike kopie \u2014 nie vir verspreiding nie',thmlTr:'Vertaal deur {t}',ownWrite:'Skryf',ownNew:'Nuwe boek',ownTitlePh:'Die titel van jou boek',ownCreate:'Begin die boek',ownUntitled:'My boek',ownSource:'In die biblioteek geskryf',ownLicense:'Eie werk',ownFirst:'Hoofstuk I',ownChapter:'Hoofstuk {n}',ownPages:'Bladsye',ownNewPage:'Nuwe bladsy',ownWords:'{n} woorde',ownUp:'Skuif op',ownDown:'Skuif af',ownDel:'Skrap hierdie bladsy',ownDelQ:'Skrap hierdie bladsy en wat daarop geskryf is?',ownLast:'\u2019n Boek hou ten minste een bladsy.',ownExport:'Stoor as Markdown (.md)',ownPh:'# Hoofstuktitel\n\nSkryf hier. \u2019n Le\u00eb lyn begin \u2019n nuwe paragraaf.',ownWordsPh:'woorde',ownHelp:'# hoofstuk \u00b7 ## afdeling \u00b7 *kursief* \u00b7 **vet** \u00b7 > aanhaling \u00b7 [[Rom 8:28]] of [jou woorde](1 Kor 13) vir \u2019n Bybelskakel. Die boek langs jou word geset terwyl jy tik.',ownT1:'Hoofstukopskrif',ownT2:'Afdelingsopskrif',ownTi:'Kursief',ownTb:'Vet',ownTq:'Aanhaling',ownTl:'Lysitem',ownTr:'Bybelverwysing',nTitle:'Notas',nNew:'Nota op hierdie bladsy',nPh:'Skryf terwyl jy lees\u2026',nNone:'Nog geen notas op hierdie bladsye nie.',nAll:'Alle notas in hierdie boek ({n})',nDelete:'Skrap hierdie nota',nDelQ:'Skrap hierdie nota?',notes:'Notas',
+  bkAbout:'\u2019n Rugsteun van jou eie boeke, hul notas en merke, waar jy in elke boek is en jou leestyd \u2014 om veilig te hou, of na \u2019n ander toestel te skuif. Op \u2019n foon kan Deel rugsteun dit reguit in Google Drive sit; Laai biblioteek-rugsteun kan dit van daar af oopmaak.',bkSave:'Stoor biblioteek-rugsteun',bkShare:'Deel rugsteun',bkLoad:'Laai biblioteek-rugsteun',bkSaving:'Die rugsteun word gemaak\u2026',bkLoading:'Die rugsteun word gelaai\u2026',bkBad:'Daardie l\u00eaer is nie \u2019n biblioteek-rugsteun nie.',bkDone:'Rugsteun gelaai: {b} boek(e) bygevoeg of bygewerk, {n} nota(s) ingebring.',thmlBad:'\u201c{f}\u201d is nie \u2019n ThML-boek nie (die XML van die Christian Classics Ethereal Library).',
   hint:'Klik op \u2019n boek om dit oop te maak waar jy opgehou het. Regskliek (of hou vas) vir besonderhede en inhoud.',
   contents:'Inhoud',details:'Besonderhede',read:'gelees',lastRead:'laas gelees',total:'tyd gelees',week:'hierdie week',days:'dae gelees',never:'nog nie oopgemaak nie',
   cloth:'Bandkleur',shelfOf:'Rak',remove:'Verwyder van hierdie toestel',removeQ:'Verwyder hierdie boek van hierdie toestel? Jou leestyd bly behoue.',
@@ -531,7 +563,7 @@ async function openBook(meta,at){
   busy(L.opening); await new Promise(r=>setTimeout(r,20));
   const bk=await loadBook(meta); if(!bk){ busy(null); alert(L.noNet); return; }
   CUR.bk=bk; CUR.meta=meta; CUR.anchor=at!=null?at:(ST.pos[meta.id]||0);
-  closeShelf(); relayout(); busy(null);
+  closeShelf(); relayout(); busy(null); $('#writebtn').hidden=!bk.pages; if(!bk.pages&&writing()) setWriting(false);
   $('#titlebtn span').textContent=bk.short||bk.title; $('#titlebtn').style.setProperty('--c',clothOf(meta)); act();
 }
 
@@ -552,7 +584,7 @@ const shelf=$('#shelf'), shelfOpen=()=>shelf.classList.contains('on');
 function spineW(b){ return Math.round(20+15*Math.log10(Math.max(4000,b.words||40000)/4000)); }
 function buildShelf(){
   const all=catalogue();
-  if(!all.length){ shelf.innerHTML='<div class="empty">'+esc(L.empty)+'<div class="acts" style="justify-content:center;margin-top:16px"><button class="btn main" type="button" data-act="add">'+esc(L.add)+'</button></div></div>'; return; }
+  if(!all.length){ shelf.innerHTML='<div class="empty">'+esc(L.empty)+'<div class="acts" style="justify-content:center;margin-top:16px"><button class="btn main" type="button" data-act="add">'+esc(L.add)+'</button><button class="btn" type="button" data-act="newbook">'+esc(L.ownNew)+'</button></div></div>'; return; }
   const groups=new Map(); for(const id of SHELF_ORDER) groups.set(id,[]);
   for(const b of all){ const s=shelfOf(b); if(!groups.has(s)) groups.set(s,[]); groups.get(s).push(b); }
   const H=Math.round(Math.max(160,Math.min(240,(shelf.clientHeight-140)/2.4)));
@@ -573,13 +605,14 @@ function buildShelf(){
         '<span class="nm">'+esc(b.short||b.title)+'</span><span class="au">'+esc(au)+'</span>'+(tag?'<i class="tag" data-l="'+tag+'"></i>':'')+(ST.last===b.id?'<i class="rib"></i>':'')+'</button>');
       width+=w+1; }
     if(row.length) flush(); }
-  h+='</div><p class="shelfnote">'+esc(L.hint)+'<br><button class="btn" type="button" data-act="add" style="margin-top:10px">'+esc(L.add)+'</button> <span class="stor"></span></p>';
+  h+='</div><p class="shelfnote">'+esc(L.hint)+'<br><button class="btn" type="button" data-act="add" style="margin-top:10px">'+esc(L.add)+'</button> <button class="btn" type="button" data-act="newbook" style="margin-top:10px">'+esc(L.ownNew)+'</button> <span class="stor"></span></p>';
   shelf.innerHTML=h;
   if(navigator.storage&&navigator.storage.estimate) navigator.storage.estimate().then(e=>{ const f=n=>n>1e9?(n/1e9).toFixed(1)+' GB':Math.round(n/1e6)+' MB';
     const s=shelf.querySelector('.stor'); if(s&&e.quota) s.textContent=L.storage.replace('{used}',f(e.usage||0)).replace('{quota}',f(e.quota)); }).catch(()=>{});
 }
 function chrome(onShelf){
-  $('#home').hidden=onShelf; $('#titlebtn').hidden=onShelf; $('#notesbtn').hidden=onShelf; if(onShelf&&notesOpen()) setNotes(false); $('#resume').hidden=!(onShelf&&ST.last&&catalogue().some(b=>b.id===ST.last));
+  $('#home').hidden=onShelf; $('#titlebtn').hidden=onShelf; $('#notesbtn').hidden=onShelf; if(onShelf&&notesOpen()) setNotes(false);
+  $('#writebtn').hidden=onShelf||!(CUR.bk&&CUR.bk.pages); if((onShelf||!(CUR.bk&&CUR.bk.pages))&&writing()) setWriting(false); $('#resume').hidden=!(onShelf&&ST.last&&catalogue().some(b=>b.id===ST.last));
   $('#biblebtn').hidden=!onShelf; $('#regbtn').hidden=!onShelf; $('#status').hidden=onShelf||ST.s.status==='off';
   if(onShelf&&ST.last){ const m=catalogue().find(b=>b.id===ST.last); if(m) $('#resume').textContent=L.resume+' \u00b7 '+(m.short||m.title); }
 }
@@ -592,6 +625,7 @@ shelf.addEventListener('pointerdown',e=>{ pressed=false; const sp=e.target.close
 shelf.addEventListener('contextmenu',e=>{ const sp=e.target.closest('.sp'); if(!sp) return; e.preventDefault(); pressed=true; openInfo(sp.dataset.id); });
 shelf.addEventListener('click',e=>{
   if(e.target.closest('[data-act=add]')){ $('#addfile').click(); return; }
+  if(e.target.closest('[data-act=newbook]')){ e.stopPropagation(); newBookForm(); return; }
   const sp=e.target.closest('.sp'); if(!sp) return; if(pressed){ pressed=false; return; }
   const meta=catalogue().find(b=>b.id===sp.dataset.id); sp.classList.add('pull');
   setTimeout(()=>{ sp.classList.remove('pull'); openBook(meta); }, reduceMotion?0:170);
@@ -772,9 +806,29 @@ async function storeBook(bk){
    paragraphs, *italic* or _italic_, **bold**, "> " for a quotation (small print), "- " or "1. " for list items,
    "***" or "---" alone for a break. A "# Title" on the very first line is taken as the book's title.
    Links keep only their words; anything else is kept as plain text. */
+// Bible references in Markdown: [[Rom 8:28]], or [your words](1 Kor 13) — book names in English or Afrikaans, in full
+// or abbreviated (from the app's own book list, kept on the device). Each becomes a link that opens the Bible there.
+let BNAMES=null;
+async function bibleNames(){ if(BNAMES) return BNAMES; try{ const b=await (await fetch('data/base.v1.json')).json(); BNAMES=[b.names.af,b.names.en]; }catch(e){ BNAMES=[]; } return BNAMES; }
+const nName=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\s.]/g,'');
+function bibleRef(s){
+  if(!BNAMES||!BNAMES.length) return null;
+  const m=/^\s*(\d?\s*[^\d:]+?)\.?\s*(\d+)?(?:\s*[:.,]\s*(\d+))?(?:\s*[-\u2013\u2014]\s*\d+(?:\s*[:.,]\s*\d+)?)?\s*$/.exec(s||''); if(!m) return null;
+  const q=nName(m[1]); if(q.length<2) return null;
+  let b=-1;
+  for(const list of BNAMES){ b=list.findIndex(([n,a])=>nName(n)===q||nName(a)===q); if(b>=0) break; }
+  if(b<0) b=OSIS66.findIndex(o=>o.toLowerCase()===q);
+  if(b<0&&q.length>=3) for(const list of BNAMES){ b=list.findIndex(([n])=>nName(n).startsWith(q)); if(b>=0) break; }
+  if(b<0) return null;
+  return OSIS66[b]+'.'+(m[2]||1)+'.'+(m[3]||1);
+}
+const unescT=s=>s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+const srefA=(o,words)=>'<a class="sref" href="./?ref='+o+'">'+words+'</a>';
 function inlineMd(s){
   let h=escT(s);
-  h=h.replace(/!\[[^\]]*\]\([^)]*\)/g,'').replace(/\[([^\]]+)\]\([^)]*\)/g,'$1');                 // images out, links to their words
+  h=h.replace(/!\[[^\]]*\]\([^)]*\)/g,'');                                                        // images out
+  h=h.replace(/\[\[([^\]]+)\]\]/g,(m,r)=>{ const o=bibleRef(unescT(r)); return o?srefA(o,r):r; });       // [[Rom 8:28]]
+  h=h.replace(/\[([^\]]+)\]\(([^)]*)\)/g,(m,w,tg)=>{ const o=bibleRef(unescT(tg)); return o?srefA(o,w):w; });   // [words](Rom 8:28); other links keep their words
   h=h.replace(/\*\*([^*]+)\*\*|__([^_]+)__/g,(m,a,b)=>'<b>'+(a||b)+'</b>');
   h=h.replace(/(^|[^\p{L}\p{N}*])\*([^*\s][^*]*?)\*(?![\p{L}\p{N}*])/gu,'$1<i>$2</i>').replace(/(^|[^\p{L}\p{N}_])_([^_\s][^_]*?)_(?![\p{L}\p{N}_])/gu,'$1<i>$2</i>');
   return h.replace(/\\([*_#>\-\\])/g,'$1');
@@ -783,7 +837,29 @@ function mdToBook(text,name){
   text=text.replace(/^\ufeff/,'').replace(/\r\n?/g,'\n').replace(/<!--[\s\S]*?-->/g,'');   // notes to the writer are not part of the book
   const meta={}; const fm=/^---\n([\s\S]*?)\n---\n/.exec(text);
   if(fm){ for(const l of fm[1].split('\n')){ const m=/^\s*([A-Za-z\u00c0-\u024f]+)\s*:\s*(.*)$/.exec(l); if(m) meta[m[1].toLowerCase()]=m[2].trim().replace(/^["']|["']$/g,''); } text=text.slice(fm[0].length); }
-  const isMd=/\.(md|markdown)$/i.test(name), out=[];
+  const out=mdParse(text,/\.(md|markdown)$/i.test(name));
+  // a "# Title" first of all is the book's title, unless it is one chapter among others of its level
+  let title=meta.title||'';
+  if(out.length&&out[0][0][0]==='#'){
+    const lv=out[0][0], same=out.filter(b=>b[0]===lv).length;
+    if(!title&&same===1){ title=out[0][1]; out.shift(); }
+    else if(title&&out[0][1].trim().toLowerCase()===title.toLowerCase()) out.shift();
+  }
+  if(!title) title=name.replace(/\.(md|markdown|txt)$/i,'').replace(/[_-]+/g,' ').trim();
+  const B=mdRank(out);
+  // a shelf named in English or Afrikaans
+  const sh=(meta.shelf||meta.rak||'').toLowerCase();
+  const shelf=SHELF_ORDER.find(s=>s===sh||[UI.en.shelves[s],UI.af.shelves[s]].some(n=>n&&n.toLowerCase()===sh))||'other';
+  const words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
+  return {v:1,id:bookId('md',title,B),
+    title,short:title.length>30?title.slice(0,30).replace(/\s+\S*$/,''):title,subtitle:meta.subtitle||'',author:meta.author||meta.skrywer||'',year:meta.year||meta.jaar||'',
+    shelf,lang:/\b(die|het|van|nie)\b/.test(B.slice(0,20).map(x=>x[1]).join(' '))?'af':'en',source:name,license:L.pdfPersonal,words,b:B,
+    _stats:L.mdStats.replace('{w}',words.toLocaleString()).replace('{h}',B.filter(x=>x[0][0]==='h').length)};
+}
+// Markdown lines into blocks, headings kept as "#1".."#6" (ranked afterwards, over the whole book)
+function mdParse(text,isMd){
+  text=text.replace(/\r\n?/g,'\n').replace(/<!--[\s\S]*?-->/g,'');
+  const out=[];
   let para=[], quote=[];
   const flush=()=>{ if(para.length){ out.push(['p',inlineMd(para.join(' '))]); para=[]; } if(quote.length){ out.push(['ps',inlineMd(quote.join(' '))]); quote=[]; } };
   for(const raw of text.split('\n')){
@@ -798,26 +874,15 @@ function mdToBook(text,name){
     para.push(l);
   }
   flush();
-  // a "# Title" first of all is the book's title, unless it is one chapter among others of its level
-  let title=meta.title||'';
-  if(out.length&&out[0][0][0]==='#'){
-    const lv=out[0][0], same=out.filter(b=>b[0]===lv).length;
-    if(!title&&same===1){ title=out[0][1]; out.shift(); }
-    else if(title&&out[0][1].trim().toLowerCase()===title.toLowerCase()) out.shift();
-  }
-  if(!title) title=name.replace(/\.(md|markdown|txt)$/i,'').replace(/[_-]+/g,' ').trim();
+  return out;
+}
+// heading levels from the highest used: that one is the chapter
+function mdRank(out){
   const used=[...new Set(out.filter(b=>b[0][0]==='#').map(b=>+b[0].slice(1)))].sort((a,b)=>a-b);
-  const B=out.map(([k,t])=>k[0]==='#'?['h'+Math.min(3,used.indexOf(+k.slice(1))+1),t]:[k,t]);
-  // a shelf named in English or Afrikaans
-  const sh=(meta.shelf||meta.rak||'').toLowerCase();
-  const shelf=SHELF_ORDER.find(s=>s===sh||[UI.en.shelves[s],UI.af.shelves[s]].some(n=>n&&n.toLowerCase()===sh))||'other';
-  const words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
-  return {v:1,id:bookId('md',title,B),
-    title,short:title.length>30?title.slice(0,30).replace(/\s+\S*$/,''):title,subtitle:meta.subtitle||'',author:meta.author||meta.skrywer||'',year:meta.year||meta.jaar||'',
-    shelf,lang:/\b(die|het|van|nie)\b/.test(B.slice(0,20).map(x=>x[1]).join(' '))?'af':'en',source:name,license:L.pdfPersonal,words,b:B,
-    _stats:L.mdStats.replace('{w}',words.toLocaleString()).replace('{h}',B.filter(x=>x[0][0]==='h').length)};
+  return out.map(([k,t])=>k[0]==='#'?['h'+Math.min(3,used.indexOf(+k.slice(1))+1),t]:[k,t]);
 }
 async function addText(f){
+  await bibleNames();
   let bk; try{ bk=mdToBook(await f.text(),f.name); }catch(e){ console.warn(e); alert(L.pdfFailed.replace('{f}',f.name)); return 0; }
   if(!bk.b.length){ alert(L.pdfFailed.replace('{f}',f.name)); return 0; }
   bk=await confirmPdf(bk); if(!bk) return 0;
@@ -1012,6 +1077,7 @@ $('#resume').onclick=()=>{ const m=catalogue().find(b=>b.id===ST.last); if(m) op
 function label(){
   for(const [id,k] of [['#biblebtn','bible'],['#regbtn','register'],['#logbtn','time']]){ const el=$(id); el.title=L[k]; el.setAttribute('aria-label',L[k]); const s=el.querySelector('.lbl'); if(s) s.textContent=L[k]; }
   $('#home').title=L.home; $('#aa').title=L.settings; document.title=L.library;
+  $('#writebtn').title=L.ownWrite; $('#writebtn').setAttribute('aria-label',L.ownWrite); document.querySelector('[data-l=ownWrite]').textContent=L.ownWrite;
   $('#notesbtn').title=L.notes; $('#notesbtn').setAttribute('aria-label',L.notes); document.querySelector('[data-l=nTitle]').textContent=L.nTitle; if(typeof renderNotes==='function'&&CUR.bk) renderNotes(true);
 }
 
@@ -1135,7 +1201,7 @@ function renderNotes(force){
   nList.querySelectorAll('textarea').forEach(grow);
 }
 const grow=ta=>{ ta.style.height='auto'; ta.style.height=Math.max(70,ta.scrollHeight+2)+'px'; };
-function setNotes(on){ document.body.classList.toggle('notes',on); $('#notesbtn').setAttribute('aria-pressed',on); nSig=''; renderNotes(true); }
+function setNotes(on){ if(on&&typeof writing==='function'&&writing()) setWriting(false); document.body.classList.toggle('notes',on); $('#notesbtn').setAttribute('aria-pressed',on); nSig=''; renderNotes(true); }
 $('#notesbtn').onclick=e=>{ e.stopPropagation(); closePanels(); setNotes(!notesOpen()); };
 $('#nclose').onclick=()=>setNotes(false);
 nList.addEventListener('click',e=>{
@@ -1153,6 +1219,119 @@ nList.addEventListener('input',e=>{ const ta=e.target.closest('textarea[data-not
 // an empty note is put away when left
 nList.addEventListener('focusout',e=>{ const ta=e.target.closest('textarea[data-note]'); if(!ta||!CUR.bk) return; const bn=ST.notes[CUR.bk.id];
   if(bn&&bn[ta.dataset.note]&&!(bn[ta.dataset.note].t||'').trim()){ delete bn[ta.dataset.note]; if(!Object.keys(bn).length) delete ST.notes[CUR.bk.id]; persist(); setTimeout(()=>renderNotes(true),150); } });
+
+/* ---------------- a book of your own, written in the library ----------------
+   "New book" on the shelf; then a Write panel beside the book (like the notes) holds its pages, each a piece of
+   Markdown (a chapter usually begins with "# …"). As you type, the book beside it is set again, so the page is its
+   own preview. Pages can be added, moved and deleted at any time; each has an id, and the notes, marks and place
+   in the book move with the text they belong to. Kept with your own books, in the backup, and exported as .md. */
+const writeEl=$('#write'), wBody=$('#wbody');
+const writing=()=>document.body.classList.contains('writing');
+const roman=n=>{ let s='', v=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; for(const [a,r] of v) while(n>=a){ s+=r; n-=a; } return s; };
+const pid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+// the pages as one book: blocks, and where each page's blocks lie
+function buildOwn(bk){
+  const lay={}, out=[];
+  for(const pg of bk.pages){ const part=mdParse(pg.md||'',true); lay[pg.id]=[out.length,part.length]; out.push(...part); }
+  let B=mdRank(out); if(!B.length) B=[['p','\u2026']];
+  bk.b=B; bk.words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
+  return lay;
+}
+// notes, marks and the place in the book follow their page when pages grow, shrink or move
+function remapOwn(id,oldLay,newLay){
+  const map=i=>{ for(const [p,[s,n]] of Object.entries(oldLay)) if(i>=s&&i<s+n){ const nw=newLay[p]; if(!nw||!nw[1]) return null; return nw[0]+Math.min(i-s,nw[1]-1); } return null; };
+  for(const k of ['notes','marks']){ const old=ST[k][id]; if(!old) continue; const nw={};
+    for(const [i,v] of Object.entries(old)){ const j=map(+i); if(j!=null&&!(j in nw)) nw[j]=v; }
+    if(Object.keys(nw).length) ST[k][id]=nw; else delete ST[k][id]; }
+  if(ST.pos[id]!=null){ const j=map(ST.pos[id]); ST.pos[id]=j==null?0:j; }
+  persist();
+}
+let wSaveT=0, wLay=null;
+async function flushOwn(at){ clearTimeout(wSaveT); if(!wLay||!CUR.bk) return; const lay=wLay; wLay=null; await saveOwn(CUR.bk,lay,at); }
+async function saveOwn(bk,oldLay,at){
+  await bibleNames();                                   // for the Bible links in what is written
+  const lay=buildOwn(bk); remapOwn(bk.id,oldLay,lay); prepare(bk); BOOKS.set(bk.id,bk); bk.u=Date.now();
+  bk.short=bk.title.length>30?bk.title.slice(0,30).replace(/\s+\S*$/,''):bk.title;
+  const meta={id:bk.id,title:bk.title,short:bk.short,subtitle:bk.subtitle,author:bk.author,year:bk.year,shelf:bk.shelf,cloth:bk.cloth,words:bk.words,source:bk.source,license:bk.license,own:true};
+  try{ const keep=Object.fromEntries(Object.entries(bk).filter(([k])=>k[0]!=='_')); await idbPut('books',keep); await idbPut('meta',meta); }catch(e){ alert(L.full); }
+  MINE=await idbAll('meta'); if(CUR.meta&&CUR.meta.id===bk.id) Object.assign(CUR.meta,meta);
+  $('#titlebtn span').textContent=bk.short||bk.title;
+  // the book set again, at the page being written
+  if(CUR.bk===bk){ const p=at&&at.p?at.p:at, i=p!=null&&lay[p]?lay[p][0]+Math.min(at&&at.off||0,Math.max(0,lay[p][1]-1)):(ST.pos[bk.id]||0); const u=unitOf(bk,i); renderUnit(u); show(spreadOfBlock(Math.min(i,bk.b.length-1)),0); }
+  return lay;
+}
+function newBookForm(){
+  const opts=SHELF_ORDER.map(s=>'<option value="'+s+'"'+(s==='other'?' selected':'')+'>'+esc(shelfName(s))+'</option>').join('');
+  openPanel($('#info'),head(L.ownNew)+'<div class="pf" style="margin:4px 0 12px">'+
+    '<label>'+esc(L.pdfBookTitle)+'<input id="ot" placeholder="'+esc(L.ownTitlePh)+'"></label>'+
+    '<label>'+esc(L.pdfAuthor)+'<input id="oa"></label>'+
+    '<label>'+esc(L.shelfOf)+'<select id="os">'+opts+'</select></label></div>'+
+    '<div class="acts"><button class="btn main" type="button" data-act="owncreate">'+esc(L.ownCreate)+'</button><button class="btn" type="button" data-act="close">'+esc(L.pdfCancel)+'</button></div>');
+  setTimeout(()=>{ const i=$('#ot'); if(i) i.focus(); },50);
+}
+$('#info').addEventListener('click',async e=>{ if(!e.target.closest('[data-act=owncreate]')) return; e.stopPropagation();
+  const title=$('#ot').value.trim()||L.ownUntitled, author=$('#oa').value.trim(), shelf=$('#os').value;
+  const bk={v:1,id:'own-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),own:true,title,short:title,subtitle:'',author,year:String(new Date().getFullYear()),shelf,
+    lang:ST.s.lang==='af'?'af':'en',source:L.ownSource,license:L.ownLicense,pages:[{id:pid(),md:'# '+L.ownFirst+'\n\n'}],b:[],words:0};
+  closePanels(); await saveOwn(bk,{},null);
+  const meta=MINE.find(m=>m.id===bk.id); await openBook(Object.assign({},meta,{src:'mine'}),0); setWriting(true); editPage(bk.pages[0].id);
+},true);
+// the Write panel
+let wPage=null;
+function setWriting(on){ if(on&&notesOpen()) setNotes(false); document.body.classList.toggle('writing',on); $('#writebtn').setAttribute('aria-pressed',on); if(on){ wPage=null; drawWrite(); } }
+const pageLabel=md=>{ const h=/^\s*#{1,6}\s+(.+)$/m.exec(md||''); if(h) return h[1].replace(/\*\*|__|\*|_/g,''); const w=(md||'').replace(/[#>*_\[\]]/g,'').trim().split(/\s+/).slice(0,6).join(' '); return w?w+'\u2026':'\u2026'; };
+const mdWords=md=>((md||'').replace(/[#>*_\[\]()-]/g,' ').match(/\S+/g)||[]).length;
+function drawWrite(){
+  const bk=CUR.bk; if(!bk||!bk.pages) return;
+  if(wPage){ const pg=bk.pages.find(p=>p.id===wPage); if(!pg){ wPage=null; return drawWrite(); }
+    wBody.innerHTML='<div class="wtop"><button type="button" class="btn" data-w="back">\u2190 '+esc(L.ownPages)+'</button><span class="wcount"></span></div>'+
+      '<div class="wtools">'+[['h1','#',L.ownT1],['h2','##',L.ownT2],['i','<i>I</i>',L.ownTi],['b','<b>B</b>',L.ownTb],['q','\u275d',L.ownTq],['li','\u2022',L.ownTl],['ref','[[ ]]',L.ownTr]].map(([k,lab,tip])=>'<button type="button" data-t="'+k+'" title="'+esc(tip)+'" aria-label="'+esc(tip)+'">'+lab+'</button>').join('')+'</div>'+
+      '<textarea id="wtext" spellcheck="true" placeholder="'+esc(L.ownPh)+'"></textarea><p class="whelp">'+esc(L.ownHelp)+'</p>';
+    const ta=$('#wtext'); ta.value=pg.md||''; wBody.querySelector('.wcount').textContent=L.ownWords.replace('{n}',mdWords(pg.md)); return; }
+  const rows=bk.pages.map((pg,k)=>'<div class="wrow" data-p="'+pg.id+'"><span class="wn">'+(k+1)+'</span><button type="button" class="wlab" data-w="edit">'+esc(pageLabel(pg.md))+'<small>'+esc(L.ownWords.replace('{n}',mdWords(pg.md)))+'</small></button>'+
+    '<button type="button" class="wb" data-w="up" title="'+esc(L.ownUp)+'"'+(k?'':' disabled')+'>\u2191</button><button type="button" class="wb" data-w="down" title="'+esc(L.ownDown)+'"'+(k<bk.pages.length-1?'':' disabled')+'>\u2193</button>'+
+    '<button type="button" class="wb wdel" data-w="del" title="'+esc(L.ownDel)+'">\u00d7</button></div>').join('');
+  wBody.innerHTML='<div class="pf"><label>'+esc(L.pdfBookTitle)+'<input id="wt" value="'+esc(bk.title)+'"></label><label>'+esc(L.pdfAuthor)+'<input id="wa" value="'+esc(bk.author||'')+'"></label></div>'+
+    '<h4 class="wh">'+esc(L.ownPages)+' <small>'+esc(L.ownWords.replace('{n}',(bk.words||0).toLocaleString()))+'</small></h4>'+rows+
+    '<button type="button" class="btn main wadd" data-w="new">+ '+esc(L.ownNewPage)+'</button>'+
+    '<div class="wexp"><button type="button" class="btn" data-w="export">'+esc(L.ownExport)+'</button>'+(CAN_SHARE?'<button type="button" class="btn" data-w="share">'+esc(L.nShare)+'</button>':'')+'</div>';
+}
+function editPage(id){ wPage=id; drawWrite(); const bk=CUR.bk, lay=buildOwn(bk); if(lay[id]) goBlock(Math.min(lay[id][0],bk.b.length-1)); setTimeout(()=>{ const ta=$('#wtext'); if(ta) ta.focus(); },60); }
+function ownMarkdown(bk){ return '---\ntitle: '+bk.title+'\nauthor: '+(bk.author||'')+'\nyear: '+(bk.year||'')+'\nshelf: '+(bk.shelf||'other')+'\n---\n\n'+bk.pages.map(p=>(p.md||'').trim()).join('\n\n')+'\n'; }
+wBody.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-w],[data-t]'); if(!b||!CUR.bk||!CUR.bk.pages) return; const bk=CUR.bk;
+  if(b.dataset.t){ const ta=$('#wtext'); if(!ta) return; const s=ta.selectionStart, z=ta.selectionEnd, v=ta.value, sel=v.slice(s,z), ls=v.lastIndexOf('\n',s-1)+1;
+    const at=(text,a,c)=>{ ta.setRangeText(text,a,c,'end'); ta.focus(); ta.dispatchEvent(new Event('input',{bubbles:true})); };
+    const t=b.dataset.t;
+    if(t==='h1'||t==='h2'||t==='q'||t==='li'){ const pre=t==='h1'?'# ':t==='h2'?'## ':t==='q'?'> ':'- '; at(pre,ls,ls); }
+    else if(t==='i') at('*'+(sel||L.ownWordsPh)+'*',s,z);
+    else if(t==='b') at('**'+(sel||L.ownWordsPh)+'**',s,z);
+    else if(t==='ref') at('[['+(sel||'Rom 8:28')+']]',s,z);
+    return; }
+  const w=b.dataset.w, row=b.closest('.wrow'), p=row&&row.dataset.p;
+  await flushOwn(wPage); const old=buildOwn(bk);
+  if(w==='back'){ wPage=null; drawWrite(); return; }
+  if(w==='edit'){ editPage(p); return; }
+  if(w==='new'){ const np={id:pid(),md:'# '+L.ownChapter.replace('{n}',roman(bk.pages.length+1))+'\n\n'}; bk.pages.push(np); await saveOwn(bk,old,np.id); editPage(np.id); return; }
+  if(w==='up'||w==='down'){ const k=bk.pages.findIndex(x=>x.id===p), j=k+(w==='up'?-1:1); if(j<0||j>=bk.pages.length) return;
+    [bk.pages[k],bk.pages[j]]=[bk.pages[j],bk.pages[k]]; await saveOwn(bk,old,p); drawWrite(); return; }
+  if(w==='del'){ const pg=bk.pages.find(x=>x.id===p); if(bk.pages.length<2){ alert(L.ownLast); return; } if(mdWords(pg.md)>3&&!confirm(L.ownDelQ)) return;
+    bk.pages=bk.pages.filter(x=>x.id!==p); await saveOwn(bk,old,null); drawWrite(); return; }
+  if(w==='export'||w==='share'){ const f=new File([ownMarkdown(bk)],(bk.title||'book').replace(/[\\/:*?"<>|]+/g,'').slice(0,60)+'.md',{type:'text/markdown'});
+    if(w==='share'){ try{ await navigator.share({files:[f],title:f.name}); }catch(x){} return; }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(f); a.download=f.name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },800); }
+});
+wBody.addEventListener('input',e=>{ const bk=CUR.bk; if(!bk||!bk.pages) return;
+  if(e.target.id==='wtext'){ const pg=bk.pages.find(p=>p.id===wPage); if(!pg) return;
+    if(!wLay) wLay=buildOwn(bk);                          // the layout before the first unsaved change
+    pg.md=e.target.value; wBody.querySelector('.wcount').textContent=L.ownWords.replace('{n}',mdWords(pg.md));
+    const caret=e.target.selectionStart;
+    clearTimeout(wSaveT); wSaveT=setTimeout(()=>flushOwn({p:wPage,off:Math.max(0,mdParse(pg.md.slice(0,caret),true).length-1)}),650); }
+  else if(e.target.id==='wt'||e.target.id==='wa'){ if(e.target.id==='wt') bk.title=e.target.value.trim()||L.ownUntitled; else bk.author=e.target.value.trim();
+    clearTimeout(wSaveT); wSaveT=setTimeout(()=>saveOwn(bk,buildOwn(bk),null),650); }
+});
+$('#writebtn').onclick=e=>{ e.stopPropagation(); closePanels(); setWriting(!writing()); };
+$('#wclose').onclick=()=>setWriting(false);
 
 /* ---------------- the library backup ----------------
    One file with what the library keeps on this device: your own books, their notes and marks, where you are in
@@ -1182,7 +1361,9 @@ async function loadLibBackup(f){
   busy(L.bkLoading); let nb=0, nn=0;
   for(const bk of d.books||[]){ if(!bk||!bk.id||!Array.isArray(bk.b)) continue;
     let have=null; try{ have=await idbGet('books',bk.id); }catch(e){}
-    if(!(have&&have.id)){ const meta={id:bk.id,title:bk.title,short:bk.short,subtitle:bk.subtitle,author:bk.author,year:bk.year,shelf:bk.shelf,cloth:bk.cloth,words:bk.words,source:bk.source,license:bk.license};
+    const newer=have&&have.id&&bk.pages&&(bk.u||0)>(have.u||0);      // a book you are writing: the newer copy wins
+    if(!(have&&have.id)||newer){ const meta={id:bk.id,title:bk.title,short:bk.short,subtitle:bk.subtitle,author:bk.author,year:bk.year,shelf:bk.shelf,cloth:bk.cloth,words:bk.words,source:bk.source,license:bk.license};
+      if(bk.pages) meta.own=true;
       try{ await idbPut('books',bk); await idbPut('meta',meta); nb++; }catch(e){ alert(L.full); break; } } }
   for(const [id,bn] of Object.entries(d.notes||{})){ const mine=ST.notes[id]||(ST.notes[id]={});
     for(const [i,n] of Object.entries(bn)) if(!mine[i]||(n.u||0)>(mine[i].u||0)){ mine[i]=n; nn++; } }
