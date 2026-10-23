@@ -152,6 +152,13 @@ body.phone .flow{text-align:left;hyphens:manual}
 .shelfnote{max-width:760px;margin:16px auto 0;text-align:center;color:var(--soft);font-size:13px;line-height:1.55}
 .btn{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--ink)}
 .btn:hover{border-color:var(--soft)}
+.pdfimp{display:flex;gap:16px;align-items:flex-start;margin:4px 0 12px}
+.pcov{width:96px;border:1px solid var(--line);border-radius:3px;box-shadow:0 2px 8px -2px var(--shadow);flex:none}
+.pf{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.pf label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--soft)}
+.pf input,.pf select{font:15px var(--serif);color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:7px;padding:6px 8px;min-width:0}
+.pst{margin:2px 0 0;font-size:12.5px;color:var(--faint)}
+@media (max-width:520px){ .pcov{width:70px} }
 .btn.main{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
 
 /* ---------- panels ---------- */
@@ -258,7 +265,7 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
 </main>
 <footer id="status"></footer>
 <div id="measure" aria-hidden="true"></div>
-<input type="file" id="addfile" accept=".json,application/json" multiple hidden>
+<input type="file" id="addfile" accept=".pdf,application/pdf,.md,.markdown,text/markdown,.txt,text/plain,.json,application/json" multiple hidden>
 
 <script>
 'use strict';
@@ -273,7 +280,10 @@ const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice
 const UI={
  en:{gilt:'Page edges',gPlain:'Plain',gGold:'Gold',gRed:'Red & gold',contrast:'Contrast',cNormal:'Normal',cStrong:'Strong',paper:'Paper',paWhite:'White',paCream:'Cream',paSoft:'Soft',bible:'Bible',register:'Reading register',time:'Reading time',settings:'Settings',home:'Library',resume:'Continue',
   theme:'Theme',auto:'Auto',light:'Light',dark:'Dark',size:'Size',cols:'Columns',status:'Status bar',off:'Off',on:'On',lang:'Language',
-  library:'Library',add:'Add books',empty:'No books on the shelves yet. Add a book file (the .json files made from your PDFs) and it is kept on this device.',
+  library:'Library',add:'Add books',empty:'No books on the shelves yet. Add a PDF (one with real text, not a scan), a Markdown or text file (.md, .txt) or a book file (.json), and it is kept on this device.',
+  pdfReading:'Reading the PDF: page {n} of {t}\u2026',pdfShaping:'Setting the pages as a book\u2026',pdfTitle:'Add this PDF to the shelves',pdfBookTitle:'Title',pdfAuthor:'Author',pdfYear:'Year',pdfStats:'{p} pages \u00b7 {w} words \u00b7 {h} headings',mdStats:'{w} words \u00b7 {h} headings',pdfAdd:'Add to the shelves',pdfCancel:'Cancel',
+  pdfScanned:'\u201c{f}\u201d is a scanned PDF: its pages are pictures, without text to read, so it cannot be added here. Only PDFs with real text can be. A scanned book can be read (OCR) and made into a book file in a chat.',
+  pdfFailed:'\u201c{f}\u201d could not be read as a book.',pdfPersonal:'Personal copy \u2014 not for redistribution',
   hint:'Click a book to open it where you left off. Right-click (or hold) for its details and contents.',
   contents:'Contents',details:'Details',read:'read',lastRead:'last read',total:'time read',week:'this week',days:'days read',never:'not opened yet',
   cloth:'Cover colour',shelfOf:'Shelf',remove:'Remove from this device',removeQ:'Remove this book from this device? Your reading time is kept.',
@@ -285,7 +295,10 @@ const UI={
   shelves:{puritans:'Puritans',reformers:'Reformers',confessions:'Confessions & Doctrine',devotional:'Devotional',sermons:'Sermons',history:'Church history',other:'Other'}},
  af:{gilt:'Snykante',gPlain:'Gewoon',gGold:'Goud',gRed:'Rooi & goud',contrast:'Kontras',cNormal:'Gewoon',cStrong:'Sterk',paper:'Papier',paWhite:'Wit',paCream:'Room',paSoft:'Sag',bible:'Bybel',register:'Leesregister',time:'Leestyd',settings:'Instellings',home:'Biblioteek',resume:'Lees verder',
   theme:'Tema',auto:'Outo',light:'Lig',dark:'Donker',size:'Grootte',cols:'Kolomme',status:'Statusbalk',off:'Af',on:'Aan',lang:'Taal',
-  library:'Biblioteek',add:'Voeg boeke by',empty:'Nog geen boeke op die rakke nie. Voeg \u2019n boekl\u00eaer by (die .json-l\u00eaers wat van jou PDF\u2019s gemaak is) en dit word op hierdie toestel gehou.',
+  library:'Biblioteek',add:'Voeg boeke by',empty:'Nog geen boeke op die rakke nie. Voeg \u2019n PDF by (een met regte teks, nie \u2019n skandering nie), \u2019n Markdown- of tekslêer (.md, .txt) of \u2019n boekl\u00eaer (.json), en dit word op hierdie toestel gehou.',
+  pdfReading:'Die PDF word gelees: bladsy {n} van {t}\u2026',pdfShaping:'Die bladsye word as \u2019n boek geset\u2026',pdfTitle:'Voeg hierdie PDF by die rakke',pdfBookTitle:'Titel',pdfAuthor:'Skrywer',pdfYear:'Jaar',pdfStats:'{p} bladsye \u00b7 {w} woorde \u00b7 {h} opskrifte',mdStats:'{w} woorde \u00b7 {h} opskrifte',pdfAdd:'Sit op die rak',pdfCancel:'Kanselleer',
+  pdfScanned:'\u201c{f}\u201d is \u2019n geskandeerde PDF: sy bladsye is prente, sonder teks om te lees, en dit kan nie hier bygevoeg word nie. Net PDF\u2019s met regte teks kan. \u2019n Geskandeerde boek kan in \u2019n gesprek gelees (OCR) en \u2019n boekl\u00eaer gemaak word.',
+  pdfFailed:'\u201c{f}\u201d kon nie as \u2019n boek gelees word nie.',pdfPersonal:'Persoonlike kopie \u2014 nie vir verspreiding nie',
   hint:'Klik op \u2019n boek om dit oop te maak waar jy opgehou het. Regskliek (of hou vas) vir besonderhede en inhoud.',
   contents:'Inhoud',details:'Besonderhede',read:'gelees',lastRead:'laas gelees',total:'tyd gelees',week:'hierdie week',days:'dae gelees',never:'nog nie oopgemaak nie',
   cloth:'Bandkleur',shelfOf:'Rak',remove:'Verwyder van hierdie toestel',removeQ:'Verwyder hierdie boek van hierdie toestel? Jou leestyd bly behoue.',
@@ -520,10 +533,237 @@ shelf.addEventListener('click',e=>{
   setTimeout(()=>{ sp.classList.remove('pull'); openBook(meta); }, reduceMotion?0:170);
 });
 
+/* ---------------- a PDF made into a book, on this device ----------------
+   For PDFs that carry their text (most made on a computer). A scan is only pictures of pages: it is turned away,
+   since reading text from pictures (OCR) needs more than a phone can do well. PDF.js (Mozilla, Apache 2.0) is
+   fetched the first time a PDF is added and kept for offline use.
+   The text is rebuilt into the library's own blocks: headings by type size, paragraphs from the line layout
+   (an indent, a short last line or a wider gap starts a new one; a paragraph runs on over the page), words broken
+   over a line joined again, running heads and page numbers left out, italics kept, small type at the foot of a
+   page kept as small print. */
+let PDFJS=null;
+async function pdfjs(){
+  if(!PDFJS){ PDFJS=await import('./vendor/pdfjs/pdf.min.js'); PDFJS.GlobalWorkerOptions.workerSrc='vendor/pdfjs/pdf.worker.min.js'; }
+  return PDFJS;
+}
+const escT=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+async function pdfToBook(file){
+  const lib=await pdfjs();
+  const doc=await lib.getDocument({data:new Uint8Array(await file.arrayBuffer()),isEvalSupported:false,useSystemFonts:false}).promise;
+  const N=doc.numPages, pages=[];
+  let info={}; try{ info=(await doc.getMetadata()).info||{}; }catch(e){}
+  for(let p=1;p<=N;p++){
+    busy(L.pdfReading.replace('{n}',p).replace('{t}',N));
+    const pg=await doc.getPage(p), vp=pg.getViewport({scale:1}), tc=await pg.getTextContent();
+    let fonts={}; try{ await pg.getOperatorList(); for(const it of tc.items){ if(it.fontName&&!(it.fontName in fonts)){ let n=''; try{ n=pg.commonObjs.get(it.fontName).name||''; }catch(e){} fonts[it.fontName]=n; } } }catch(e){}
+    // the page's lines, top to bottom
+    const items=tc.items.filter(it=>it.str&&it.str.trim()).map(it=>{ const t=it.transform, size=Math.hypot(t[2],t[3])||it.height||10;
+      const fn=fonts[it.fontName]||'';
+      return {s:it.str,x:t[4],y:t[5],w:it.width,size,it:/italic|oblique/i.test(fn),b:/bold|black|heavy|semibold/i.test(fn)}; });
+    items.sort((a,b)=>b.y-a.y||a.x-b.x);
+    const lines=[];
+    for(const it of items){
+      let ln=lines.find(l=>Math.abs(l.y-it.y)<Math.min(l.size,it.size)*.45);
+      if(!ln){ ln={y:it.y,size:it.size,parts:[]}; lines.push(ln); }
+      ln.parts.push(it); ln.size=Math.max(ln.size,it.size);
+    }
+    for(const ln of lines){
+      ln.parts.sort((a,b)=>a.x-b.x); let txt='', html='', ital=false, prevEnd=null, ch=0, bold=0, sz=0;
+      for(const pt of ln.parts){
+        if(prevEnd!=null&&pt.x-prevEnd>pt.size*.18&&!/\s$/.test(txt)&&!/^\s/.test(pt.s)){ txt+=' '; html+=' '; }
+        if(pt.it!==ital){ html+=pt.it?'<i>':'</i>'; ital=pt.it; }
+        txt+=pt.s; html+=escT(pt.s); prevEnd=pt.x+pt.w; ch+=pt.s.length; if(pt.b) bold+=pt.s.length; sz+=pt.size*pt.s.length;
+      }
+      if(ital) html+='</i>';
+      Object.assign(ln,{x0:ln.parts[0].x,x1:prevEnd,txt:txt.replace(/\s+/g,' ').trim(),html:html.replace(/\s+/g,' ').replace(/<i>\s*<\/i>/g,'').trim(),bold:bold>ch*.8,size:sz/ch,chars:ch});
+    }
+    lines.sort((a,b)=>b.y-a.y);
+    pages.push({w:vp.width,h:vp.height,lines,chars:lines.reduce((s,l)=>s+l.chars,0)});
+    pg.cleanup();
+  }
+  // a scan: pictures of pages, hardly any text
+  const withText=pages.filter(p=>p.chars>=40).length;
+  if(!N||withText<Math.max(1,N*.33)){ doc.destroy(); const e=new Error('scanned'); e.scanned=true; throw e; }
+  busy(L.pdfShaping);
+  // running heads and feet: the same line (numbers aside) at the top or foot of many pages
+  const key=t=>t.toLowerCase().replace(/\d+/g,'#').replace(/[^\p{L}#]+/gu,' ').trim();
+  const count=new Map();
+  for(const p of pages){ const ends=[...p.lines.slice(0,2),...p.lines.slice(-2)]; for(const k of new Set(ends.map(l=>key(l.txt)))) if(k) count.set(k,(count.get(k)||0)+1); }
+  const many=Math.max(3,N*.25), pageNo=/^[\[\(]?[0-9ivxlcdm]{1,6}[\]\)]?\.?$/i;
+  for(const p of pages){
+    const n=p.lines.length;
+    p.lines=p.lines.filter((l,i)=>{ const edge=i<2||i>=n-2; if(!edge) return true; if(pageNo.test(l.txt)) return false; return (count.get(key(l.txt))||0)<many; });
+  }
+  // the body type: the size most text is set in
+  const sizes=new Map(); for(const p of pages) for(const l of p.lines){ const s=Math.round(l.size*2)/2; sizes.set(s,(sizes.get(s)||0)+l.chars); }
+  const body=[...sizes].sort((a,b)=>b[1]-a[1])[0][0];
+  // a title page (few words, large type) is left out: the library prints its own
+  let start=0; const p0=pages[0];
+  if(p0&&p0.lines.length&&p0.chars<400&&p0.lines.some(l=>l.size>body*1.4)) start=1;
+  const hsz=[...new Set(pages.slice(start).flatMap(p=>p.lines.filter(l=>l.size>=body*1.12&&l.txt.length<150).map(l=>Math.round(l.size*2)/2)))].sort((a,b)=>b-a);
+  const level=s=>{ const i=hsz.indexOf(Math.round(s*2)/2); return i<0?null:'h'+Math.min(3,i+1); };
+  // lines into blocks
+  const B=[]; let para=null, notes=[];
+  const close=()=>{ if(para){ B.push(['p',para.html]); para=null; } if(notes.length){ for(const n of notes) B.push(['ps',n]); notes=[]; } };
+  const add=(ln)=>{ const h=ln.html;
+    if(!para){ para={html:h}; return; }
+    if(/[\p{L}]-$/u.test(para.html.replace(/<\/i>$/,''))&&/^(<i>)?\p{Ll}/u.test(h)){ para.html=para.html.replace(/-(<\/i>)?$/,'$1')+h; }
+    else para.html+=' '+h;
+  };
+  for(let pi=start;pi<pages.length;pi++){
+    const p=pages[pi], bodyL=p.lines.filter(l=>Math.abs(l.size-body)<body*.12);
+    if(!p.lines.length) continue;
+    const xs=bodyL.map(l=>l.x0).sort((a,b)=>a-b), xe=bodyL.map(l=>l.x1).sort((a,b)=>a-b);
+    const left=xs.length?xs[Math.floor(xs.length*.1)]:p.w*.1, right=xe.length?xe[Math.floor(xe.length*.9)]:p.w*.9;
+    const gaps=[]; for(let i=1;i<p.lines.length;i++){ const g=p.lines[i-1].y-p.lines[i].y; if(g>0&&Math.abs(p.lines[i].size-body)<body*.12) gaps.push(g); }
+    gaps.sort((a,b)=>a-b); const lg=gaps.length?gaps[Math.floor(gaps.length/2)]:body*1.3;
+    let prev=null;
+    for(const ln of p.lines){
+      const lv=ln.size>=body*1.12&&ln.txt.length<150?level(ln.size):null;
+      const foot=ln.size<body*.88&&ln.y<p.h*.2;
+      if(lv){ // a heading; one set over two lines is one heading
+        const last=B[B.length-1];
+        if(!para&&last&&last[0]===lv&&prev&&prev.lv===lv) last[1]+=' '+ln.txt; else { close(); B.push([lv,ln.txt]); }
+        prev={lv,ln}; continue;
+      }
+      if(foot){ notes.push(ln.html); prev={foot:true,ln}; continue; }
+      if(ln.bold&&ln.txt.length<70&&!/[,;]$/.test(ln.txt)&&(!prev||prev.lv||prev.ln.y-ln.y>lg*1.4)){ close(); B.push(['h3',ln.txt]); prev={lv:'h3',ln}; continue; }
+      const indent=ln.x0>left+body*.8&&ln.x0<p.w*.45;
+      let fresh=!para||indent;
+      if(para&&!fresh&&prev&&prev.ln){
+        if(prev.lv) fresh=true;
+        // the line before ended short: in ragged-right type only if it ends a sentence or stops well short
+        else if(prev.ln.x1<right-body*2.5&&(/[.!?:\u201d\u2019"')\]]$/.test(prev.ln.txt)||prev.ln.x1<left+(right-left)*.6)) fresh=true;
+        else if(prev.ln.y-ln.y>lg*1.6&&prev.ln.y>ln.y) fresh=true;            // a wider gap
+      }
+      if(para&&!prev&&pi>start){                                             // the first line of a page
+        const pl=pages[pi-1].lines.filter(l=>Math.abs(l.size-body)<body*.12).pop();
+        if(pl&&pl.x1<right-body*2.5&&(/[.!?:\u201d\u2019"')\]]$/.test(pl.txt)||pl.x1<left+(right-left)*.6)) fresh=true;
+      }
+      if(fresh) close();
+      add(ln); prev={ln};
+    }
+    if(notes.length&&!para){ for(const n of notes) B.push(['ps',n]); notes=[]; }
+  }
+  close();
+  // a small cover from the first page
+  let cover='';
+  try{ const pg=await doc.getPage(1), v0=pg.getViewport({scale:1}), sc=216/v0.width, v=pg.getViewport({scale:sc});
+    const cv=document.createElement('canvas'); cv.width=Math.round(v.width); cv.height=Math.round(v.height);
+    const cx=cv.getContext('2d'); cx.fillStyle='#fff'; cx.fillRect(0,0,cv.width,cv.height);
+    await pg.render({canvasContext:cx,viewport:v}).promise; cover=cv.toDataURL('image/jpeg',.72); }catch(e){}
+  doc.destroy();
+  // title and author: from the PDF, else the title page's largest line, else the file name
+  let title=(info.Title||'').trim();
+  if(!title||/^(untitled|microsoft word|document)/i.test(title)){ const big=p0&&[...p0.lines].sort((a,b)=>b.size-a.size)[0]; title=start&&big?big.txt:file.name.replace(/\.pdf$/i,''); }
+  const words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
+  return {v:1,id:'pdf-'+title.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)+'-'+Date.now().toString(36),
+    title,short:title.length>30?title.slice(0,30).replace(/\s+\S*$/,''):title,author:(info.Author||'').trim(),year:'',shelf:'other',lang:ST.s.lang==='af'&&/\b(die|en|van|het)\b/.test(B.slice(0,30).map(x=>x[1]).join(' '))?'af':'en',
+    source:file.name,license:L.pdfPersonal,cover,words,b:B,_pages:N,_heads:B.filter(x=>x[0][0]==='h').length};
+}
+// before it goes on the shelf: the title, author and shelf can be put right
+function confirmPdf(bk){
+  return new Promise(res=>{
+    const opts=SHELF_ORDER.map(s=>'<option value="'+s+'"'+(s===bk.shelf?' selected':'')+'>'+esc(shelfName(s))+'</option>').join('');
+    openPanel($('#info'),head(L.pdfTitle)+
+      '<div class="pdfimp">'+(bk.cover?'<img class="pcov" src="'+bk.cover+'" alt="">':'')+'<div class="pf">'+
+      '<label>'+esc(L.pdfBookTitle)+'<input id="pt" value="'+esc(bk.title)+'"></label>'+
+      '<label>'+esc(L.pdfAuthor)+'<input id="pa" value="'+esc(bk.author)+'"></label>'+
+      '<label>'+esc(L.pdfYear)+'<input id="py" value="'+esc(bk.year||'')+'" inputmode="numeric"></label>'+
+      '<label>'+esc(L.shelfOf)+'<select id="ps">'+opts+'</select></label>'+
+      '<p class="pst">'+esc(bk._stats||L.pdfStats.replace('{p}',bk._pages).replace('{w}',bk.words.toLocaleString()).replace('{h}',bk._heads))+'</p></div></div>'+
+      '<div class="acts"><button class="btn main" type="button" data-pdf="ok">'+esc(L.pdfAdd)+'</button><button class="btn" type="button" data-pdf="no">'+esc(L.pdfCancel)+'</button></div>');
+    const panel=$('#info');
+    // closed some other way (a tap outside, Escape): as Cancel
+    const iv=setInterval(()=>{ if(!panel.classList.contains('on')){ clearInterval(iv); panel.removeEventListener('click',on,true); res(null); } },300);
+    const done=ok=>{ clearInterval(iv); panel.removeEventListener('click',on,true); closePanels();
+      if(!ok) return res(null);
+      bk.title=$('#pt').value.trim()||bk.title; bk.short=bk.title.length>30?bk.title.slice(0,30).replace(/\s+\S*$/,''):bk.title;
+      bk.author=$('#pa').value.trim(); bk.year=$('#py').value.trim(); bk.shelf=$('#ps').value; res(bk); };
+    const on=e=>{ const b=e.target.closest('[data-pdf],[data-act=close]'); if(!b) return; e.stopPropagation(); done(b.dataset.pdf==='ok'); };
+    panel.addEventListener('click',on,true);
+  });
+}
+async function addPdf(f){
+  let bk;
+  try{ bk=await pdfToBook(f); }
+  catch(e){ busy(null); if(e&&e.scanned) alert(L.pdfScanned.replace('{f}',f.name)); else { console.warn(e); alert(L.pdfFailed.replace('{f}',f.name)); } return 0; }
+  busy(null);
+  if(!bk.b.length){ alert(L.pdfFailed.replace('{f}',f.name)); return 0; }
+  bk=await confirmPdf(bk); if(!bk) return 0;
+  return storeBook(bk);
+}
+async function storeBook(bk){
+  delete bk._pages; delete bk._heads; delete bk._stats;
+  const meta={id:bk.id,title:bk.title,short:bk.short,subtitle:bk.subtitle,author:bk.author,year:bk.year,shelf:bk.shelf,cloth:bk.cloth,words:bk.words,source:bk.source,license:bk.license};
+  try{ await idbPut('books',bk); await idbPut('meta',meta); BOOKS.delete(bk.id); return 1; }catch(x){ alert(L.full); return 0; }
+}
+
+/* ---------------- a Markdown (or plain text) file made into a book ----------------
+   An easy way to prepare a book by hand. Optional details at the top, between two lines of "---":
+     title: …   author: …   year: …   shelf: Puritans (or puritans, devotional, sermons …)   subtitle: …
+   Then "#", "##", "###" for headings (the highest level used becomes the chapter level), a blank line between
+   paragraphs, *italic* or _italic_, **bold**, "> " for a quotation (small print), "- " or "1. " for list items,
+   "***" or "---" alone for a break. A "# Title" on the very first line is taken as the book's title.
+   Links keep only their words; anything else is kept as plain text. */
+function inlineMd(s){
+  let h=escT(s);
+  h=h.replace(/!\[[^\]]*\]\([^)]*\)/g,'').replace(/\[([^\]]+)\]\([^)]*\)/g,'$1');                 // images out, links to their words
+  h=h.replace(/\*\*([^*]+)\*\*|__([^_]+)__/g,(m,a,b)=>'<b>'+(a||b)+'</b>');
+  h=h.replace(/(^|[^\p{L}\p{N}*])\*([^*\s][^*]*?)\*(?![\p{L}\p{N}*])/gu,'$1<i>$2</i>').replace(/(^|[^\p{L}\p{N}_])_([^_\s][^_]*?)_(?![\p{L}\p{N}_])/gu,'$1<i>$2</i>');
+  return h.replace(/\\([*_#>\-\\])/g,'$1');
+}
+function mdToBook(text,name){
+  text=text.replace(/^\ufeff/,'').replace(/\r\n?/g,'\n').replace(/<!--[\s\S]*?-->/g,'');   // notes to the writer are not part of the book
+  const meta={}; const fm=/^---\n([\s\S]*?)\n---\n/.exec(text);
+  if(fm){ for(const l of fm[1].split('\n')){ const m=/^\s*([A-Za-z\u00c0-\u024f]+)\s*:\s*(.*)$/.exec(l); if(m) meta[m[1].toLowerCase()]=m[2].trim().replace(/^["']|["']$/g,''); } text=text.slice(fm[0].length); }
+  const isMd=/\.(md|markdown)$/i.test(name), out=[];
+  let para=[], quote=[];
+  const flush=()=>{ if(para.length){ out.push(['p',inlineMd(para.join(' '))]); para=[]; } if(quote.length){ out.push(['ps',inlineMd(quote.join(' '))]); quote=[]; } };
+  for(const raw of text.split('\n')){
+    const l=raw.trim();
+    if(!l){ flush(); continue; }
+    let m;
+    if(isMd&&(m=/^(#{1,6})\s+(.*?)\s*#*$/.exec(l))){ flush(); out.push(['#'+m[1].length,m[2].replace(/\*\*|__|\*|_/g,'')]); continue; }
+    if(isMd&&/^([-*_])(\s*\1){2,}$/.test(l)){ flush(); out.push(['ps','* * *']); continue; }
+    if(isMd&&(m=/^>\s?(.*)$/.exec(l))){ if(para.length){ out.push(['p',inlineMd(para.join(' '))]); para=[]; } quote.push(m[1]); continue; }
+    if(isMd&&(m=/^(?:[-*+]|\d+[.)])\s+(.*)$/.exec(l))){ flush(); out.push(['p',(/^\d/.test(l)?escT(l.match(/^\d+[.)]/)[0])+' ':'\u2022 ')+inlineMd(m[1])]); continue; }
+    if(quote.length){ out.push(['ps',inlineMd(quote.join(' '))]); quote=[]; }
+    para.push(l);
+  }
+  flush();
+  // a "# Title" first of all is the book's title, unless it is one chapter among others of its level
+  let title=meta.title||'';
+  if(out.length&&out[0][0][0]==='#'){
+    const lv=out[0][0], same=out.filter(b=>b[0]===lv).length;
+    if(!title&&same===1){ title=out[0][1]; out.shift(); }
+    else if(title&&out[0][1].trim().toLowerCase()===title.toLowerCase()) out.shift();
+  }
+  if(!title) title=name.replace(/\.(md|markdown|txt)$/i,'').replace(/[_-]+/g,' ').trim();
+  const used=[...new Set(out.filter(b=>b[0][0]==='#').map(b=>+b[0].slice(1)))].sort((a,b)=>a-b);
+  const B=out.map(([k,t])=>k[0]==='#'?['h'+Math.min(3,used.indexOf(+k.slice(1))+1),t]:[k,t]);
+  // a shelf named in English or Afrikaans
+  const sh=(meta.shelf||meta.rak||'').toLowerCase();
+  const shelf=SHELF_ORDER.find(s=>s===sh||[UI.en.shelves[s],UI.af.shelves[s]].some(n=>n&&n.toLowerCase()===sh))||'other';
+  const words=B.reduce((s,[,t])=>s+t.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length,0);
+  return {v:1,id:'md-'+title.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)+'-'+Date.now().toString(36),
+    title,short:title.length>30?title.slice(0,30).replace(/\s+\S*$/,''):title,subtitle:meta.subtitle||'',author:meta.author||meta.skrywer||'',year:meta.year||meta.jaar||'',
+    shelf,lang:/\b(die|het|van|nie)\b/.test(B.slice(0,20).map(x=>x[1]).join(' '))?'af':'en',source:name,license:L.pdfPersonal,words,b:B,
+    _stats:L.mdStats.replace('{w}',words.toLocaleString()).replace('{h}',B.filter(x=>x[0][0]==='h').length)};
+}
+async function addText(f){
+  let bk; try{ bk=mdToBook(await f.text(),f.name); }catch(e){ console.warn(e); alert(L.pdfFailed.replace('{f}',f.name)); return 0; }
+  if(!bk.b.length){ alert(L.pdfFailed.replace('{f}',f.name)); return 0; }
+  bk=await confirmPdf(bk); if(!bk) return 0;
+  return storeBook(bk);
+}
+
 /* ---------------- adding books (kept on this device) ---------------- */
 $('#addfile').onchange=async e=>{
   let n=0;
   for(const f of e.target.files){
+    if(/\.pdf$/i.test(f.name)||f.type==='application/pdf'){ n+=await addPdf(f); continue; }
+    if(/\.(md|markdown|txt)$/i.test(f.name)||/^text\/(markdown|plain)/.test(f.type)){ n+=await addText(f); continue; }
     try{ const j=JSON.parse(await f.text()); const list=Array.isArray(j.books)?j.books:[j];
       for(const bk of list){ if(!bk||!bk.id||!Array.isArray(bk.b)) throw new Error('bad');
         const meta={id:bk.id,title:bk.title,short:bk.short,subtitle:bk.subtitle,author:bk.author,year:bk.year,shelf:bk.shelf,cloth:bk.cloth,words:bk.words,source:bk.source,license:bk.license};

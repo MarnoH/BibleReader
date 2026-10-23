@@ -17,6 +17,8 @@ data/kjv.v1.json
 data/bsb.v1.json
 data/orig.v1.json     Hebrew Old Testament and Greek New Testament (TR)
 data/sbl.v1.json      Greek New Testament (SBLGNT); its Old Testament is the Hebrew
+data/byz.v1.json      Greek New Testament (Byzantine Textform), with Strong's numbers and parsing; OT the Hebrew
+data/na.v1.json       Greek New Testament (NA27/UBS4 readings), with Strong's numbers and parsing; OT the Hebrew
 data/xrefs.v1.json    the cross-references
 data/strongs.v1.json  Strong's dictionary (Hebrew and Greek)
 data/tags-kjv.v1.json Strong's numbers for each word of the KJV
@@ -29,6 +31,10 @@ data/tags-aov.v1.json first-draft links of each AOV word to the Hebrew or Greek 
 boeke.html            the library: other Christian books on their own shelves
 data/library.json     the books in the online library
 data/books/           one file per online book
+vendor/pdfjs/         PDF.js, which reads a PDF when one is added to the library
+tekste.html           the Greek New Testaments compared (TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL)
+data/nt-compare.v3.json  the six Greek texts, verse by verse, for tekste.html
+boek-sjabloon.md      a template for writing a book in Markdown (see "The library")
 ```
 
 A phone downloads the program, the numbering and the AOV when it is installed. Another translation or the
@@ -38,8 +44,64 @@ cross-references are downloaded the first time they are chosen, and kept on the 
 
 `boeke.html` has its own bookshelves, reader and reading-time log, kept apart from the Bible and its register.
 Only books that may be shared go in `data/library.json` and `data/books/` (public domain, or a licence that allows it,
-like the Quakers' Catechism under CC BY-NC-ND). Books you own as PDFs are converted to a `.json` file and added on
-each device with **Add books**; they stay on that device and must not be uploaded here.
+like the Quakers' Catechism under CC BY-NC-ND).
+
+### Adding your own books
+
+Tap **Add books** and choose a file. Before a book goes on the shelf you can put its title, author, year and
+shelf right. It is kept on that device only (add it again on each phone or computer), and your own books must not
+be uploaded here.
+
+| File | What happens |
+|---|---|
+| **PDF** (`.pdf`) with real text | Read on the device: chapters from the larger type, paragraphs rebuilt, page headers and page numbers left out, italics and footnotes kept, the first page as the cover. The first time, PDF.js (1.8 MB) is downloaded; after that it works offline. |
+| **Scanned PDF** (pages that are pictures) | Turned away: there is no text in it to read. Have it read (OCR) and made into a book file in a chat, or save the recognised text as Markdown. |
+| **Markdown** (`.md`) | Your own text as a book, in the simple format below. |
+| **Text** (`.txt`) | Plain paragraphs, one blank line between them. |
+| **Book file** (`.json`) | A book already made for the library (for example converted in a chat). |
+
+### Writing a book in Markdown
+
+Start from [`boek-sjabloon.md`](boek-sjabloon.md): a small example book with these instructions inside it.
+Open it in any text editor, put your own text in, save it and add it with **Add books**.
+
+```
+---
+title: The Title of the Book
+author: The Author
+year: 1660
+shelf: Puritans
+---
+
+# Chapter I. Of Faith
+## The First Doctrine
+
+A paragraph. Lines written straight under each other
+run on as one paragraph; a blank line starts the next.
+
+*italic* or _italic_, **bold**
+
+> A quotation, printed small.
+
+- a list item
+1. a numbered item
+
+***
+```
+
+| You write | In the book |
+|---|---|
+| `#`, `##`, `###` | chapter, section, smaller heading (the highest level you use becomes the chapter) |
+| a blank line | a new paragraph |
+| `*words*` or `_words_` / `**words**` | italics / bold |
+| `> words` | a quotation in small type |
+| `- item`, `1. item` | list items |
+| `***` on its own line | a break (* * *) |
+| `<!-- a note -->` | a note to yourself, not shown in the book |
+
+The block between the two `---` lines is optional. `shelf` can be Puritans, Reformers, Confessions, Devotional,
+Sermons, Church history or Other, in English or Afrikaans (Puriteine, Hervormers, Stigtelik, Preke …). Without it,
+a single `#` heading on the first line is taken as the book's title.
 
 ## Put it online (GitHub Pages)
 
@@ -76,3 +138,4 @@ Byzantine Textform, M. A. Robinson & W. G. Pierpont (CrossWire module "Byz", CC 
 Heb/Byz and Heb/NA27 (data/byz.v1.json, data/na.v1.json): the Byzantine Textform (Robinson & Pierpont) and the
 NA27/UBS4 readings from the CrossWire modules "Byz" and "WHNU", with their Strong's numbers and Robinson parsing,
 CC BY-NC-SA 4.0; the Hebrew Old Testament as in Heb/TR.
+PDF import in the library: PDF.js 4.10.38 (vendor/pdfjs), Mozilla Foundation, Apache License 2.0 (vendor/pdfjs/LICENSE).
