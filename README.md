@@ -139,8 +139,14 @@ Open the address in Chrome, tap **⋮** and choose **Install app** or **Add to H
 
 ## Your data
 
+The translation is chosen with the button beside the book's name in the top bar (also the one beside it, for
+reading two side by side). On a computer the top bar also has type size, light or dark, one or two columns,
+cross-references and Strong's numbers, one tap each.
+
 Readings, notes, sermons and markings are saved only on the device where they are made.
 Use **Stoor rugsteun** (leesregister), **Save notes backup** (reader) and **Save library backup** (library) to move them between devices.
+On a phone, **Share backup** sends a backup through the phone's share sheet, straight into Google Drive for instance;
+**Load** can open it from Drive again.
 
 Hebrew: Westminster Leningrad Codex via the Open Scriptures Hebrew Bible (public domain text). Greek: Scrivener 1894 Textus Receptus (public domain), and the SBL Greek New Testament, © 2010 Society of Biblical Literature and Logos Bible Software (CC BY 4.0).
 Strong's numbers in the KJV: CrossWire KJV module (general public licence). Strong's dictionary: Open Scriptures (CC BY-SA). Hebrew parsing: Open Scriptures Hebrew Bible (CC BY 4.0). Greek words, parsing and short definitions: BSB interlinear tables (Berean, public domain).

@@ -64,6 +64,34 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 
 /* ---------- chrome ---------- */
 #top{flex:none;height:48px;display:flex;align-items:center;gap:6px;padding:0 14px}
+/* the translation, one tap away; on a computer the everyday settings sit in the bar too */
+#trbtn{display:flex;align-items:center;gap:5px;font:600 14px var(--sans);letter-spacing:.02em;color:var(--soft);border:1px solid var(--line);padding:5px 9px}
+#trbtn svg{width:10px;height:10px}
+#trbtn:hover,#trbtn[aria-expanded=true]{color:var(--ink);border-color:var(--soft)}
+#quick{display:flex;align-items:center;gap:1px}
+#quick .q{padding:6px 8px;font:600 14px var(--serif);color:var(--soft);min-width:32px}
+#quick .q svg{width:17px;height:17px;display:block}
+#quick .qt{font:600 12.5px var(--sans);letter-spacing:.02em}
+#quick .q[aria-pressed=true]{color:var(--ink);background:color-mix(in srgb,var(--ink) 9%,transparent)}
+#quick .q:hover{color:var(--ink)}
+.qsep{width:1px;height:18px;background:var(--line);margin:0 4px}
+body.phone #quick,body.land #quick,body.shelf #quick{display:none}
+@media (max-width:1040px){ #quick{display:none} }
+#trmenu{position:fixed;z-index:70;display:none;min-width:260px;max-width:min(420px,calc(100vw - 16px));max-height:calc(100vh - 70px);overflow:auto;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 44px -14px var(--shadow);padding:8px}
+#trmenu.on{display:block}
+#trmenu h4{margin:6px 8px 4px;font:600 11.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+#trmenu .ti{display:grid;grid-template-columns:5.9em 1fr auto;align-items:baseline;gap:8px;width:100%;text-align:left;border:0;background:none;border-radius:8px;padding:7px 9px;cursor:pointer;color:var(--ink)}
+#trmenu .ti:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+#trmenu .ti[aria-checked=true]{background:var(--sel);color:var(--sel-ink)}
+#trmenu .ti b{font:600 14.5px var(--sans)}
+#trmenu .ti span{font:13px var(--serif);color:inherit;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#trmenu .ti i{font-style:normal;font-size:12px;opacity:.6}
+#trmenu .tsep{height:1px;background:var(--line);margin:8px 4px}
+#trmenu .tlay{display:flex;gap:6px;padding:4px 8px 6px}
+#trmenu .tlay button{flex:1;border:1px solid var(--line);background:none;border-radius:7px;padding:6px 8px;cursor:pointer;color:var(--ink);font-size:13px}
+#trmenu .tlay button[aria-pressed=true]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+body.phone #trbtn{padding:4px 7px;font-size:13px}
 .tb{background:none;border:0;padding:6px 10px;border-radius:7px;cursor:pointer;color:var(--ink)}
 .tb:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
 #bookbtn{position:relative;font-family:var(--serif);font-size:17px;display:flex;align-items:center;gap:7px;padding:5px 15px;border-radius:4px;
@@ -813,7 +841,16 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
   <button id="back" class="tb" type="button" hidden></button>
   <button id="bookbtn" class="tb" type="button" aria-haspopup="dialog"><span id="bookname"></span>
     <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+  <button id="trbtn" class="tb" type="button" aria-haspopup="menu"><span></span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
   <div class="grow"></div>
+  <div id="quick" role="group">
+    <button type="button" class="tb q" data-q="smaller">A−</button><button type="button" class="tb q" data-q="bigger">A+</button>
+    <i class="qsep"></i>
+    <button type="button" class="tb q" data-q="theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10 3.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+    <button type="button" class="tb q" data-q="cols"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="5.5" height="12" rx=".8" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="4" width="5.5" height="12" rx=".8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></button>
+    <button type="button" class="tb q qt" data-q="xref">↗</button>
+    <button type="button" class="tb q qt" data-q="strongs">H/G</button>
+  </div>
   <a id="cmpbtn" class="tb" href="tekste.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h9M3 15h12" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M14.5 8.5l2.5 2-2.5 2" stroke="currentColor" stroke-width="1.3" fill="none"/></svg><span></span></a>
   <a id="libbtn" class="tb" href="boeke.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h3v12H3zM7.5 6h3v10h-3zM12.3 5.2l2.8-.9 3.2 11-2.9.8z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 16.6h17" stroke="currentColor" stroke-width="1.3"/></svg><span></span></a>
   <a id="regbtn" class="tb" href="leesregister.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h4v4H3zM8 3h4v4H8zM13 3h4v4h-4zM3 8h4v4H3zM8 8h4v4H8zM3 13h4v4H3z" fill="currentColor" opacity=".85"/><path d="M13 8h4v4h-4zM8 13h4v4H8zM13 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1"/></svg><span></span></a>
@@ -822,6 +859,7 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
   <button id="notesbtn" class="tb" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3.5h9l3 3V16.5H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 8h7M6.5 10.8h7M6.5 13.6h4.5" stroke="currentColor" stroke-width="1.1"/></svg><i class="dot" hidden></i></button>
   <button id="aa" class="tb" type="button" aria-haspopup="dialog">Aa</button>
 </header>
+<div id="trmenu" role="menu"></div>
 <div id="work">
 <main id="stage">
   <div id="book">
@@ -984,12 +1022,12 @@ const UI={
 };
 
 // questions
-Object.assign(UI.en,{greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
+Object.assign(UI.en,{qSmaller:'Smaller type',qBigger:'Larger type',qTheme:'Light or dark',qCols:'One or two columns a page',qXref:'Cross-references',qStrongs:"Strong's numbers: tap a word for its Hebrew or Greek",trDown:'Downloaded the first time it is chosen',nShare:'Share backup',greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
   qIntro:'Questions that come up while you read, gathered here to answer later. Select words in the text and tap ? in the colour bar, or tap \u201c+ Question\u201d for the pages that are open. Verses with an open question carry a small ? by their number.',
   qNoneOpen:'No open questions.',qNoneDone:'No answered questions yet.',qHere:'On these pages',qPsalms:'Psalms',
   qAskPh:'Your question\u2026',qAnswerPh:'The answer, when you find it\u2026',qMarkDone:'Answered \u2713',qReopen:'Open again',
   qAnsweredOn:'answered {d}',qDelete:'Delete this question',qDelConfirm:'Delete this question and its answer?',mkAsk:'Ask a question about this'});
-Object.assign(UI.af,{greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
+Object.assign(UI.af,{qSmaller:'Kleiner letters',qBigger:'Groter letters',qTheme:'Lig of donker',qCols:'Een of twee kolomme per bladsy',qXref:'Kruisverwysings',qStrongs:'Strong-nommers: tik op \u2019n woord vir die Hebreeus of Grieks',trDown:'Word afgelaai die eerste keer dat dit gekies word',nShare:'Deel rugsteun',greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
   qIntro:'Vrae wat opkom terwyl jy lees, hier bymekaar om later te beantwoord. Kies woorde in die teks en tik ? in die kleurbalk, of tik \u201c+ Vraag\u201d vir die bladsye wat oop is. Verse met \u2019n oop vraag dra \u2019n klein ? by hul nommer.',
   qNoneOpen:'Geen oop vrae nie.',qNoneDone:'Nog geen beantwoorde vrae nie.',qHere:'Op hierdie bladsye',qPsalms:'Psalms',
   qAskPh:'Jou vraag\u2026',qAnswerPh:'Die antwoord, wanneer jy dit kry\u2026',qMarkDone:'Beantwoord \u2713',qReopen:'Weer oop',
@@ -1598,7 +1636,7 @@ const SEGS=[['theme',[['auto','auto'],['light','light'],['dark','dark']]],['cont
  ['cols',[[1,'1'],[2,'2']]],['layout',[['lines','lines'],['para','para']]],['gap',[['off','off'],['on','on']]],['-'],
  ['xref',[['off','off'],['on','on']]],['status',[['off','off'],['on','on']]],
  ['cover',[['off','off'],['book','cvBook'],...COVERS.map(c=>[c,c])]],['gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']]],['thumbs',[['off','off'],['on','on']]],['-'],
- ['tr',CAT.bibles.map(b=>[b.id,b.label])],['teamim',[['off','off'],['on','on']]],['strongs',[['off','off'],['on','on']]],['swapAs',[['word','swWord'],['num','swNum']]],['wordOrder',[['en','woEn'],['he','woHe']]],['par',[['off','off'],...CAT.bibles.map(b=>[b.id,b.label])]],['parLay',[['facing','plFacing'],['stacked','plStacked']]],['lang',[['en','English'],['af','Afrikaans']]]];
+ ['teamim',[['off','off'],['on','on']]],['strongs',[['off','off'],['on','on']]],['swapAs',[['word','swWord'],['num','swNum']]],['wordOrder',[['en','woEn'],['he','woHe']]],['lang',[['en','English'],['af','Afrikaans']]]];
 const setEl=$('#set');
 function buildSettings(){
   let h='<div class="seth"><button class="lnk" type="button" data-act="reset">'+L.reset+'</button>'+
@@ -1645,7 +1683,7 @@ async function setSetting(k,v){
 }
 setEl.addEventListener('click',async e=>{
   const b=e.target.closest('button'); if(!b) return;
-  if(b.dataset.k){ await setSetting(b.dataset.k,b.dataset.v); return; }
+  if(b.dataset.k){ await setSetting(b.dataset.k,b.dataset.v); updateTop(); return; }
   const a=b.dataset.act;
   if(a==='close') setEl.classList.remove('on');
   else if(a==='reset'){ S=Object.assign({},DEF,{tr:S.tr,lang:S.lang}); document.documentElement.dataset.theme=S.theme; document.documentElement.dataset.contrast=S.contrast; document.documentElement.dataset.paper=S.paper; delete book.dataset.gilt;
@@ -1653,6 +1691,7 @@ setEl.addEventListener('click',async e=>{
   else if(a==='smaller'||a==='bigger'||a==='a5'){
     S.scale= a==='a5'?1 : Math.min(4,Math.max(.6,S.scale*(a==='bigger'?1.08:1/1.08)));
     persist(); await relayout(false); buildSettings(); }
+  updateTop();
 });
 $('#aa').onclick=e=>{ e.stopPropagation(); closeNav(); closePop();
   if(setEl.classList.toggle('on')) buildSettings(); };
@@ -1699,7 +1738,7 @@ navEl.addEventListener('click',e=>{
 $('#bookbtn').onclick=e=>{ e.stopPropagation(); navEl.classList.contains('on')?closeNav():openNav(); };
 $('#status').onclick=e=>{ const mk=e.target.closest('.mk'); if(mk){ regToggle(CUR.b,+mk.dataset.c); return; } openNav(); };
 $('#status').onkeydown=e=>{ if(e.target.closest('.mk')) return; if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openNav(); } };
-function labelChrome(){ $('#aa').title=L.settings; $('#aa').setAttribute('aria-label',L.settings); $('#findbtn').title=L.find; $('#findbtn').setAttribute('aria-label',L.find);
+function labelChrome(){ if(typeof updateTop==='function'&&CUR.G) updateTop(); $('#aa').title=L.settings; $('#aa').setAttribute('aria-label',L.settings); $('#findbtn').title=L.find; $('#findbtn').setAttribute('aria-label',L.find);
   $('#regbtn span').textContent=L.register; $('#regbtn').title=L.register;
   $('#libbtn span').textContent=L.library; $('#libbtn').title=L.library;
   $('#cmpbtn span').textContent=L.greekTexts; $('#cmpbtn').title=L.greekTextsTip;
@@ -1787,7 +1826,7 @@ function buildShelf(fit=1){
     :esc(L.noReg)+' <button type="button" data-act="loadreg">'+esc(L.loadReg)+'</button>');
 }
 function chromeForShelf(on){
-  $('#home').hidden=on; $('#bookbtn').hidden=on; $('#resume').hidden=!on; $('#regbtn').hidden=!on; $('#libbtn').hidden=!on||!'boeke.html'; $('#cmpbtn').hidden=!on||!'tekste.html';
+  $('#home').hidden=on; $('#bookbtn').hidden=on; $('#trbtn').hidden=on; document.body.classList.toggle('shelf',on); if(on) $('#trmenu').classList.remove('on'); $('#resume').hidden=!on; $('#regbtn').hidden=!on; $('#libbtn').hidden=!on||!'boeke.html'; $('#cmpbtn').hidden=!on||!'tekste.html';
   if(on){ $('#back').hidden=true; const v=CUR.V[firstOnPage(CUR.spread*CUR.G.ppv)];
           $('#resume').textContent=L.resume+' \u00b7 '+bookName(CUR.b)+(v?' '+v.c:''); }
   else updateBack();
@@ -1979,7 +2018,7 @@ function renderNotes(force){
     const others=Object.keys(NOTES).filter(k=>hasNote(k)&&!keys.includes(k)).sort(keyOrder);
     more.innerHTML=(others.length?'<b>'+esc(L.nOther)+'</b>'+others.map(k=>'<button type="button" class="lnkb" data-goto="'+k+'">'+esc(keyLabel(k))+'</button>').join(''):'');
   }
-  more.innerHTML+='<div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button></div>'+storageLine();
+  more.innerHTML+='<div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button>'+shareBtn()+'</div>'+storageLine();
   const focusEl=document.activeElement&&nBody.contains(document.activeElement)?document.activeElement:null;
   let sel=null; try{ sel=focusEl&&[focusEl.selectionStart,focusEl.selectionEnd]; }catch(e){}
   nBody.replaceChildren(...head,...secs,more);
@@ -2092,10 +2131,16 @@ nBody.addEventListener('click',e=>{
   if(a.dataset.n==='snew') newSermon();
   else if(a.dataset.n==='sdel'){ const sec=a.closest('.sheet'); if(confirm(L.sDelConfirm)){ delete SERM[sec.dataset.k]; saveNotes(); renderNotes(true); } }
   else if(a.dataset.n==='backup'){ saveNotes();
-    const url=URL.createObjectURL(new Blob([JSON.stringify({app:'bybel-notas',v:4,saved:todayISO(),notes:NOTES,sermons:SERM,marks:MARKS,palaces:PAL,questions:QS},packInk)],{type:'application/json'}));
+    const url=URL.createObjectURL(notesBlob());
     const l=document.createElement('a'); l.href=url; l.download='notas-'+todayISO()+'.json'; l.click(); setTimeout(()=>URL.revokeObjectURL(url),2000); }
+  else if(a.dataset.n==='share'){ saveNotes(); shareFile(new File([notesBlob()],'notas-'+todayISO()+'.json',{type:'application/json'})); }
   else if(a.dataset.n==='restore') $('#notesfile').click();
 });
+const notesBlob=()=>new Blob([JSON.stringify({app:'bybel-notas',v:4,saved:todayISO(),notes:NOTES,sermons:SERM,marks:MARKS,palaces:PAL,questions:QS},packInk)],{type:'application/json'});
+// the phone's own share sheet (Google Drive, mail, a chat …), where the browser offers it for files
+const CAN_SHARE=(()=>{ try{ return !!(navigator.canShare&&navigator.canShare({files:[new File(['{}'],'x.json',{type:'application/json'})]})); }catch(e){ return false; } })();
+async function shareFile(f){ try{ await navigator.share({files:[f],title:f.name}); }catch(e){ if(e&&e.name!=='AbortError') alert(e.message||e); } }
+const shareBtn=()=>CAN_SHARE?'<button type="button" data-n="share">'+esc(L.nShare)+'</button>':'';
 $('#notesfile').onchange=e=>{
   const f=e.target.files[0]; if(!f) return; const rd=new FileReader();
   rd.onload=()=>{ try{ const p=JSON.parse(rd.result); let n=0;
@@ -3318,7 +3363,7 @@ function renderQuestions(force){
   if(on.length) h+='<h3 class="qgrp">'+esc(L.qHere)+'</h3>'+on.map(q=>qCard(q,true)).join('');
   let lastB=-1;
   for(const q of rest){ if(q.b!==lastB){ h+='<h3 class="qgrp">'+esc(q.b===18?L.qPsalms:bookName(q.b))+'</h3>'; lastB=q.b; } h+=qCard(q,false); }
-  h+='<div class="nmore"><div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button></div>'+storageLine()+'</div>';
+  h+='<div class="nmore"><div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button>'+shareBtn()+'</div>'+storageLine()+'</div>';
   const top=nBody.scrollTop, same=(nBody.dataset.qs||'')===QST.show; nBody.innerHTML=h; nBody.dataset.qs=QST.show;
   nBody.querySelectorAll('.qcard textarea').forEach(growQ);
   nBody.scrollTop=same?top:0;
@@ -3340,6 +3385,47 @@ nBody.addEventListener('click',e=>{
   else if(b.dataset.qdone){ q.done=q.done?null:todayISO(); }
   q.u=todayISO(); QV++; saveQ(); qPaint(); renderNotes(true);
 });
+
+/* ---------------- the translation menu and the quick settings ----------------
+   The translation (and the one beside it) is chosen from a menu under the bar, which fits a phone however many
+   Bibles there are. On a computer the everyday one-tap settings are in the bar: type size, light/dark, one or two
+   columns, cross-references and Strong's. */
+const trbtn=$('#trbtn'), trmenu=$('#trmenu'), quick=$('#quick');
+const isDarkNow=()=>S.theme==='dark'||(S.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+function updateTop(){
+  trbtn.querySelector('span').textContent=BIB[S.tr].label+(parWanted()?' + '+BIB[S.par].label:'');
+  trbtn.title=L.tr+(parWanted()?' \u00b7 '+L.par:''); trbtn.setAttribute('aria-label',trbtn.title);
+  const q=(k,on,tip)=>{ const b=quick.querySelector('[data-q='+k+']'); if(on!=null) b.setAttribute('aria-pressed',on); b.title=tip; b.setAttribute('aria-label',tip); };
+  q('smaller',null,L.qSmaller); q('bigger',null,L.qBigger); q('theme',isDarkNow(),L.qTheme); q('cols',S.cols===2,L.qCols); q('xref',S.xref==='on',L.qXref); q('strongs',S.strongs==='on',L.qStrongs);
+  if(trmenu.classList.contains('on')) drawTrMenu();
+}
+function drawTrMenu(){
+  const item=(k,id,lab,name,on)=>'<button type="button" class="ti" role="menuitemradio" data-'+k+'="'+id+'" aria-checked="'+on+'"><b>'+esc(lab)+'</b><span>'+esc(name||'')+'</span>'+
+    (id!=='off'&&!(NUM[id]&&NUM[id].t)?'<i title="'+esc(L.trDown)+'">\u2193</i>':'<i></i>')+'</button>';
+  const short=b=>(b.name||'').replace(/\s*\([^)]*\)/g,'').split(' \u00b7 ').pop().replace(/^Greek:\s*/,'');
+  let h='<h4>'+esc(L.tr)+'</h4>'+CAT.bibles.map(b=>item('tr',b.id,b.label,short(b),b.id===S.tr)).join('');
+  h+='<div class="tsep"></div><h4>'+esc(L.par)+'</h4>'+item('par','off',L.off,'',!parWanted())+CAT.bibles.filter(b=>b.id!==S.tr).map(b=>item('par',b.id,b.label,short(b),S.par===b.id)).join('');
+  if(parWanted()&&!(isPhone()&&!isLand())) h+='<h4>'+esc(L.parLay)+'</h4><div class="tlay"><button type="button" data-lay="facing" aria-pressed="'+(S.parLay!=='stacked')+'">'+esc(L.plFacing)+'</button><button type="button" data-lay="stacked" aria-pressed="'+(S.parLay==='stacked')+'">'+esc(L.plStacked)+'</button></div>';
+  trmenu.innerHTML=h;
+  const r=trbtn.getBoundingClientRect(), w=trmenu.offsetWidth;
+  trmenu.style.top=(r.bottom+6)+'px'; trmenu.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left))+'px';
+}
+trbtn.addEventListener('click',e=>{ e.stopPropagation(); closeNav(); closePop(); setEl.classList.remove('on');
+  const on=!trmenu.classList.contains('on'); trmenu.classList.toggle('on',on); trbtn.setAttribute('aria-expanded',on); if(on) drawTrMenu(); });
+trmenu.addEventListener('click',async e=>{ e.stopPropagation(); const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.tr){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); await setSetting('tr',b.dataset.tr); }
+  else if(b.dataset.par){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); await setSetting('par',b.dataset.par); }
+  else if(b.dataset.lay){ await setSetting('parLay',b.dataset.lay); }
+  updateTop(); if(setEl.classList.contains('on')) buildSettings(); });
+document.addEventListener('click',e=>{ if(trmenu.classList.contains('on')&&!e.target.closest('#trmenu,#trbtn')){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&trmenu.classList.contains('on')){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); } });
+quick.addEventListener('click',async e=>{ const b=e.target.closest('[data-q]'); if(!b) return; const k=b.dataset.q;
+  if(k==='smaller'||k==='bigger'){ S.scale=Math.min(4,Math.max(.6,S.scale*(k==='bigger'?1.08:1/1.08))); persist(); await relayout(false); }
+  else if(k==='theme') await setSetting('theme',isDarkNow()?'light':'dark');
+  else if(k==='cols') await setSetting('cols',S.cols===2?1:2);
+  else if(k==='xref') await setSetting('xref',S.xref==='on'?'off':'on');
+  else if(k==='strongs') await setSetting('strongs',S.strongs==='on'?'off':'on');
+  updateTop(); if(setEl.classList.contains('on')) buildSettings(); });
 
 /* ---------------- memory palace ----------------
    The A5-sheet method (all of Ephesians was learned this way): a passage is split into rooms of about five verses;
@@ -3520,7 +3606,7 @@ function renderPalace(force){
     else h+='<p class="sempty">'+esc(L.pNoneHere)+'</p>';
     h+='<div class="nmore"><b>'+esc(L.pAllRooms)+'</b><div class="prooms">'+C.rooms.map(room=>'<button type="button" class="lnkb'+(here.includes(room.i)?' here':'')+'" data-proom="'+room.i+'">'+(room.i+1)+' \u00b7 '+esc(vRange(room.V))+' <small>'+room.places.length+'</small></button>').join('')+'</div>';
   } else h+='<div class="nmore">';
-  h+='<div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button></div>'+storageLine()+'</div>';
+  h+='<div class="acts"><button type="button" data-n="backup">'+esc(L.nBackup)+'</button><button type="button" data-n="restore">'+esc(L.nRestore)+'</button>'+shareBtn()+'</div>'+storageLine()+'</div>';
   const top=nBody.scrollTop, same=nBody.dataset.pal===sig.split('|').slice(0,4).join('|');
   nBody.innerHTML=h; nBody.dataset.pal=sig.split('|').slice(0,4).join('|');
   nBody.querySelectorAll('.room').forEach(sizeRoom);
@@ -3663,8 +3749,13 @@ if(firstRun){
   persist();
 }
 await relayout(true);
+updateTop();
 openShelf();
 renderNotes(true);
+{ const ref=/^([1-3]?[A-Za-z]+)\.(\d+)(?:\.(\d+))?$/.exec(new URLSearchParams(location.search).get('ref')||'');
+  if(ref){ const b=OSIS.indexOf(ref[1]), k=NUM.kjv;
+    if(b>=0){ let row=D.bs[b]; for(let r=D.bs[b];r<D.bs[b+1];r++) if(k.c[r]===+ref[2]&&k.v[r]===+(ref[3]||1)){ row=r; break; }
+      closeShelf(); go(b,row,{push:false,flash:true}); history.replaceState(null,'',location.pathname); } } }
 { const r=+new URLSearchParams(location.search).get('r');
   if(r>=0&&r<bookOf.length&&new URLSearchParams(location.search).has('r')){ closeShelf(); go(bookOf[r],r,{push:false,flash:true}); history.replaceState(null,'',location.pathname); } }
 window.__reader={CNT:()=>CNT,CAL:()=>CAL,PAL:()=>PAL,CUR,S,D,calibrate,next,prev,go,relayout,a5page,geomFor,openShelf,closeShelf,buildShelf};
