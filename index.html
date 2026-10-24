@@ -220,6 +220,17 @@ body.phone #trbtn{padding:4px 7px;font-size:13px}
 .x:hover{color:var(--ink)}
 .srow{display:grid;grid-template-columns:118px 1fr;align-items:center;gap:10px;margin:6px 0}
 .srow>span{color:var(--ink);opacity:.85}
+/* a row whose choices do not fit beside its name puts the name above them; if they still do not fit, the words wrap */
+.drv{margin:14px 0 4px;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;color:var(--soft)}
+.drv b{display:block;font:600 14px var(--sans);color:var(--ink);margin-bottom:3px}
+.drv p{margin:0 0 8px;line-height:1.45}
+.drva{display:flex;gap:8px;flex-wrap:wrap}
+.drva button{border:1px solid var(--line);background:var(--page);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--ink);font-size:13.5px}
+.drva .drmain{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.drst{margin:8px 0 2px!important;font-size:12.5px;color:var(--faint);min-height:1em}
+.drv a{font-size:12px;color:var(--faint)}
+.srow.stack{grid-template-columns:1fr;gap:4px;margin:10px 0 8px}
+.srow.wrap .seg button{white-space:normal;line-height:1.2}
 .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .seg button{flex:1;border:0;border-left:1px solid var(--line);background:transparent;padding:7px 4px;cursor:pointer;white-space:nowrap}
 .seg button:first-child{border-left:0}
@@ -472,6 +483,17 @@ body.phone #top{position:absolute;left:0;right:0;top:0;z-index:58;height:auto;mi
   background:color-mix(in srgb,var(--desk) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);transform:translateY(-105%);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
 body.phone.chrome #top{transform:none}
+/* the bar has to fit the narrowest phone: tighter buttons, the way back on two short lines, and a long book or
+   translation name gives way (\u2026) before any button is pushed off the screen */
+body.phone #top{gap:2px;padding-left:6px;padding-right:6px}
+body.phone #top>.tb{flex:none;padding:6px 6px}
+body.phone #top>#bookbtn{flex:0 1 auto;min-width:0;padding:5px 11px;gap:5px;font-size:16px}
+body.phone #top>#trbtn{flex:none;padding:4px 6px;gap:3px}
+body.phone #trbtn span{max-width:5.6em}
+body.phone #top>#resume{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.phone #bookname,body.phone #trbtn span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.phone #top>#back{padding:2px 3px;font-size:12px;line-height:1.15;max-width:3.5em;text-align:center}
+@media (max-width:350px){ body.phone #top>.tb{padding:6px 5px} body.phone #top>#bookbtn{padding:5px 10px} body.phone #bookbtn svg{display:none} }
 body.land #top{position:absolute;left:0;right:0;top:0;z-index:58;padding:0 calc(10px + env(safe-area-inset-right,0px)) 0 calc(10px + env(safe-area-inset-left,0px));
   background:color-mix(in srgb,var(--desk) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);transform:translateY(-105%);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
@@ -480,7 +502,7 @@ body.land #status{min-height:0;padding-top:3px;padding-bottom:3px}
 body.land #set{top:54px;max-height:calc(100% - 60px)}
 body.phone #shelf{padding-top:58px}
 body.phone #nav,body.phone #find,body.phone #smap,body.phone #amap{padding-top:60px}
-body.phone #set{top:58px;right:8px;max-height:calc(100% - 66px)}
+body.phone #set{top:58px;left:8px;right:8px;width:auto;max-width:none;max-height:calc(100% - 66px);padding:10px 12px}
 body.phone #book{filter:none}
 body.phone .flowcss{text-align:left;hyphens:manual}
 body.phone .pg.l{border-radius:3px;box-shadow:0 1px 3px var(--shadow)}
@@ -909,6 +931,74 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
 <div id="measure" aria-hidden="true"><div class="mflow flowcss"></div><div class="cflow flowcss"></div></div>
 
 <script type="application/octet-stream" id="bibledata"></script>
+<script>/* ---------------- Google Drive sync (optional) ----------------
+   Off until someone taps "Connect Google Drive". Then Google's own sign-in asks for the narrowest Drive permission
+   (drive.file): the app sees only the files it made itself, kept in a folder "Bybel-app" in that person's Drive.
+   "Sync" fetches the copy in Drive, merges it into this device (the newer of two versions wins), and saves the merged
+   result back, so a phone and a computer agree after each sync. Nothing goes anywhere else: no server of ours. */
+(function(){
+const CLIENT='618969271604-ok33ioqe2dfstd5ljuifr1dv7grle46v.apps.googleusercontent.com', SCOPE='https://www.googleapis.com/auth/drive.file', FOLDER='Bybel-app', KEY='bybel-gdrive-v1';
+const API='https://www.googleapis.com/drive/v3/files', UP='https://www.googleapis.com/upload/drive/v3/files';
+let st={}; try{ st=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+const keep=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} };
+let token=null, until=0, gis=null, client=null;
+function loadGis(){
+  if(gis) return gis;
+  gis=new Promise((ok,no)=>{ if(window.google&&google.accounts&&google.accounts.oauth2) return ok();
+    const s=document.createElement('script'); s.src='https://accounts.google.com/gsi/client'; s.async=true; s.onload=()=>ok(); s.onerror=()=>{ gis=null; no(new Error('offline')); };
+    document.head.appendChild(s); });
+  return gis;
+}
+// a token for an hour; Google shows its sign-in the first time, and later only a brief check
+async function getToken(fresh){
+  if(!fresh&&token&&Date.now()<until-60000) return token;
+  await loadGis();
+  return new Promise((ok,no)=>{
+    client=google.accounts.oauth2.initTokenClient({client_id:CLIENT,scope:SCOPE,
+      callback:r=>{ if(r&&r.access_token){ token=r.access_token; until=Date.now()+(r.expires_in||3600)*1000; st.on=true; keep(); ok(token); } else no(new Error((r&&r.error)||'denied')); },
+      error_callback:e=>no(new Error((e&&e.type)||'closed'))});
+    client.requestAccessToken({prompt:st.on?'':'consent'});
+  });
+}
+async function call(url,opt={},again){
+  const t=await getToken();
+  const r=await fetch(url,Object.assign({},opt,{headers:Object.assign({Authorization:'Bearer '+t},opt.headers||{})}));
+  if(r.status===401&&!again){ token=null; await getToken(true); return call(url,opt,true); }
+  if(!r.ok) throw new Error('Drive '+r.status);
+  return r;
+}
+const q=s=>encodeURIComponent(s);
+async function folder(){
+  if(st.folder){ try{ const r=await call(API+'/'+st.folder+'?fields=id,trashed'); const j=await r.json(); if(!j.trashed) return st.folder; }catch(e){} }
+  const l=await (await call(API+'?q='+q("name='"+FOLDER+"' and mimeType='application/vnd.google-apps.folder' and trashed=false")+'&fields=files(id)&spaces=drive')).json();
+  st.folder=l.files&&l.files[0]?l.files[0].id:(await (await call(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:FOLDER,mimeType:'application/vnd.google-apps.folder'})})).json()).id;
+  keep(); return st.folder;
+}
+async function findFile(dir,name){
+  const l=await (await call(API+'?q='+q("name='"+name+"' and '"+dir+"' in parents and trashed=false")+'&fields=files(id,modifiedTime)&orderBy=modifiedTime desc&spaces=drive')).json();
+  return l.files&&l.files[0]?l.files[0].id:null;
+}
+// sync one file: local data out, Drive's copy in (merged first)
+async function sync(name,getLocal,mergeIn){
+  const dir=await folder(); const id=await findFile(dir,name);
+  let brought=0;
+  if(id){ const remote=await (await call(API+'/'+id+'?alt=media')).json().catch(()=>null); if(remote) brought=await mergeIn(remote)||0; }
+  const body=JSON.stringify(await getLocal());
+  if(id) await call(UP+'/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
+  else { const bd='bybel'+Date.now(), meta=JSON.stringify({name,parents:[dir],mimeType:'application/json'});
+    await call(UP+'?uploadType=multipart',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+bd},
+      body:'--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+meta+'\r\n--'+bd+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+bd+'--'}); }
+  st.last=st.last||{}; st.last[name]=new Date().toISOString(); keep();
+  return {brought,when:st.last[name]};
+}
+function disconnect(){
+  try{ if(token&&window.google&&google.accounts) google.accounts.oauth2.revoke(token,()=>{}); }catch(e){}
+  token=null; until=0; st={}; keep();
+}
+window.GDrive={ready:!!CLIENT&&CLIENT.indexOf('__')<0&&(location.protocol==='https:'||/^(localhost|127\.0\.0\.1)$/.test(location.hostname)),
+  on:()=>!!st.on, last:n=>st.last&&st.last[n]||'', sync, disconnect, connect:()=>getToken(true).then(()=>true)};
+})();
+</script>
 <script>
 'use strict';
 (async function(){
@@ -1022,12 +1112,12 @@ const UI={
 };
 
 // questions
-Object.assign(UI.en,{qSmaller:'Smaller type',qBigger:'Larger type',qTheme:'Light or dark',qCols:'One or two columns a page',qXref:'Cross-references',qStrongs:"Strong's numbers: tap a word for its Hebrew or Greek",trDown:'Downloaded the first time it is chosen',nShare:'Share backup',greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
+Object.assign(UI.en,{drAbout:'Optional: keep your notes, sermons, marks, palaces, questions and reading register in your own Google Drive, to use them on your phone and computer alike. Nothing is sent anywhere else.',drOn:'Connected. Sync brings in what changed on your other devices and saves this one\u2019s changes to your Drive (folder \u201cBybel-app\u201d).',drConnect:'Connect Google Drive',drSync:'Sync now',drOff:'Disconnect',drOffQ:'Disconnect Google Drive? Your files stay in your Drive; this device simply stops syncing.',drLast:'Last synced {t}',drBusy:'Syncing\u2026',drDone:'Synced {t} \u00b7 {n} change(s) brought in',drFail:'Sync did not succeed ({e}). Try again later.',drOffline:'No connection to Google just now; try again when online.',drPrivacy:'Privacy',drTerms:'Terms of service',qSmaller:'Smaller type',qBigger:'Larger type',qTheme:'Light or dark',qCols:'One or two columns a page',qXref:'Cross-references',qStrongs:"Strong's numbers: tap a word for its Hebrew or Greek",trDown:'Downloaded the first time it is chosen',nShare:'Share backup',greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
   qIntro:'Questions that come up while you read, gathered here to answer later. Select words in the text and tap ? in the colour bar, or tap \u201c+ Question\u201d for the pages that are open. Verses with an open question carry a small ? by their number.',
   qNoneOpen:'No open questions.',qNoneDone:'No answered questions yet.',qHere:'On these pages',qPsalms:'Psalms',
   qAskPh:'Your question\u2026',qAnswerPh:'The answer, when you find it\u2026',qMarkDone:'Answered \u2713',qReopen:'Open again',
   qAnsweredOn:'answered {d}',qDelete:'Delete this question',qDelConfirm:'Delete this question and its answer?',mkAsk:'Ask a question about this'});
-Object.assign(UI.af,{qSmaller:'Kleiner letters',qBigger:'Groter letters',qTheme:'Lig of donker',qCols:'Een of twee kolomme per bladsy',qXref:'Kruisverwysings',qStrongs:'Strong-nommers: tik op \u2019n woord vir die Hebreeus of Grieks',trDown:'Word afgelaai die eerste keer dat dit gekies word',nShare:'Deel rugsteun',greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
+Object.assign(UI.af,{drAbout:'Opsioneel: hou jou notas, preke, merke, paleise, vrae en leesregister in jou eie Google Drive, om dit op jou foon en rekenaar te gebruik. Niks word elders heen gestuur nie.',drOn:'Gekoppel. Sinkroniseer bring in wat op jou ander toestelle verander het en stoor hierdie toestel se veranderinge in jou Drive (vouer \u201cBybel-app\u201d).',drConnect:'Koppel Google Drive',drSync:'Sinkroniseer nou',drOff:'Ontkoppel',drOffQ:'Ontkoppel Google Drive? Jou l\u00eaers bly in jou Drive; hierdie toestel sinkroniseer net nie meer nie.',drLast:'Laas gesinkroniseer {t}',drBusy:'Besig om te sinkroniseer\u2026',drDone:'Gesinkroniseer {t} \u00b7 {n} verandering(e) ingebring',drFail:'Sinkronisering het nie geslaag nie ({e}). Probeer later weer.',drOffline:'Geen verbinding met Google nie; probeer weer as jy aanlyn is.',drPrivacy:'Privaatheid',drTerms:'Diensbepalings',qSmaller:'Kleiner letters',qBigger:'Groter letters',qTheme:'Lig of donker',qCols:'Een of twee kolomme per bladsy',qXref:'Kruisverwysings',qStrongs:'Strong-nommers: tik op \u2019n woord vir die Hebreeus of Grieks',trDown:'Word afgelaai die eerste keer dat dit gekies word',nShare:'Deel rugsteun',greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
   qIntro:'Vrae wat opkom terwyl jy lees, hier bymekaar om later te beantwoord. Kies woorde in die teks en tik ? in die kleurbalk, of tik \u201c+ Vraag\u201d vir die bladsye wat oop is. Verse met \u2019n oop vraag dra \u2019n klein ? by hul nommer.',
   qNoneOpen:'Geen oop vrae nie.',qNoneDone:'Nog geen beantwoorde vrae nie.',qHere:'Op hierdie bladsye',qPsalms:'Psalms',
   qAskPh:'Jou vraag\u2026',qAnswerPh:'Die antwoord, wanneer jy dit kry\u2026',qMarkDone:'Beantwoord \u2713',qReopen:'Weer oop',
@@ -1408,7 +1498,7 @@ function show(s,dir){
   POS={b:CUR.b,row:CUR.anchor}; persist();
   setStatus(fv,lv,s);
   if(typeof renderNotes==='function') renderNotes(false);
-  $('#bookname').textContent=bookName(CUR.b);
+  fitBookName();
   $('#bookbtn').style.setProperty('--c',CLOTH[GROUP[CUR.b]]);
   drawRibbons();
   if(dir&&!reduceMotion) vp.animate([{opacity:.15,transform:'translateX('+(dir*18)+'px)'},{opacity:1,transform:'none'}],
@@ -1581,10 +1671,14 @@ function scheduleCounts(){
 
 /* ---------------- history ---------------- */
 const HIST=[];
+// the book's name on the button; when it is too long for the phone's bar, its short form
+function fitBookName(){ if(CUR.b<0) return; const bn=$('#bookname'); bn.textContent=bookName(CUR.b);
+  if(isPhone()&&bn.scrollWidth>bn.clientWidth) bn.textContent=bookAbbr(CUR.b); }
 function updateBack(){
   const bt=$('#back'), h=HIST[HIST.length-1]; bt.hidden=!h;
   if(h){ const n=NUM[S.tr]; bt.textContent='\u2190 '+bookAbbr(h.b)+' '+n.c[h.row]+':'+n.v[h.row];
          bt.title=L.backTo+' '+bookName(h.b)+' '+n.c[h.row]+':'+n.v[h.row]; }
+  fitBookName();
 }
 function back(){ const h=HIST.pop(); if(h) go(h.b,h.row,{flash:true}); updateBack(); }
 $('#back').onclick=back;
@@ -1656,7 +1750,15 @@ function buildSettings(){
       h+=key==='cover'&&v[0]==='#'?'<button type="button" class="cvsw" style="--c:'+v+'" data-k="cover" data-v="'+v+'" aria-pressed="'+(S.cover===v)+'" title="'+v+'"></button>':'<button type="button" data-k="'+key+'" data-v="'+v+'" aria-pressed="'+(on!==null?on:String(S[key])===String(v))+'"'+(key==='tr'?' title="'+esc(BIB[v].name)+'"':'')+'>'+(L[lab]||lab)+(key==='tr'&&!NUM[v].t?' \u2193':'')+'</button>'; }
     h+='</div></div>';
   }
-  setEl.innerHTML=h+'<p class="cred">'+L.cred+'</p>';
+  setEl.innerHTML=h+driveHTML()+'<p class="cred">'+L.cred+'</p>';
+  fitSettings();
+}
+function fitSettings(){
+  if(!setEl.classList.contains('on')) return;
+  const rows=[...setEl.querySelectorAll('.srow')], over=r=>{ const g=r.querySelector('.seg'); return g&&g.scrollWidth>g.clientWidth+1; };
+  rows.forEach(r=>r.classList.remove('stack','wrap'));
+  rows.filter(over).forEach(r=>r.classList.add('stack'));
+  rows.filter(r=>r.classList.contains('stack')&&over(r)).forEach(r=>r.classList.add('wrap'));
 }
 async function setSetting(k,v){
   if(k==='cols') v=+v;
@@ -2143,7 +2245,12 @@ async function shareFile(f){ try{ await navigator.share({files:[f],title:f.name}
 const shareBtn=()=>CAN_SHARE?'<button type="button" data-n="share">'+esc(L.nShare)+'</button>':'';
 $('#notesfile').onchange=e=>{
   const f=e.target.files[0]; if(!f) return; const rd=new FileReader();
-  rd.onload=()=>{ try{ const p=JSON.parse(rd.result); let n=0;
+  rd.onload=()=>{ try{ const p=JSON.parse(rd.result); const n=mergeNotesData(p); alert(n+L.nLoaded);
+    }catch(x){ alert(L.regBad); } e.target.value=''; };
+  rd.readAsText(f);
+};
+// another copy of the notes (a backup file, or the one in Google Drive) merged into this device: the newer one wins
+function mergeNotesData(p){ let n=0;
       const merge=(dst,inc)=>{ for(const k in inc||{}){ const a=dst[k], b=inc[k]; if(!a||(b.u||'')>(a.u||'')){ dst[k]=b; n++; } } };
       merge(NOTES,unpackInk(p.notes||{})); merge(SERM,unpackInk(p.sermons||{}));
       for(const t in p.marks||{}){ MARKS[t]=MARKS[t]||{}; for(const r in p.marks[t]) MARKS[t][r]=Object.assign({},p.marks[t][r],MARKS[t][r]||{}); }
@@ -2151,10 +2258,14 @@ $('#notesfile').onchange=e=>{
         for(const id in p.palaces.list){ const a=PAL.list[id], b=p.palaces.list[id]; if(!a||(b.u||'')>(a.u||'')){ PAL.list[id]=b; n++; } }
         merge(PAL.ink,p.palaces.ink||{}); if(!PAL.cur) PAL.cur=p.palaces.cur||Object.keys(PAL.list)[0]||''; PALV++; }
       if(Array.isArray(p.questions)){ for(const b of p.questions){ const a=QS.find(x=>x.id===b.id); if(!a){ QS.push(b); n++; } else if((b.u||'')>(a.u||'')){ Object.assign(a,b); n++; } } QV++; qPaint(); }
-      saveNotes(); saveMarks(); renderNotes(true); if((p.marks||p.palaces)&&CUR.b>=0) relayout(true); alert(n+L.nLoaded);
-    }catch(x){ alert(L.regBad); } e.target.value=''; };
-  rd.readAsText(f);
-};
+      // the reading register (Drive only): readings are added together, chapter by chapter
+      if(p.register&&p.register.log){ let reg={v:1,log:{},set:{}}; try{ reg=Object.assign(reg,JSON.parse(localStorage.getItem('bybel-leesregister-v1')||'{}')); }catch(x){}
+        for(const k in p.register.log){ const cur=reg.log[k]||[], all=[...new Set([...cur,...p.register.log[k]])].sort(); n+=all.length-cur.length; reg.log[k]=all; }
+        if(!Object.keys(reg.set||{}).length&&p.register.set) reg.set=p.register.set;
+        try{ localStorage.setItem('bybel-leesregister-v1',JSON.stringify(reg)); }catch(x){} if(shelfOpen()) buildShelf(); }
+      saveNotes(); saveMarks(); renderNotes(true); if((p.marks||p.palaces)&&CUR.b>=0) relayout(true);
+      return n;
+}
 function applyNotesUI(){
   if(S.notesH) notesEl.style.setProperty('--nh',(S.notesH*100).toFixed(1)+'%');
   const open=!!S.notesOpen, pin=!!S.notesPinned;
@@ -2420,7 +2531,7 @@ document.addEventListener('keydown',e=>{
 let rzT=0, lastStage='';
 new ResizeObserver(()=>{ if(grabbing) return; const st=$('#stage'), key=st.clientWidth+'x'+st.clientHeight; if(key===lastStage) return; lastStage=key;
   clearTimeout(rzT); rzT=setTimeout(()=>{ if(CUR.G) relayout(false); if(shelfOpen()){ closeChap(); buildShelf(); } },120); }).observe($('#stage'));
-addEventListener('resize',()=>{ if(notesOpen()) setTimeout(()=>nBody.querySelectorAll('.sheet').forEach(sizeSheet),150); });
+addEventListener('resize',()=>{ if(notesOpen()) setTimeout(()=>nBody.querySelectorAll('.sheet').forEach(sizeSheet),150); fitSettings(); });
 
 
 
@@ -3426,6 +3537,35 @@ quick.addEventListener('click',async e=>{ const b=e.target.closest('[data-q]'); 
   else if(k==='xref') await setSetting('xref',S.xref==='on'?'off':'on');
   else if(k==='strongs') await setSetting('strongs',S.strongs==='on'?'off':'on');
   updateTop(); if(setEl.classList.contains('on')) buildSettings(); });
+
+/* ---------------- Google Drive in the settings (optional) ----------------
+   One file, "bybel-notas.json" in the Drive folder "Bybel-app": notes, sermons, marks, memory palaces, questions and
+   the reading register. Hidden where it cannot work (the travel copy, no connection to Google). */
+const DRIVE_FILE='bybel-notas.json';
+const hasDrive=()=>typeof GDrive!=='undefined'&&GDrive.ready;
+function driveWhen(iso){ if(!iso) return ''; const d=new Date(iso); return d.toLocaleDateString(S.lang==='af'?'af-ZA':'en-GB',{day:'numeric',month:'short'})+' '+d.toTimeString().slice(0,5); }
+function driveHTML(){
+  if(!hasDrive()) return '';
+  const on=GDrive.on(), last=GDrive.last(DRIVE_FILE);
+  return '<div class="drv"><b>Google Drive</b><p>'+esc(on?L.drOn:L.drAbout)+'</p><div class="drva">'+
+    (on?'<button type="button" class="drmain" data-drv="sync">'+esc(L.drSync)+'</button><button type="button" data-drv="off">'+esc(L.drOff)+'</button>'
+       :'<button type="button" class="drmain" data-drv="connect">'+esc(L.drConnect)+'</button>')+
+    '</div><p class="drst">'+esc(last?L.drLast.replace('{t}',driveWhen(last)):'')+'</p><a href="privacy.html" target="_blank" rel="noopener">'+esc(L.drPrivacy)+'</a> \u00b7 <a href="terms.html" target="_blank" rel="noopener">'+esc(L.drTerms)+'</a></div>';
+}
+function notesData(){ saveNotes();
+  let reg=null; try{ reg=JSON.parse(localStorage.getItem('bybel-leesregister-v1')||'null'); }catch(e){}
+  return JSON.parse(JSON.stringify({app:'bybel-notas',v:4,saved:todayISO(),notes:NOTES,sermons:SERM,marks:MARKS,palaces:PAL,questions:QS,register:reg},packInk)); }
+async function driveSync(){
+  const stEl=setEl.querySelector('.drst'), say=s=>{ if(stEl) stEl.textContent=s; };
+  say(L.drBusy);
+  try{ const r=await GDrive.sync(DRIVE_FILE,notesData,remote=>remote&&remote.app==='bybel-notas'?mergeNotesData(remote):0);
+    buildSettings(); const s2=setEl.querySelector('.drst'); if(s2) s2.textContent=L.drDone.replace('{n}',r.brought).replace('{t}',driveWhen(r.when)); }
+  catch(e){ say(/offline|Failed to fetch/i.test(e.message)?L.drOffline:L.drFail.replace('{e}',e.message)); }
+}
+setEl.addEventListener('click',async e=>{ const b=e.target.closest('[data-drv]'); if(!b) return; e.stopPropagation();
+  if(b.dataset.drv==='connect'){ try{ await GDrive.connect(); await driveSync(); }catch(x){ const s=setEl.querySelector('.drst'); if(s) s.textContent=/offline/i.test(x.message)?L.drOffline:L.drFail.replace('{e}',x.message); } }
+  else if(b.dataset.drv==='sync') driveSync();
+  else if(b.dataset.drv==='off'){ if(confirm(L.drOffQ)){ GDrive.disconnect(); buildSettings(); } } },true);
 
 /* ---------------- memory palace ----------------
    The A5-sheet method (all of Ephesians was learned this way): a passage is split into rooms of about five verses;

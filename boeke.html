@@ -59,6 +59,17 @@
 .mg{display:flex;align-items:center;gap:4px}
 .msep{width:1px;height:20px;background:var(--line);margin:0 3px}
 body.phone #markbar button{width:36px;height:36px}
+/* on a touch screen the phone's own selection is off (it brings up Copy, Select all and the Google search); words are
+   chosen by holding instead, as in the Bible, with a handle at each end to take in more or fewer words */
+@media (pointer:coarse){ #flow{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none} }
+::highlight(pick){background-color:rgba(70,130,220,.32)}
+.hdl{position:fixed;z-index:89;width:44px;margin-left:-22px;display:none;touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab}
+.hdl.on{display:block}
+.hdl::before{content:"";position:absolute;left:21px;top:0;width:2px;height:var(--lh,20px);background:#3c78d0;border-radius:1px}
+.hdl::after{content:"";position:absolute;left:12px;top:var(--lh,20px);width:20px;height:20px;background:#3c78d0;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+#hA::after{border-radius:50% 0 50% 50%}
+#hB::after{border-radius:0 50% 50% 50%}
+.hdl.drag::after{transform:scale(1.15)}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{height:100%}
@@ -141,6 +152,11 @@ body.phone.notes #stage{margin-bottom:calc(48vh - 36px)}
 #notesbtn{position:relative}
 #notesbtn .dot{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--rubric)}
 #notesbtn[aria-pressed=true]{background:color-mix(in srgb,var(--ink) 9%,transparent)}
+.drv{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;color:var(--soft)}
+.drv b{display:block;font:600 14px var(--sans);color:var(--ink);margin-bottom:3px}
+.drv p{margin:0 0 8px;line-height:1.45}
+.drst{margin:8px 0 2px!important;color:var(--faint);min-height:1em}
+.drv a{font-size:12px;color:var(--faint)}
 .bkrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .bkrow p{flex-basis:100%;margin:0 0 4px;font-size:12.5px;color:var(--soft)}
 #stage{flex:1;min-height:0;min-width:0;position:relative;display:flex;align-items:center;justify-content:center}
@@ -367,6 +383,7 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
   <div id="log" class="panel scroll"></div>
   <div id="busy" class="on"><span>…</span></div>
 <div id="markbar" role="toolbar"><div class="mg"><button type="button" data-h="y"></button><button type="button" data-h="o"></button><button type="button" data-h="g"></button><button type="button" data-h="b"></button><button type="button" data-h="p"></button><button type="button" data-h="v"></button></div><i class="msep"></i><div class="mg"><button type="button" data-c="r">A</button><button type="button" data-c="o">A</button><button type="button" data-c="y">A</button><button type="button" data-c="v">A</button><button type="button" data-c="b">A</button><button type="button" data-c="g">A</button><i class="msep"></i><button type="button" data-x="1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6"/></svg></button></div></div>
+<div id="hA" class="hdl" aria-hidden="true"></div><div id="hB" class="hdl" aria-hidden="true"></div>
 </main>
 <footer id="status"></footer>
 <div id="measure" aria-hidden="true"></div>
@@ -375,6 +392,74 @@ table.lg td:first-child{font-family:var(--serif);font-size:15px}
 <input type="file" id="libfile" accept=".json,application/json" hidden>
 <input type="file" id="addfile" accept=".pdf,application/pdf,.xml,.thml,application/xml,text/xml,.md,.markdown,text/markdown,.txt,text/plain,.json,application/json" multiple hidden>
 
+<script>/* ---------------- Google Drive sync (optional) ----------------
+   Off until someone taps "Connect Google Drive". Then Google's own sign-in asks for the narrowest Drive permission
+   (drive.file): the app sees only the files it made itself, kept in a folder "Bybel-app" in that person's Drive.
+   "Sync" fetches the copy in Drive, merges it into this device (the newer of two versions wins), and saves the merged
+   result back, so a phone and a computer agree after each sync. Nothing goes anywhere else: no server of ours. */
+(function(){
+const CLIENT='618969271604-ok33ioqe2dfstd5ljuifr1dv7grle46v.apps.googleusercontent.com', SCOPE='https://www.googleapis.com/auth/drive.file', FOLDER='Bybel-app', KEY='bybel-gdrive-v1';
+const API='https://www.googleapis.com/drive/v3/files', UP='https://www.googleapis.com/upload/drive/v3/files';
+let st={}; try{ st=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+const keep=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} };
+let token=null, until=0, gis=null, client=null;
+function loadGis(){
+  if(gis) return gis;
+  gis=new Promise((ok,no)=>{ if(window.google&&google.accounts&&google.accounts.oauth2) return ok();
+    const s=document.createElement('script'); s.src='https://accounts.google.com/gsi/client'; s.async=true; s.onload=()=>ok(); s.onerror=()=>{ gis=null; no(new Error('offline')); };
+    document.head.appendChild(s); });
+  return gis;
+}
+// a token for an hour; Google shows its sign-in the first time, and later only a brief check
+async function getToken(fresh){
+  if(!fresh&&token&&Date.now()<until-60000) return token;
+  await loadGis();
+  return new Promise((ok,no)=>{
+    client=google.accounts.oauth2.initTokenClient({client_id:CLIENT,scope:SCOPE,
+      callback:r=>{ if(r&&r.access_token){ token=r.access_token; until=Date.now()+(r.expires_in||3600)*1000; st.on=true; keep(); ok(token); } else no(new Error((r&&r.error)||'denied')); },
+      error_callback:e=>no(new Error((e&&e.type)||'closed'))});
+    client.requestAccessToken({prompt:st.on?'':'consent'});
+  });
+}
+async function call(url,opt={},again){
+  const t=await getToken();
+  const r=await fetch(url,Object.assign({},opt,{headers:Object.assign({Authorization:'Bearer '+t},opt.headers||{})}));
+  if(r.status===401&&!again){ token=null; await getToken(true); return call(url,opt,true); }
+  if(!r.ok) throw new Error('Drive '+r.status);
+  return r;
+}
+const q=s=>encodeURIComponent(s);
+async function folder(){
+  if(st.folder){ try{ const r=await call(API+'/'+st.folder+'?fields=id,trashed'); const j=await r.json(); if(!j.trashed) return st.folder; }catch(e){} }
+  const l=await (await call(API+'?q='+q("name='"+FOLDER+"' and mimeType='application/vnd.google-apps.folder' and trashed=false")+'&fields=files(id)&spaces=drive')).json();
+  st.folder=l.files&&l.files[0]?l.files[0].id:(await (await call(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:FOLDER,mimeType:'application/vnd.google-apps.folder'})})).json()).id;
+  keep(); return st.folder;
+}
+async function findFile(dir,name){
+  const l=await (await call(API+'?q='+q("name='"+name+"' and '"+dir+"' in parents and trashed=false")+'&fields=files(id,modifiedTime)&orderBy=modifiedTime desc&spaces=drive')).json();
+  return l.files&&l.files[0]?l.files[0].id:null;
+}
+// sync one file: local data out, Drive's copy in (merged first)
+async function sync(name,getLocal,mergeIn){
+  const dir=await folder(); const id=await findFile(dir,name);
+  let brought=0;
+  if(id){ const remote=await (await call(API+'/'+id+'?alt=media')).json().catch(()=>null); if(remote) brought=await mergeIn(remote)||0; }
+  const body=JSON.stringify(await getLocal());
+  if(id) await call(UP+'/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
+  else { const bd='bybel'+Date.now(), meta=JSON.stringify({name,parents:[dir],mimeType:'application/json'});
+    await call(UP+'?uploadType=multipart',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+bd},
+      body:'--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+meta+'\r\n--'+bd+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+bd+'--'}); }
+  st.last=st.last||{}; st.last[name]=new Date().toISOString(); keep();
+  return {brought,when:st.last[name]};
+}
+function disconnect(){
+  try{ if(token&&window.google&&google.accounts) google.accounts.oauth2.revoke(token,()=>{}); }catch(e){}
+  token=null; until=0; st={}; keep();
+}
+window.GDrive={ready:!!CLIENT&&CLIENT.indexOf('__')<0&&(location.protocol==='https:'||/^(localhost|127\.0\.0\.1)$/.test(location.hostname)),
+  on:()=>!!st.on, last:n=>st.last&&st.last[n]||'', sync, disconnect, connect:()=>getToken(true).then(()=>true)};
+})();
+</script>
 <script>
 'use strict';
 (async function(){
@@ -392,7 +477,7 @@ const UI={
   pdfReading:'Reading the PDF: page {n} of {t}\u2026',pdfShaping:'Setting the pages as a book\u2026',pdfTitle:'Add this PDF to the shelves',pdfBookTitle:'Title',pdfAuthor:'Author',pdfYear:'Year',pdfStats:'{p} pages \u00b7 {w} words \u00b7 {h} headings',mdStats:'{w} words \u00b7 {h} headings',pdfAdd:'Add to the shelves',pdfCancel:'Cancel',
   pdfScanned:'\u201c{f}\u201d is a scanned PDF: its pages are pictures, without text to read, so it cannot be added here. Only PDFs with real text can be. A scanned book can be read (OCR) and made into a book file in a chat.',
   pdfFailed:'\u201c{f}\u201d could not be read as a book.',pdfPersonal:'Personal copy \u2014 not for redistribution',thmlTr:'Translated by {t}',bmOn:'Bookmark these pages',bmOff:'Take the bookmark away',bmList:'Bookmarks',bmDel:'Delete this bookmark',pack:'Shelves',packShare:'Share shelves',packOwn:'One per shelf',ownWrite:'Write',ownNew:'New book',ownTitlePh:'The title of your book',ownCreate:'Begin the book',ownUntitled:'My book',ownSource:'Written in the library',ownLicense:'Own work',ownFirst:'Chapter I',ownChapter:'Chapter {n}',ownPages:'Pages',ownNewPage:'New page',ownWords:'{n} words',ownUp:'Move up',ownDown:'Move down',ownDel:'Delete this page',ownDelQ:'Delete this page and what is written on it?',ownLast:'A book keeps at least one page.',ownExport:'Save as Markdown (.md)',ownPh:'# Chapter title\n\nWrite here. A blank line starts a new paragraph.',ownWordsPh:'words',ownHelp:'# chapter \u00b7 ## section \u00b7 *italic* \u00b7 **bold** \u00b7 > quotation \u00b7 [[Rom 8:28]] or [your words](1 Kor 13) for a Bible link. The book beside you is set as you type.',ownT1:'Chapter heading',ownT2:'Section heading',ownTi:'Italic',ownTb:'Bold',ownTq:'Quotation',ownTl:'List item',ownTr:'Bible reference',nTitle:'Notes',nNew:'Note on this page',nPh:'Write as you read\u2026',nNone:'No notes on these pages yet.',nAll:'All notes in this book ({n})',nDelete:'Delete this note',nDelQ:'Delete this note?',notes:'Notes',
-  bkAbout:'A backup of your own books, their notes and marks, where you are in each book and your reading time \u2014 to keep safe, or to move to another device. On a phone, Share backup can put it straight into Google Drive; Load library backup can open it from there.',bkSave:'Save library backup',bkShare:'Share backup',bkLoad:'Load library backup',bkSaving:'Making the backup\u2026',bkLoading:'Loading the backup\u2026',bkBad:'That file is not a library backup.',bkDone:'Backup loaded: {b} book(s) added or brought up to date, {n} note(s) brought in.',thmlBad:'\u201c{f}\u201d is not a ThML book (the XML of the Christian Classics Ethereal Library).',
+  bkAbout:'A backup of your own books, their notes and marks, where you are in each book and your reading time \u2014 to keep safe, or to move to another device. On a phone, Share backup can put it straight into Google Drive; Load library backup can open it from there.',drAbout:'Optional: keep your own books, their notes, marks and bookmarks, and your reading in your own Google Drive, to use them on your phone and computer alike. Nothing is sent anywhere else.',drOn:'Connected. Sync brings in what changed on your other devices and saves this one\u2019s changes to your Drive (folder \u201cBybel-app\u201d).',drConnect:'Connect Google Drive',drSync:'Sync now',drOff:'Disconnect',drOffQ:'Disconnect Google Drive? Your files stay in your Drive; this device simply stops syncing.',drLast:'Last synced {t}',drBusy:'Syncing\u2026',drDone:'Synced {t} \u00b7 {n} change(s) brought in',drFail:'Sync did not succeed ({e}). Try again later.',drOffline:'No connection to Google just now; try again when online.',drPrivacy:'Privacy',drTerms:'Terms of service',bkSave:'Save library backup',bkShare:'Share backup',bkLoad:'Load library backup',bkSaving:'Making the backup\u2026',bkLoading:'Loading the backup\u2026',bkBad:'That file is not a library backup.',bkDone:'Backup loaded: {b} book(s) added or brought up to date, {n} note(s) brought in.',thmlBad:'\u201c{f}\u201d is not a ThML book (the XML of the Christian Classics Ethereal Library).',
   hint:'Click a book to open it where you left off. Right-click (or hold) for its details and contents.',
   contents:'Contents',details:'Details',read:'read',lastRead:'last read',total:'time read',week:'this week',days:'days read',never:'not opened yet',
   cloth:'Cover colour',shelfOf:'Shelf',remove:'Remove from this device',removeQ:'Remove this book from this device? Your reading time is kept.',
@@ -408,7 +493,7 @@ const UI={
   pdfReading:'Die PDF word gelees: bladsy {n} van {t}\u2026',pdfShaping:'Die bladsye word as \u2019n boek geset\u2026',pdfTitle:'Voeg hierdie PDF by die rakke',pdfBookTitle:'Titel',pdfAuthor:'Skrywer',pdfYear:'Jaar',pdfStats:'{p} bladsye \u00b7 {w} woorde \u00b7 {h} opskrifte',mdStats:'{w} woorde \u00b7 {h} opskrifte',pdfAdd:'Sit op die rak',pdfCancel:'Kanselleer',
   pdfScanned:'\u201c{f}\u201d is \u2019n geskandeerde PDF: sy bladsye is prente, sonder teks om te lees, en dit kan nie hier bygevoeg word nie. Net PDF\u2019s met regte teks kan. \u2019n Geskandeerde boek kan in \u2019n gesprek gelees (OCR) en \u2019n boekl\u00eaer gemaak word.',
   pdfFailed:'\u201c{f}\u201d kon nie as \u2019n boek gelees word nie.',pdfPersonal:'Persoonlike kopie \u2014 nie vir verspreiding nie',thmlTr:'Vertaal deur {t}',bmOn:'Merk hierdie bladsye',bmOff:'Haal die boekmerk weg',bmList:'Boekmerke',bmDel:'Skrap hierdie boekmerk',pack:'Rakke',packShare:'Deel rakke',packOwn:'Een per rak',ownWrite:'Skryf',ownNew:'Nuwe boek',ownTitlePh:'Die titel van jou boek',ownCreate:'Begin die boek',ownUntitled:'My boek',ownSource:'In die biblioteek geskryf',ownLicense:'Eie werk',ownFirst:'Hoofstuk I',ownChapter:'Hoofstuk {n}',ownPages:'Bladsye',ownNewPage:'Nuwe bladsy',ownWords:'{n} woorde',ownUp:'Skuif op',ownDown:'Skuif af',ownDel:'Skrap hierdie bladsy',ownDelQ:'Skrap hierdie bladsy en wat daarop geskryf is?',ownLast:'\u2019n Boek hou ten minste een bladsy.',ownExport:'Stoor as Markdown (.md)',ownPh:'# Hoofstuktitel\n\nSkryf hier. \u2019n Le\u00eb lyn begin \u2019n nuwe paragraaf.',ownWordsPh:'woorde',ownHelp:'# hoofstuk \u00b7 ## afdeling \u00b7 *kursief* \u00b7 **vet** \u00b7 > aanhaling \u00b7 [[Rom 8:28]] of [jou woorde](1 Kor 13) vir \u2019n Bybelskakel. Die boek langs jou word geset terwyl jy tik.',ownT1:'Hoofstukopskrif',ownT2:'Afdelingsopskrif',ownTi:'Kursief',ownTb:'Vet',ownTq:'Aanhaling',ownTl:'Lysitem',ownTr:'Bybelverwysing',nTitle:'Notas',nNew:'Nota op hierdie bladsy',nPh:'Skryf terwyl jy lees\u2026',nNone:'Nog geen notas op hierdie bladsye nie.',nAll:'Alle notas in hierdie boek ({n})',nDelete:'Skrap hierdie nota',nDelQ:'Skrap hierdie nota?',notes:'Notas',
-  bkAbout:'\u2019n Rugsteun van jou eie boeke, hul notas en merke, waar jy in elke boek is en jou leestyd \u2014 om veilig te hou, of na \u2019n ander toestel te skuif. Op \u2019n foon kan Deel rugsteun dit reguit in Google Drive sit; Laai biblioteek-rugsteun kan dit van daar af oopmaak.',bkSave:'Stoor biblioteek-rugsteun',bkShare:'Deel rugsteun',bkLoad:'Laai biblioteek-rugsteun',bkSaving:'Die rugsteun word gemaak\u2026',bkLoading:'Die rugsteun word gelaai\u2026',bkBad:'Daardie l\u00eaer is nie \u2019n biblioteek-rugsteun nie.',bkDone:'Rugsteun gelaai: {b} boek(e) bygevoeg of bygewerk, {n} nota(s) ingebring.',thmlBad:'\u201c{f}\u201d is nie \u2019n ThML-boek nie (die XML van die Christian Classics Ethereal Library).',
+  bkAbout:'\u2019n Rugsteun van jou eie boeke, hul notas en merke, waar jy in elke boek is en jou leestyd \u2014 om veilig te hou, of na \u2019n ander toestel te skuif. Op \u2019n foon kan Deel rugsteun dit reguit in Google Drive sit; Laai biblioteek-rugsteun kan dit van daar af oopmaak.',drAbout:'Opsioneel: hou jou eie boeke, hul notas, merke en boekmerke, en jou lees in jou eie Google Drive, om dit op jou foon en rekenaar te gebruik. Niks word elders heen gestuur nie.',drOn:'Gekoppel. Sinkroniseer bring in wat op jou ander toestelle verander het en stoor hierdie toestel se veranderinge in jou Drive (vouer \u201cBybel-app\u201d).',drConnect:'Koppel Google Drive',drSync:'Sinkroniseer nou',drOff:'Ontkoppel',drOffQ:'Ontkoppel Google Drive? Jou l\u00eaers bly in jou Drive; hierdie toestel sinkroniseer net nie meer nie.',drLast:'Laas gesinkroniseer {t}',drBusy:'Besig om te sinkroniseer\u2026',drDone:'Gesinkroniseer {t} \u00b7 {n} verandering(e) ingebring',drFail:'Sinkronisering het nie geslaag nie ({e}). Probeer later weer.',drOffline:'Geen verbinding met Google nie; probeer weer as jy aanlyn is.',drPrivacy:'Privaatheid',drTerms:'Diensbepalings',bkSave:'Stoor biblioteek-rugsteun',bkShare:'Deel rugsteun',bkLoad:'Laai biblioteek-rugsteun',bkSaving:'Die rugsteun word gemaak\u2026',bkLoading:'Die rugsteun word gelaai\u2026',bkBad:'Daardie l\u00eaer is nie \u2019n biblioteek-rugsteun nie.',bkDone:'Rugsteun gelaai: {b} boek(e) bygevoeg of bygewerk, {n} nota(s) ingebring.',thmlBad:'\u201c{f}\u201d is nie \u2019n ThML-boek nie (die XML van die Christian Classics Ethereal Library).',
   hint:'Klik op \u2019n boek om dit oop te maak waar jy opgehou het. Regskliek (of hou vas) vir besonderhede en inhoud.',
   contents:'Inhoud',details:'Besonderhede',read:'gelees',lastRead:'laas gelees',total:'tyd gelees',week:'hierdie week',days:'dae gelees',never:'nog nie oopgemaak nie',
   cloth:'Bandkleur',shelfOf:'Rak',remove:'Verwyder van hierdie toestel',removeQ:'Verwyder hierdie boek van hierdie toestel? Jou leestyd bly behoue.',
@@ -541,6 +626,7 @@ function startsOnSpread(s){ const x=s*CUR.G.ppv*CUR.G.cpp, i=lowerBound(x); retu
 const spreadOfBlock=i=>{ let k=0; for(let j=0;j<CUR.idx.length;j++){ if(CUR.idx[j]<=i) k=j; else break; } return Math.floor(Math.floor(CUR.col[k]/CUR.G.cpp)/CUR.G.ppv); };
 const pctAt=i=>Math.round(CUR.bk._cum[i]/CUR.bk._total*100);
 function show(s,dir){
+  if(typeof clearPick==='function'&&PICK.range){ clearPick(); hideMarkbar(); }
   s=Math.max(0,Math.min(CUR.spreads-1,s)); CUR.spread=s;
   const G=CUR.G, p0=s*G.ppv, bk=CUR.bk;
   flow.style.transform='translateX('+(-p0*G.cpp*G.pitch)+'px)';
@@ -1035,7 +1121,7 @@ function settingsHTML(){
   return head(L.settings)+seg('theme',[['auto','auto'],['light','light'],['dark','dark']])+seg('contrast',[['normal','cNormal'],['strong','cStrong']])+(ST.s.theme==='dark'?'':seg('paper',[['white','paWhite'],['cream','paCream'],['soft','paSoft']]))+seg('gilt',[['plain','gPlain'],['gold','gGold'],['red','gRed']])+
     '<div class="srow"><span>'+L.size+'</span><div class="seg"><button type="button" data-act="smaller">A\u2212</button><button type="button" data-act="size0">'+Math.round(CUR.G?CUR.G.fs:17)+'</button><button type="button" data-act="bigger">A+</button></div></div>'+
     seg('cols',[[1,'1'],[2,'2']])+seg('status',[['off','off'],['on','on']])+seg('pack',[['share','packShare'],['own','packOwn']])+seg('lang',[['en','English'],['af','Afrikaans']])+
-    '<div class="bkrow"><p>'+esc(L.bkAbout)+'</p><button type="button" class="btn" data-act="bksave">'+esc(L.bkSave)+'</button><button type="button" class="btn" data-act="bkload">'+esc(L.bkLoad)+'</button>'+(CAN_SHARE?'<button type="button" class="btn" data-act="bkshare">'+esc(L.bkShare)+'</button>':'')+'</div>';
+    '<div class="bkrow"><p>'+esc(L.bkAbout)+'</p><button type="button" class="btn" data-act="bksave">'+esc(L.bkSave)+'</button><button type="button" class="btn" data-act="bkload">'+esc(L.bkLoad)+'</button>'+(CAN_SHARE?'<button type="button" class="btn" data-act="bkshare">'+esc(L.bkShare)+'</button>':'')+'</div>'+driveHTML();
 }
 $('#aa').onclick=e=>{ e.stopPropagation(); if($('#set').classList.contains('on')) closePanels(); else openPanel($('#set'),settingsHTML()); };
 $('#set').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
@@ -1156,9 +1242,13 @@ function wordAt(el,node,off,end){
   // the word this character belongs to (or the next one, from a space)
   const re=/\S+/g; let m,w=0,last=0; while((m=re.exec(txt))){ if(ci<m.index+m[0].length) return (end&&ci<m.index)?Math.max(0,w-1):w; last=w; w++; } return last;
 }
+// the words chosen: on a phone those held (below), else the browser's own selection
+function pickedRange(){
+  if(PICK.range&&PICK.range.startContainer.isConnected) return PICK.range;
+  const sel=getSelection(); return sel.rangeCount&&!sel.isCollapsed?sel.getRangeAt(0):null;
+}
 function selectedRanges(){
-  const sel=getSelection(); if(!sel.rangeCount||sel.isCollapsed) return null;
-  const r=sel.getRangeAt(0); if(!flow.contains(r.commonAncestorContainer)) return null;
+  const r=pickedRange(); if(!r||!flow.contains(r.commonAncestorContainer)) return null;
   const bk=n=>(n.nodeType===1?n:n.parentElement).closest('.bk[data-i]');
   let a=bk(r.startContainer), z=bk(r.endContainer); if(!a||!z) return null;
   const els=[...flow.querySelectorAll('.bk[data-i]')], ia=els.indexOf(a), iz=els.indexOf(z); if(ia<0||iz<ia) return null;
@@ -1175,24 +1265,96 @@ function applyMark(kind,code){
     for(let w=a;w<=z;w++){ if(kind==='h') H[w]=code; else if(kind==='c') C[w]=code; else { H[w]=''; C[w]=''; } }
     const l=compress(H,C); if(l.length) bm[i]=l; else delete bm[i]; }
   if(!Object.keys(bm).length) delete ST.marks[id];
-  persist(); getSelection().removeAllRanges(); hideMarkbar();
+  persist(); getSelection().removeAllRanges(); clearPick(); hideMarkbar();
   const s=CUR.spread; renderUnit(CUR.u); show(s,0);       // the same page, now marked
 }
 function hideMarkbar(){ markbar.classList.remove('on'); }
 function placeMarkbar(){
   const rs=selectedRanges(); if(!rs){ hideMarkbar(); return; }
-  const rect=getSelection().getRangeAt(0).getBoundingClientRect();
+  const rect=pickedRange().getBoundingClientRect(), coarse=matchMedia('(pointer: coarse)').matches;
   markbar.classList.add('on'); const w=markbar.offsetWidth, h=markbar.offsetHeight;
-  let x=rect.left+rect.width/2-w/2, y=rect.top-h-10;
+  let x=rect.left+rect.width/2-w/2, y=coarse?rect.bottom+38:rect.top-h-10;    // on a phone below the handles
   if(y<8) y=rect.bottom+10;                                // no room above: below the words
+  if(coarse&&y+h>innerHeight-8) y=rect.top-h-10;            // no room below: above them
   x=Math.max(8,Math.min(innerWidth-w-8,x)); y=Math.min(innerHeight-h-8,y);
   markbar.style.left=x+'px'; markbar.style.top=y+'px';
 }
 let selT=0;
-document.addEventListener('selectionchange',()=>{ clearTimeout(selT); selT=setTimeout(()=>{ if(!CUR.bk||shelfOpen()) return hideMarkbar(); placeMarkbar(); },220); });
+document.addEventListener('selectionchange',()=>{ if(PICK.range) return; clearTimeout(selT); selT=setTimeout(()=>{ if(!CUR.bk||shelfOpen()) return hideMarkbar(); placeMarkbar(); },220); });
 markbar.addEventListener('pointerdown',e=>e.preventDefault());     // keep the selection while a colour is chosen
 markbar.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
   if(b.dataset.h) applyMark('h',b.dataset.h); else if(b.dataset.c) applyMark('c',b.dataset.c); else applyMark('x'); });
+
+/* Choosing words on a touch screen: hold a word, then slide to take in more; the marking bar appears on release.
+   Either end can then be dragged by its handle. A tap anywhere else lets go of the words. */
+const PICK={range:null,a:null,b:null,p:null,q:null,hold:0,drag:false,swallow:false,x:0,y:0};
+function pickNodes(el){ const out=[]; let acc=0; const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT); let n;
+  while((n=tw.nextNode())){ out.push([n,acc]); acc+=n.data.length; } return out; }
+function pickRangeAt(nodes,a,z){ const r=document.createRange();
+  const at=(pos,end)=>{ for(const [n,o] of nodes) if(pos<o+n.data.length||(end&&pos===o+n.data.length)) return [n,pos-o];
+    const [n]=nodes[nodes.length-1]; return [n,n.data.length]; };
+  r.setStart(...at(a,false)); r.setEnd(...at(z,true)); return r; }
+// the word under a point on the page: its block, its number in the block (counted as the marks count words) and its range
+function pickWordAt(x,y){
+  // look through the handles (and the marking bar) to the text beneath: the end handle travels just ahead of the finger
+  const el=document.elementsFromPoint(x,y).map(h=>h.closest&&h.closest('#flow .bk[data-i]')).find(Boolean); if(!el) return null;
+  const nodes=pickNodes(el); if(!nodes.length) return null;
+  const txt=nodes.map(([n])=>n.data).join(''), re=/\S+/g; let m, w=0;
+  while((m=re.exec(txt))){ const r=pickRangeAt(nodes,m.index,m.index+m[0].length);
+    for(const q of r.getClientRects()) if(x>=q.left-3&&x<=q.right+3&&y>=q.top-2&&y<=q.bottom+2) return {el,w,r};
+    w++; }
+  return null;
+}
+function paintPick(){
+  const all=[...flow.querySelectorAll('.bk[data-i]')], ia=all.indexOf(PICK.a.el), ib=all.indexOf(PICK.b.el);
+  const [p,q]=(ia<ib||(ia===ib&&PICK.a.w<=PICK.b.w))?[PICK.a,PICK.b]:[PICK.b,PICK.a];
+  const rg=document.createRange(); rg.setStart(p.r.startContainer,p.r.startOffset); rg.setEnd(q.r.endContainer,q.r.endOffset);
+  PICK.range=rg; PICK.p=p; PICK.q=q; placeHandles();
+  if(window.CSS&&CSS.highlights&&window.Highlight) CSS.highlights.set('pick',new Highlight(rg));
+  else { const sl=getSelection(); sl.removeAllRanges(); sl.addRange(rg); }
+}
+function clearPick(){ PICK.range=PICK.a=PICK.b=PICK.p=PICK.q=null; PICK.drag=false; clearTimeout(PICK.hold); hideHandles();
+  if(window.CSS&&CSS.highlights) CSS.highlights.delete('pick'); }
+book.addEventListener('pointerdown',e=>{
+  if(e.pointerType!=='touch') return;
+  PICK.swallow=false; PICK.x=e.clientX; PICK.y=e.clientY; clearTimeout(PICK.hold);
+  PICK.hold=setTimeout(()=>{ const w=pickWordAt(PICK.x,PICK.y); if(!w) return;
+    hideMarkbar(); PICK.a=PICK.b=w; PICK.drag=true; paintPick(); if(navigator.vibrate) navigator.vibrate(12); },450);
+});
+book.addEventListener('pointermove',e=>{
+  if(e.pointerType!=='touch') return;
+  if(!PICK.drag){ if(Math.hypot(e.clientX-PICK.x,e.clientY-PICK.y)>10) clearTimeout(PICK.hold); return; }
+  const w=pickWordAt(e.clientX,e.clientY); if(w&&(w.el!==PICK.b.el||w.w!==PICK.b.w)){ PICK.b=w; paintPick(); }
+});
+const endPick=e=>{ if(e.pointerType!=='touch') return; clearTimeout(PICK.hold);
+  if(PICK.drag){ PICK.drag=false; PICK.swallow=true; placeMarkbar(); } };
+book.addEventListener('pointerup',endPick); book.addEventListener('pointercancel',endPick);
+book.addEventListener('contextmenu',e=>{ if(matchMedia('(pointer: coarse)').matches||PICK.range) e.preventDefault(); });
+// the handles: the word is looked for a little above the finger, so the finger does not hide it
+const HA=$('#hA'), HB=$('#hB'); let HDRAG=null;
+function hideHandles(){ HA.classList.remove('on','drag'); HB.classList.remove('on','drag'); }
+function placeHandles(){
+  const rg=PICK.range; if(!rg){ hideHandles(); return; }
+  const rs=[...rg.getClientRects()].filter(r=>r.width>0&&r.height>0); if(!rs.length){ hideHandles(); return; }
+  const f=rs[0], l=rs[rs.length-1];
+  for(const [el,x,r] of [[HA,f.left,f],[HB,l.right,l]]){ el.style.left=x+'px'; el.style.top=r.top+'px'; el.style.setProperty('--lh',r.height+'px'); el.style.height=(r.height+22)+'px'; el.classList.add('on'); }
+}
+function handleDown(e){
+  if(!PICK.range) return; e.preventDefault(); e.stopPropagation();
+  const isA=e.currentTarget===HA, el=e.currentTarget, lh=parseFloat(el.style.getPropertyValue('--lh'))||20;
+  PICK.a=isA?PICK.q:PICK.p; PICK.b=isA?PICK.p:PICK.q;              // the other end stays put
+  HDRAG={el,off:e.clientY-(parseFloat(el.style.top)+lh/2)};
+  el.classList.add('drag'); el.setPointerCapture(e.pointerId); hideMarkbar();
+}
+function handleMove(e){
+  if(!HDRAG) return; e.preventDefault();
+  const y=e.clientY-HDRAG.off;
+  let w=pickWordAt(e.clientX,y); for(const dx of [-8,8,-16,16]){ if(w) break; w=pickWordAt(e.clientX+dx,y); }
+  if(w&&(w.el!==PICK.b.el||w.w!==PICK.b.w)){ PICK.b=w; paintPick(); HDRAG.el.classList.add('drag'); if(navigator.vibrate) navigator.vibrate(4); }
+}
+function handleUp(){ if(!HDRAG) return; HDRAG.el.classList.remove('drag'); HDRAG=null; placeHandles(); placeMarkbar(); }
+for(const h of [HA,HB]){ h.addEventListener('pointerdown',handleDown); h.addEventListener('pointermove',handleMove);
+  h.addEventListener('pointerup',handleUp); h.addEventListener('pointercancel',handleUp); h.addEventListener('contextmenu',e=>e.preventDefault()); }
 
 /* ---------------- notes in a book ----------------
    As in the Bible: a panel beside the book (from below on a phone) for notes written while reading. A note belongs
@@ -1392,12 +1554,12 @@ $('#wclose').onclick=()=>setWriting(false);
    One file with what the library keeps on this device: your own books, their notes and marks, where you are in
    each book and how far you read, reading time, cover colours and shelves. Loading it adds what is missing and
    keeps the newer of two versions of a note. */
-async function libBackupBlob(){
-  let books=[]; try{ books=await idbAll('books'); }catch(e){}
+async function libData(){
+  let books=[]; try{ books=(await idbAll('books')).map(b=>Object.fromEntries(Object.entries(b).filter(([k])=>k[0]!=='_'))); }catch(e){}
   const keep=k=>JSON.parse(JSON.stringify(ST[k]||{}));
-  const data={app:'bybel-biblioteek-rugsteun',v:1,saved:new Date().toISOString(),books,notes:keep('notes'),marks:keep('marks'),bmk:keep('bmk'),pos:keep('pos'),far:keep('far'),time:keep('time'),cloth:keep('cloth'),shelf:keep('shelf'),last:ST.last};
-  return new Blob([JSON.stringify(data)],{type:'application/json'});
+  return {app:'bybel-biblioteek-rugsteun',v:1,saved:new Date().toISOString(),books,notes:keep('notes'),marks:keep('marks'),bmk:keep('bmk'),pos:keep('pos'),far:keep('far'),time:keep('time'),cloth:keep('cloth'),shelf:keep('shelf'),last:ST.last};
 }
+async function libBackupBlob(){ return new Blob([JSON.stringify(await libData())],{type:'application/json'}); }
 // the phone's own share sheet (Google Drive, mail, a chat …), where the browser offers it for files
 const CAN_SHARE=(()=>{ try{ return !!(navigator.canShare&&navigator.canShare({files:[new File(['{}'],'x.json',{type:'application/json'})]})); }catch(e){ return false; } })();
 async function shareLibBackup(){
@@ -1413,7 +1575,11 @@ async function saveLibBackup(){
 async function loadLibBackup(f){
   let d; try{ d=JSON.parse(await f.text()); }catch(e){ d=null; }
   if(!d||d.app!=='bybel-biblioteek-rugsteun'){ alert(L.bkBad); return; }
-  busy(L.bkLoading); let nb=0, nn=0;
+  busy(L.bkLoading); const {nb,nn}=await mergeLibData(d); busy(null);
+  alert(L.bkDone.replace('{b}',nb).replace('{n}',nn));
+}
+// another copy of the library (a backup file, or the one in Google Drive) merged into this device
+async function mergeLibData(d){ let nb=0, nn=0;
   for(const bk of d.books||[]){ if(!bk||!bk.id||!Array.isArray(bk.b)) continue;
     let have=null; try{ have=await idbGet('books',bk.id); }catch(e){}
     const newer=have&&have.id&&bk.pages&&(bk.u||0)>(have.u||0);      // a book you are writing: the newer copy wins
@@ -1430,19 +1596,42 @@ async function loadLibBackup(f){
     for(const [day,s] of Object.entries(t.days||{})) mine.days[day]=Math.max(mine.days[day]||0,s);
     mine.total=Math.max(mine.total||0,Object.values(mine.days).reduce((a,b)=>a+b,0),t.total||0); }
   if(!ST.last&&d.last) ST.last=d.last;
-  persist(); MINE=await idbAll('meta'); BOOKS.clear(); busy(null);
+  persist(); MINE=await idbAll('meta'); BOOKS.clear();
   if(shelfOpen()) buildShelf(); else if(CUR.bk){ const s=CUR.spread; renderUnit(CUR.u); show(s,0); }
-  alert(L.bkDone.replace('{b}',nb).replace('{n}',nn));
+  return {nb,nn};
 }
+/* Google Drive (optional): the library as one file, "biblioteek.json", in the Drive folder "Bybel-app" */
+const LDRIVE='biblioteek.json', hasDrive=()=>typeof GDrive!=='undefined'&&GDrive.ready;
+const dWhen=iso=>{ if(!iso) return ''; const d=new Date(iso); return d.toLocaleDateString(ST.s.lang==='af'?'af-ZA':'en-GB',{day:'numeric',month:'short'})+' '+d.toTimeString().slice(0,5); };
+function driveHTML(){
+  if(!hasDrive()) return '';
+  const on=GDrive.on(), last=GDrive.last(LDRIVE);
+  return '<div class="drv"><b>Google Drive</b><p>'+esc(on?L.drOn:L.drAbout)+'</p><div class="acts">'+
+    (on?'<button type="button" class="btn main" data-drv="sync">'+esc(L.drSync)+'</button><button type="button" class="btn" data-drv="off">'+esc(L.drOff)+'</button>'
+       :'<button type="button" class="btn main" data-drv="connect">'+esc(L.drConnect)+'</button>')+'</div>'+
+    '<p class="drst">'+esc(last?L.drLast.replace('{t}',dWhen(last)):'')+'</p><a href="privacy.html" target="_blank" rel="noopener">'+esc(L.drPrivacy)+'</a> \u00b7 <a href="terms.html" target="_blank" rel="noopener">'+esc(L.drTerms)+'</a></div>';
+}
+async function libDriveSync(){
+  const say=s=>{ const el=$('#set .drst'); if(el) el.textContent=s; }; say(L.drBusy);
+  try{ const r=await GDrive.sync(LDRIVE,libData,async remote=>{ if(!remote||remote.app!=='bybel-biblioteek-rugsteun') return 0; const x=await mergeLibData(remote); return x.nb+x.nn; });
+    $('#set').innerHTML=settingsHTML(); say(L.drDone.replace('{n}',r.brought).replace('{t}',dWhen(r.when))); }
+  catch(e){ say(/offline|Failed to fetch/i.test(e.message)?L.drOffline:L.drFail.replace('{e}',e.message)); }
+}
+$('#set').addEventListener('click',async e=>{ const b=e.target.closest('[data-drv]'); if(!b) return; e.stopPropagation();
+  if(b.dataset.drv==='connect'){ try{ await GDrive.connect(); await libDriveSync(); }catch(x){ const el=$('#set .drst'); if(el) el.textContent=/offline/i.test(x.message)?L.drOffline:L.drFail.replace('{e}',x.message); } }
+  else if(b.dataset.drv==='sync') libDriveSync();
+  else if(b.dataset.drv==='off'){ if(confirm(L.drOffQ)){ GDrive.disconnect(); $('#set').innerHTML=settingsHTML(); } } },true);
 $('#libfile').onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(f) await loadLibBackup(f); };
 
 /* ---------------- turning pages ---------------- */
 let downX=0,downY=0,swiped=false;
 let swallow=false;   // a tap that only puts away the marking bar does not turn the page
 book.addEventListener('pointerdown',e=>{ downX=e.clientX; downY=e.clientY; swiped=false; swallow=markbar.classList.contains('on'); });
-book.addEventListener('pointerup',e=>{ if(e.pointerType!=='touch') return; const dx=e.clientX-downX, dy=e.clientY-downY;
+book.addEventListener('pointerup',e=>{ if(e.pointerType!=='touch'||PICK.range) return; const dx=e.clientX-downX, dy=e.clientY-downY;
   if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3){ swiped=true; dx<0?next():prev(); } });
 book.addEventListener('click',e=>{
+  if(PICK.swallow){ PICK.swallow=false; return; }
+  if(PICK.range){ clearPick(); hideMarkbar(); swallow=false; return; }   // a tap lets go of held words
   if(swallow){ swallow=false; return; }
   if(swiped){ swiped=false; return; } if(Math.hypot(e.clientX-downX,e.clientY-downY)>6) return; if(String(getSelection()).trim()) return;
   const x=e.clientX-book.getBoundingClientRect().left, P=CUR.G.P;

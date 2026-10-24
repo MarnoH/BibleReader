@@ -35,6 +35,7 @@ vendor/pdfjs/         PDF.js, which reads a PDF when one is added to the library
 tekste.html           the Greek New Testaments compared (TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL)
 data/nt-compare.v3.json  the six Greek texts, verse by verse, for tekste.html
 boek-sjabloon.md      a template for writing a book in Markdown (see "The library")
+home.html, privacy.html, terms.html, page.css   the app's homepage, privacy policy and terms (for Google's sign-in screen)
 ```
 
 A phone downloads the program, the numbering and the AOV when it is installed. Another translation or the
@@ -167,6 +168,12 @@ cross-references and Strong's numbers, one tap each.
 
 Readings, notes, sermons and markings are saved only on the device where they are made.
 Use **Stoor rugsteun** (leesregister), **Save notes backup** (reader) and **Save library backup** (library) to move them between devices.
+**Google Drive (optional):** in the settings (**Aa**) of the Bible and of the library, **Connect Google Drive**, then
+**Sync now** keeps a copy in your own Drive (folder "Bybel-app": `bybel-notas.json` with notes, sermons, marks,
+palaces, questions and the reading register; `biblioteek.json` with the library). Sync merges both ways, the newer
+version winning, so phone and computer agree after a sync. The app sees only the files it made (`drive.file`).
+Homepage: [home.html](home.html) · privacy policy: [privacy.html](privacy.html) · terms of service: [terms.html](terms.html).
+
 On a phone, **Share backup** sends a backup through the phone's share sheet, straight into Google Drive for instance;
 **Load** can open it from Drive again.
 
