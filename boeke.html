@@ -237,7 +237,7 @@ body.phone .flow{text-align:left;hyphens:manual}
 #measure{position:fixed;left:0;top:0;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none;contain:strict}
 
 /* ---------- the bookshelf ---------- */
-#shelf{position:absolute;inset:0;z-index:30;overflow:auto;background:var(--desk);padding:6px 16px 26px;display:none}
+#shelf{position:absolute;inset:0;z-index:30;overflow:auto;background:var(--desk);padding:6px 16px calc(48px + env(safe-area-inset-bottom,0px));display:none}
 #shelf.on{display:block}
 .case{margin:14px auto 0;max-width:1180px;background:var(--case);border:12px solid var(--plank);border-bottom:0;border-radius:3px 3px 0 0;padding:0 22px;
   box-shadow:inset 0 10px 24px -14px rgba(0,0,0,.45),0 18px 40px -18px var(--shadow);position:relative}
