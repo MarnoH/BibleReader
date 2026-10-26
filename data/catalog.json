@@ -39,7 +39,7 @@
    "label": "Heb/TR",
    "name": "Hebrew: Westminster Leningrad Codex (Open Scriptures Hebrew Bible) · Greek: Scrivener 1894 Textus Receptus",
    "names": "ui",
-   "file": "data/orig.v1.json",
+   "file": "data/orig.v2.json",
    "lang": {
     "ot": "he",
     "nt": "grc"
@@ -50,7 +50,7 @@
    "label": "Heb/SBL",
    "name": "Hebrew: Westminster Leningrad Codex · Greek: SBL Greek New Testament (CC BY 4.0)",
    "names": "ui",
-   "file": "data/sbl.v1.json",
+   "file": "data/sbl.v2.json",
    "ot": "orig",
    "lang": {
     "ot": "he",
@@ -62,7 +62,7 @@
    "label": "Heb/Byz",
    "name": "Hebrew: Westminster Leningrad Codex · Greek: Byzantine Textform, Robinson & Pierpont (CrossWire, CC BY-NC-SA 4.0)",
    "names": "ui",
-   "file": "data/byz.v1.json",
+   "file": "data/byz.v2.json",
    "ot": "orig",
    "lang": {
     "ot": "he",
@@ -74,7 +74,7 @@
    "label": "Heb/NA27",
    "name": "Hebrew: Westminster Leningrad Codex · Greek: Nestle-Aland 27 / UBS4 readings (CrossWire WHNU, CC BY-NC-SA 4.0)",
    "names": "ui",
-   "file": "data/na.v1.json",
+   "file": "data/na.v2.json",
    "ot": "orig",
    "lang": {
     "ot": "he",

@@ -15,10 +15,10 @@ data/base.v1.json     book names, chapter and verse numbering
 data/aov.v1.json      one file per translation
 data/kjv.v1.json
 data/bsb.v1.json
-data/orig.v1.json     Hebrew Old Testament and Greek New Testament (TR)
-data/sbl.v1.json      Greek New Testament (SBLGNT); its Old Testament is the Hebrew
-data/byz.v1.json      Greek New Testament (Byzantine Textform), with Strong's numbers and parsing; OT the Hebrew
-data/na.v1.json       Greek New Testament (NA27/UBS4 readings), with Strong's numbers and parsing; OT the Hebrew
+data/orig.v2.json     Hebrew Old Testament and Greek New Testament (TR)
+data/sbl.v2.json      Greek New Testament (SBLGNT); its Old Testament is the Hebrew
+data/byz.v2.json      Greek New Testament (Byzantine Textform), with Strong's numbers and parsing; OT the Hebrew
+data/na.v2.json       Greek New Testament (NA27/UBS4 readings), with Strong's numbers and parsing; OT the Hebrew
 data/xrefs.v1.json    the cross-references
 data/strongs.v1.json  Strong's dictionary (Hebrew and Greek)
 data/tags-kjv.v1.json Strong's numbers for each word of the KJV
@@ -188,7 +188,7 @@ Byzantine Textform, M. A. Robinson & W. G. Pierpont (CrossWire module "Byz", CC 
 (CrossWire module "Nestle1904", public domain); Westcott & Hort 1881 with the NA27/UBS4 readings (CrossWire module
 "WHNU", CC BY-NC-SA 4.0); SBL Greek New Testament, © 2010 Society of Biblical Literature and Logos Bible Software
 (CC BY 4.0). The comparison data is shared under CC BY-NC-SA 4.0, as the Byz and WHNU modules require.
-Heb/Byz and Heb/NA27 (data/byz.v1.json, data/na.v1.json): the Byzantine Textform (Robinson & Pierpont) and the
+Heb/Byz and Heb/NA27 (data/byz.v2.json, data/na.v2.json): the Byzantine Textform (Robinson & Pierpont) and the
 NA27/UBS4 readings from the CrossWire modules "Byz" and "WHNU", with their Strong's numbers and Robinson parsing,
 CC BY-NC-SA 4.0; the Hebrew Old Testament as in Heb/TR.
 PDF import in the library: PDF.js 4.10.38 (vendor/pdfjs), Mozilla Foundation, Apache License 2.0 (vendor/pdfjs/LICENSE).
