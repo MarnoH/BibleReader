@@ -67,6 +67,11 @@ be uploaded here.
 Select words in a book (drag with the mouse, or hold on a phone) and the same bar as in the Bible appears: six
 highlight colours, six text colours and × to clear. Marks are kept on the device, with the book.
 
+### Searching the books
+
+The magnifying glass in the library's top bar (or Ctrl+F) searches the book you are reading, or all your books;
+accents and capitals do not matter. Tap a hit to go there; the found words light up on the page.
+
 ### Bookmarks and shelves
 
 The ribbon button in a book's top bar (or **B** on the keyboard) bookmarks the open pages, and a ribbon hangs from
