@@ -94,6 +94,9 @@ body.phone #quick,body.land #quick,body.shelf #quick{display:none}
 .pza{display:flex;gap:6px;margin-top:8px}
 .pza button{border:1px solid var(--line);background:var(--page);border-radius:7px;padding:4px 10px;cursor:pointer;font-size:12.5px;color:var(--ink)}
 .pzhelp{font-size:12px;color:var(--faint);margin:8px 2px 2px;line-height:1.4}
+.pzm{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.pzm button{border:1px solid var(--line);background:none;border-radius:7px;padding:5px 9px;cursor:pointer;color:var(--ink);font-size:13px}
+.pzm button[aria-pressed=true]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
 #trmenu .tpz{display:flex;flex-wrap:wrap;gap:4px;padding:2px 8px 6px}
 #trmenu .tpz button{border:1px solid var(--line);background:none;border-radius:7px;padding:5px 9px;cursor:pointer;color:var(--ink);font-size:13px}
 #trmenu .tpz button[aria-pressed=true]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
@@ -400,7 +403,9 @@ body.phone #regbtn span,body.phone #libbtn span,body.phone #cmpbtn span{display:
 
 /* ---------- notes ---------- */
 #notesbtn{position:relative}
-#notesbtn svg,#findbtn svg{width:20px;height:20px;display:block}
+#notesbtn svg,#findbtn svg,#pzbtn svg{width:20px;height:20px;display:block}
+#pzbtn[aria-pressed=true]{background:color-mix(in srgb,var(--ink) 10%,transparent)}
+body.shelf #pzbtn{display:none}
 #notesbtn[aria-pressed=true]{background:color-mix(in srgb,var(--ink) 10%,transparent)}
 #notesbtn .dot{position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--rubric)}
 #notes{position:absolute;top:0;right:0;bottom:0;width:min(420px,92vw);z-index:45;display:flex;flex-direction:column;
@@ -895,12 +900,12 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
     <button type="button" class="tb q" data-q="cols"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="5.5" height="12" rx=".8" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="4" width="5.5" height="12" rx=".8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></button>
     <button type="button" class="tb q qt" data-q="xref">↗</button>
     <button type="button" class="tb q qt" data-q="strongs">H/G</button>
-    <button type="button" class="tb q" id="pzbtn" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.2a6.8 6.8 0 1 0 0 13.6c1 0 1.4-.6 1.4-1.3 0-.9-.8-1.2-.8-2 0-.8.6-1.3 1.5-1.3h1.6a3.3 3.3 0 0 0 3.3-3.3C17 5.7 14 3.2 10 3.2z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="6.4" cy="9.4" r="1.1" fill="#b3261e"/><circle cx="8.6" cy="6.3" r="1.1" fill="#1d4fa8"/><circle cx="12.3" cy="6.4" r="1.1" fill="#1e7a3c"/></svg></button>
   </div>
   <a id="cmpbtn" class="tb" href="tekste.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h9M3 15h12" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M14.5 8.5l2.5 2-2.5 2" stroke="currentColor" stroke-width="1.3" fill="none"/></svg><span></span></a>
   <a id="libbtn" class="tb" href="boeke.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h3v12H3zM7.5 6h3v10h-3zM12.3 5.2l2.8-.9 3.2 11-2.9.8z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 16.6h17" stroke="currentColor" stroke-width="1.3"/></svg><span></span></a>
   <a id="regbtn" class="tb" href="leesregister.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h4v4H3zM8 3h4v4H8zM13 3h4v4h-4zM3 8h4v4H3zM8 8h4v4H8zM3 13h4v4H3z" fill="currentColor" opacity=".85"/><path d="M13 8h4v4h-4zM8 13h4v4H8zM13 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1"/></svg><span></span></a>
   <button id="resume" class="tb" type="button" hidden></button>
+  <button type="button" class="tb" id="pzbtn" aria-pressed="false" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.2a6.8 6.8 0 1 0 0 13.6c1 0 1.4-.6 1.4-1.3 0-.9-.8-1.2-.8-2 0-.8.6-1.3 1.5-1.3h1.6a3.3 3.3 0 0 0 3.3-3.3C17 5.7 14 3.2 10 3.2z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="6.4" cy="9.4" r="1.1" fill="#b3261e"/><circle cx="8.6" cy="6.3" r="1.1" fill="#1d4fa8"/><circle cx="12.3" cy="6.4" r="1.1" fill="#1e7a3c"/></svg></button>
   <button id="findbtn" class="tb" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M12.4 12.4l4.6 4.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   <button id="notesbtn" class="tb" type="button" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3.5h9l3 3V16.5H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 8h7M6.5 10.8h7M6.5 13.6h4.5" stroke="currentColor" stroke-width="1.1"/></svg><i class="dot" hidden></i></button>
   <button id="aa" class="tb" type="button" aria-haspopup="dialog">Aa</button>
@@ -1172,7 +1177,7 @@ Object.assign(UI.af,{pTab:'Paleis',pIntro:'\u2019n Geheuepaleis, een A5-vel per 
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={pz:'off',pzLab:false,pzOnly:'',pzCol:{},paper:'white',parLay:'facing',chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={pz:'off',pzLast:'stem',pzLab:false,pzOnly:'',pzCol:{},paper:'white',parLay:'facing',chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -2557,6 +2562,7 @@ document.addEventListener('keydown',e=>{
   else if(k==='Home'){ e.preventDefault(); show(0,-1); }
   else if(k==='End'){ e.preventDefault(); show(CUR.spreads-1,1); }
   else if(k==='Backspace'&&HIST.length){ e.preventDefault(); back(); }
+  else if((k==='k'||k==='K')&&!e.shiftKey){ e.preventDefault(); pzToggle(); }
 });
 let rzT=0, lastStage='';
 new ResizeObserver(()=>{ if(grabbing) return; const st=$('#stage'), key=st.clientWidth+'x'+st.clientHeight; if(key===lastStage) return; lastStage=key;
@@ -3537,7 +3543,8 @@ function updateTop(){
   trbtn.querySelector('span').textContent=BIB[S.tr].label+(parWanted()?' + '+BIB[S.par].label:'');
   trbtn.title=L.tr+(parWanted()?' \u00b7 '+L.par:''); trbtn.setAttribute('aria-label',trbtn.title);
   const q=(k,on,tip)=>{ const b=quick.querySelector('[data-q='+k+']'); if(on!=null) b.setAttribute('aria-pressed',on); b.title=tip; b.setAttribute('aria-label',tip); };
-  const pb=$('#pzbtn'); if(pb){ pb.setAttribute('aria-pressed',S.pz!=='off'); pb.title=L.pzTitle; pb.setAttribute('aria-label',L.pzTitle); }
+  const pb=$('#pzbtn'); if(pb){ const on=pzShown(); pb.hidden=!on; if(!on) $('#pzkey').classList.remove('on');
+    pb.setAttribute('aria-pressed',S.pz!=='off'||!!S.pzLab); pb.title=L.pzTitle+' (K)'; pb.setAttribute('aria-label',L.pzTitle); }
   q('smaller',null,L.qSmaller); q('bigger',null,L.qBigger); q('theme',isDarkNow(),L.qTheme); q('cols',S.cols===2,L.qCols); q('xref',S.xref==='on',L.qXref); q('strongs',S.strongs==='on',L.qStrongs);
   if(trmenu.classList.contains('on')) drawTrMenu();
 }
@@ -3549,7 +3556,7 @@ function drawTrMenu(){
   h+='<div class="tsep"></div><h4>'+esc(L.par)+'</h4>'+item('par','off',L.off,'',!parWanted())+CAT.bibles.filter(b=>b.id!==S.tr).map(b=>item('par',b.id,b.label,short(b),S.par===b.id)).join('');
   if(parWanted()&&!(isPhone()&&!isLand())) h+='<h4>'+esc(L.parLay)+'</h4><div class="tlay"><button type="button" data-lay="facing" aria-pressed="'+(S.parLay!=='stacked')+'">'+esc(L.plFacing)+'</button><button type="button" data-lay="stacked" aria-pressed="'+(S.parLay==='stacked')+'">'+esc(L.plStacked)+'</button></div>';
   // colouring the Hebrew and Greek by their parsing
-  const ntPlain=CUR.b>=39&&(S.tr==='orig'||S.tr==='sbl')&&!(parWanted()&&(S.par==='byz'||S.par==='na'));
+  const ntPlain=pzNtPlain();
   h+='<div class="tsep"></div><h4>'+esc(L.pzTitle)+'</h4><div class="tpz">'+['off','pos','stem','tense','mood'].map(m=>'<button type="button" data-pz="'+m+'" aria-pressed="'+(S.pz===m)+'">'+esc(L['pz_'+m])+'</button>').join('')+'</div>'+
     '<div class="tpz"><button type="button" data-pzlab="1" aria-pressed="'+!!S.pzLab+'">'+esc(L.pzLabels)+'</button>'+(S.pz!=='off'?'<button type="button" data-pzkey="1">'+esc(L.pzKey)+'</button>':'')+'</div>'+
     (ntPlain&&(S.pz!=='off'||S.pzLab)?'<p class="tpznote">'+esc(L.pzNt)+'</p>':'');
@@ -3673,27 +3680,38 @@ function pzSheet(){
   const dark=S.theme==='dark'||(S.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
   el.textContent=(PZC[S.pz]||[]).map(([k,c,st])=>{ const col=(S.pzCol&&S.pzCol[k])||c, use=dark?'color-mix(in srgb,'+col+' 58%,#fff)':col;
     return '.pz-'+k+'{color:'+use+(st?';text-decoration:underline '+st+';text-decoration-thickness:1px;text-underline-offset:.22em':'')+'}'; }).join('\n')+
-    (S.pzOnly?'\n.flowcss.pzonly .rw{color:color-mix(in srgb,var(--ink) 42%,transparent)}\n.flowcss .pz:not(.pz-'+S.pzOnly+'){color:inherit;text-decoration:none}':'');
+    (S.pzOnly?'\n.flowcss .pz:not(.pz-'+S.pzOnly+'){color:inherit;text-decoration:none}':'');   // the other words keep the page's own text colour
 }
 async function pzSet(k,v){
-  S[k]=v; if(k==='pz') S.pzOnly=''; persist();
+  S[k]=v; if(k==='pz'){ S.pzOnly=''; if(v!=='off') S.pzLast=v; } persist();
   if((S.pz!=='off'||S.pzLab)&&!SG.heb) await ensureStrongs();
   pzSheet(); document.querySelector('#flow')&&flow.classList.toggle('pzonly',!!S.pzOnly);
   await relayout(true); if(trmenu.classList.contains('on')) drawTrMenu(); if($('#pzkey').classList.contains('on')) drawPzKey();
 }
-// the key: what each colour means; tap one to see only those words; set a colour by hand
+// is a Hebrew or Greek text on the page (alone or beside another translation)? only then is there anything to colour
+function pzShown(){ return ORIGS.has(S.tr)||(parWanted()&&ORIGS.has(S.par)); }
+// a New Testament page whose Greek carries no parsing (TR, SBL without Byz or NA27 beside it)
+function pzNtPlain(){ return CUR.b>=39&&(S.tr==='orig'||S.tr==='sbl')&&!(parWanted()&&(S.par==='byz'||S.par==='na')); }
+// the key: the ways of colouring at the top; then what each colour means; tap one to see only those words; set a colour by hand
 function drawPzKey(){
-  const k=$('#pzkey'); if(S.pz==='off'){ k.classList.remove('on'); return; }
+  const k=$('#pzkey'); if(!pzShown()){ k.classList.remove('on'); return; }
   // only what applies here: the Hebrew forms and stems in the Old Testament, the Greek tenses and voices in the New
   const GREEK=new Set(['ga','gm','gp','tP','tI','tF','tA','tR','tL','mS','mO']), HEB=new Set(['sa','sp','sr','ia','ip','ir','ca','cp','cr','hp','hq','hi','hw','hv','hj','hn','hr','mJ']);
-  const nt=CUR.b>=39, names=PZN[S.lang]||PZN.en, list=(PZC[S.pz]||[]).filter(([k])=>nt?!HEB.has(k):!GREEK.has(k));
-  k.innerHTML='<div class="pzh"><b>'+esc(L['pz_'+S.pz])+'</b><button type="button" class="x" data-pzk="close" aria-label="close">\u00d7</button></div>'+
+  const nt=CUR.b>=39, names=PZN[S.lang]||PZN.en, on=S.pz!=='off', list=on?(PZC[S.pz]||[]).filter(([k])=>nt?!HEB.has(k):!GREEK.has(k)):[];
+  k.innerHTML='<div class="pzh"><b>'+esc(L.pzTitle)+'</b><button type="button" class="x" data-pzk="close" aria-label="close">\u00d7</button></div>'+
+    '<div class="pzm">'+['off','pos','stem','tense','mood'].map(m=>'<button type="button" data-pzm="'+m+'" aria-pressed="'+(S.pz===m)+'">'+esc(L['pz_'+m])+'</button>').join('')+
+      '<button type="button" data-pzl="1" aria-pressed="'+!!S.pzLab+'">'+esc(L.pzLabels)+'</button></div>'+
     list.map(([key,c,st])=>'<div class="pzr'+(S.pzOnly===key?' on':'')+'"><input type="color" data-pzc="'+key+'" value="'+((S.pzCol&&S.pzCol[key])||c)+'" title="'+esc(L.pzPick)+'">'+
       '<button type="button" data-pzo="'+key+'"><span class="pz pz-'+key+'">'+esc(names[key]||key)+'</span>'+(st?' <small>'+esc(st==='wavy'?L.pzWavy:L.pzDotted)+'</small>':'')+'</button></div>').join('')+
-    '<div class="pza">'+(S.pzOnly?'<button type="button" data-pzk="all">'+esc(L.pzAll)+'</button>':'')+'<button type="button" data-pzk="reset">'+esc(L.pzReset)+'</button></div><p class="pzhelp">'+esc(L.pzHelp)+'</p>';
+    (on?'<div class="pza">'+(S.pzOnly?'<button type="button" data-pzk="all">'+esc(L.pzAll)+'</button>':'')+'<button type="button" data-pzk="reset">'+esc(L.pzReset)+'</button></div><p class="pzhelp">'+esc(L.pzHelp)+'</p>':'')+
+    (pzNtPlain()&&(on||S.pzLab)?'<p class="pzhelp">'+esc(L.pzNt)+'</p>':'');
   k.classList.add('on');
 }
-$('#pzkey').addEventListener('click',async e=>{ e.stopPropagation(); const b=e.target.closest('[data-pzo],[data-pzk]'); if(!b) return;
+// colouring on in its last way, or off (the K key)
+async function pzToggle(){ if(!pzShown()) return; await pzSet('pz',S.pz!=='off'?'off':(S.pzLast||'stem')); updateTop(); }
+$('#pzkey').addEventListener('click',async e=>{ e.stopPropagation(); const b=e.target.closest('[data-pzo],[data-pzk],[data-pzm],[data-pzl]'); if(!b) return;
+  if(b.dataset.pzm){ if(S.pz!==b.dataset.pzm) await pzSet('pz',b.dataset.pzm); updateTop(); drawPzKey(); return; }
+  if(b.dataset.pzl){ await pzSet('pzLab',!S.pzLab); updateTop(); drawPzKey(); return; }
   if(b.dataset.pzo){ S.pzOnly=S.pzOnly===b.dataset.pzo?'':b.dataset.pzo; persist(); pzSheet(); flow.classList.toggle('pzonly',!!S.pzOnly); drawPzKey(); return; }
   if(b.dataset.pzk==='close') $('#pzkey').classList.remove('on');
   else if(b.dataset.pzk==='all'){ S.pzOnly=''; persist(); pzSheet(); flow.classList.remove('pzonly'); drawPzKey(); }
@@ -3701,7 +3719,11 @@ $('#pzkey').addEventListener('click',async e=>{ e.stopPropagation(); const b=e.t
 $('#pzkey').addEventListener('input',e=>{ const c=e.target.closest('[data-pzc]'); if(!c) return; S.pzCol=Object.assign({},S.pzCol,{[c.dataset.pzc]:c.value}); persist(); pzSheet(); });
 document.addEventListener('click',e=>{ const k=$('#pzkey'); if(k.classList.contains('on')&&!e.target.closest('#pzkey,#trmenu,#pzbtn')) k.classList.remove('on'); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') $('#pzkey').classList.remove('on'); });
-$('#pzbtn').addEventListener('click',e=>{ e.stopPropagation(); $('#pzkey').classList.contains('on')?$('#pzkey').classList.remove('on'):drawPzKey(); });
+$('#pzbtn').addEventListener('click',async e=>{ e.stopPropagation(); const k=$('#pzkey');
+  if(k.classList.contains('on')){ k.classList.remove('on'); return; }
+  closePop(); setEl.classList.remove('on'); trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false);
+  if(S.pz==='off'&&!S.pzLab) await pzSet('pz',S.pzLast||'stem');
+  updateTop(); drawPzKey(); });
 
 /* ---------------- memory palace ----------------
    The A5-sheet method (all of Ephesians was learned this way): a passage is split into rooms of about five verses;

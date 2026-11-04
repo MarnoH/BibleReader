@@ -177,6 +177,11 @@ voice (Greek), by tense or verb form, or by mood, and show small person-number l
 explains the colours; tap an entry to see only those words, or tap its colour to choose your own. The Hebrew Old
 Testament works in every Heb/… text; the Greek New Testament in Heb/Byz and Heb/NA27.
 
+The palette button in the top bar (on a phone too, whenever a Heb/… text is on the page) brings it back at once: if
+nothing is coloured, it turns the colouring on in the way you used last and opens the key; otherwise it opens or
+closes the key. The key has the ways of colouring at its top (Off, Word type, Stem / voice, Tense / form, Mood,
+Person & number). On a keyboard, **K** turns the colouring off, and on again in the way used last.
+
 Readings, notes, sermons and markings are saved only on the device where they are made.
 Use **Stoor rugsteun** (leesregister), **Save notes backup** (reader) and **Save library backup** (library) to move them between devices.
 **Google Drive (optional):** in the settings (**Aa**) of the Bible and of the library, **Connect Google Drive**, then
