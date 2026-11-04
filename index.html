@@ -77,6 +77,28 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--rubric);ou
 .qsep{width:1px;height:18px;background:var(--line);margin:0 4px}
 body.phone #quick,body.land #quick,body.shelf #quick{display:none}
 @media (max-width:1040px){ #quick{display:none} }
+/* parsing colours: a label above a verb (3ms), the key */
+.pz{position:relative}
+.pz[data-l]::after{content:attr(data-l);position:absolute;left:50%;transform:translateX(-50%);bottom:84%;font:600 .48em/1 var(--sans);letter-spacing:.02em;
+  color:var(--faint);white-space:nowrap;pointer-events:none;font-style:normal;direction:ltr}
+#pzkey{position:fixed;z-index:71;right:12px;top:58px;display:none;width:min(330px,calc(100vw - 24px));max-height:calc(100vh - 80px);overflow:auto;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 44px -14px var(--shadow);padding:10px 12px}
+#pzkey.on{display:block}
+.pzh{display:flex;align-items:center;margin-bottom:4px}.pzh b{flex:1;font:600 15px var(--serif)}
+.pzh .x{border:0;background:none;font-size:20px;cursor:pointer;color:var(--soft)}
+.pzr{display:flex;align-items:center;gap:8px;border-radius:7px;padding:1px 4px}
+.pzr.on{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.pzr input[type=color]{width:26px;height:22px;border:1px solid var(--line);border-radius:5px;padding:0;background:none;cursor:pointer;flex:none}
+.pzr button{flex:1;text-align:left;border:0;background:none;cursor:pointer;padding:5px 2px;font:15px var(--serif)}
+.pzr small{font:11.5px var(--sans);color:var(--faint)}
+.pza{display:flex;gap:6px;margin-top:8px}
+.pza button{border:1px solid var(--line);background:var(--page);border-radius:7px;padding:4px 10px;cursor:pointer;font-size:12.5px;color:var(--ink)}
+.pzhelp{font-size:12px;color:var(--faint);margin:8px 2px 2px;line-height:1.4}
+#trmenu .tpz{display:flex;flex-wrap:wrap;gap:4px;padding:2px 8px 6px}
+#trmenu .tpz button{border:1px solid var(--line);background:none;border-radius:7px;padding:5px 9px;cursor:pointer;color:var(--ink);font-size:13px}
+#trmenu .tpz button[aria-pressed=true]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+#trmenu .tpznote{font-size:12px;color:var(--faint);padding:0 9px 4px}
+body.phone #pzkey{top:auto;bottom:10px;right:8px;left:8px;width:auto;max-height:60vh}
 #trmenu{position:fixed;z-index:70;display:none;min-width:260px;max-width:min(420px,calc(100vw - 16px));max-height:calc(100vh - 70px);overflow:auto;
   background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 44px -14px var(--shadow);padding:8px}
 #trmenu.on{display:block}
@@ -873,6 +895,7 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
     <button type="button" class="tb q" data-q="cols"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="5.5" height="12" rx=".8" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11.5" y="4" width="5.5" height="12" rx=".8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></button>
     <button type="button" class="tb q qt" data-q="xref">↗</button>
     <button type="button" class="tb q qt" data-q="strongs">H/G</button>
+    <button type="button" class="tb q" id="pzbtn" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.2a6.8 6.8 0 1 0 0 13.6c1 0 1.4-.6 1.4-1.3 0-.9-.8-1.2-.8-2 0-.8.6-1.3 1.5-1.3h1.6a3.3 3.3 0 0 0 3.3-3.3C17 5.7 14 3.2 10 3.2z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="6.4" cy="9.4" r="1.1" fill="#b3261e"/><circle cx="8.6" cy="6.3" r="1.1" fill="#1d4fa8"/><circle cx="12.3" cy="6.4" r="1.1" fill="#1e7a3c"/></svg></button>
   </div>
   <a id="cmpbtn" class="tb" href="tekste.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h9M3 15h12" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M14.5 8.5l2.5 2-2.5 2" stroke="currentColor" stroke-width="1.3" fill="none"/></svg><span></span></a>
   <a id="libbtn" class="tb" href="boeke.html" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h3v12H3zM7.5 6h3v10h-3zM12.3 5.2l2.8-.9 3.2 11-2.9.8z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 16.6h17" stroke="currentColor" stroke-width="1.3"/></svg><span></span></a>
@@ -883,6 +906,7 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
   <button id="aa" class="tb" type="button" aria-haspopup="dialog">Aa</button>
 </header>
 <div id="trmenu" role="menu"></div>
+<div id="pzkey" role="dialog"></div>
 <div id="work">
 <main id="stage">
   <div id="book">
@@ -1113,12 +1137,12 @@ const UI={
 };
 
 // questions
-Object.assign(UI.en,{drAbout:'Optional: keep your notes, sermons, marks, palaces, questions and reading register in your own Google Drive, to use them on your phone and computer alike. Nothing is sent anywhere else.',drOn:'Connected. Sync brings in what changed on your other devices and saves this one\u2019s changes to your Drive (folder \u201cBybel-app\u201d).',drConnect:'Connect Google Drive',drSync:'Sync now',drOff:'Disconnect',drOffQ:'Disconnect Google Drive? Your files stay in your Drive; this device simply stops syncing.',drLast:'Last synced {t}',drBusy:'Syncing\u2026',drDone:'Synced {t} \u00b7 {n} change(s) brought in',drFail:'Sync did not succeed ({e}). Try again later.',drOffline:'No connection to Google just now; try again when online.',drDenied:'Google did not connect (the sign-in was refused or closed). While Bybel-app is still being tested by Google, only invited Google accounts can use Drive sync; everything else works as usual.',drPrivacy:'Privacy',drTerms:'Terms of service',qSmaller:'Smaller type',qBigger:'Larger type',qTheme:'Light or dark',qCols:'One or two columns a page',qXref:'Cross-references',qStrongs:"Strong's numbers: tap a word for its Hebrew or Greek",trDown:'Downloaded the first time it is chosen',nShare:'Share backup',greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
+Object.assign(UI.en,{pzTitle:'Colour the Hebrew and Greek',pz_off:'Off',pz_pos:'Word type',pz_stem:'Stem / voice',pz_tense:'Tense / form',pz_mood:'Mood',pzLabels:'Person & number',pzKey:'Key',pzPick:'Choose a colour',pzWavy:'wavy line',pzDotted:'dotted line',pzAll:'Show all',pzReset:'Default colours',pzHelp:'Tap a name to see only those words; tap a colour to choose your own.',pzNt:'In the New Testament only Heb/Byz and Heb/NA27 carry their parsing.',drAbout:'Optional: keep your notes, sermons, marks, palaces, questions and reading register in your own Google Drive, to use them on your phone and computer alike. Nothing is sent anywhere else.',drOn:'Connected. Sync brings in what changed on your other devices and saves this one\u2019s changes to your Drive (folder \u201cBybel-app\u201d).',drConnect:'Connect Google Drive',drSync:'Sync now',drOff:'Disconnect',drOffQ:'Disconnect Google Drive? Your files stay in your Drive; this device simply stops syncing.',drLast:'Last synced {t}',drBusy:'Syncing\u2026',drDone:'Synced {t} \u00b7 {n} change(s) brought in',drFail:'Sync did not succeed ({e}). Try again later.',drOffline:'No connection to Google just now; try again when online.',drDenied:'Google did not connect (the sign-in was refused or closed). While Bybel-app is still being tested by Google, only invited Google accounts can use Drive sync; everything else works as usual.',drPrivacy:'Privacy',drTerms:'Terms of service',qSmaller:'Smaller type',qBigger:'Larger type',qTheme:'Light or dark',qCols:'One or two columns a page',qXref:'Cross-references',qStrongs:"Strong's numbers: tap a word for its Hebrew or Greek",trDown:'Downloaded the first time it is chosen',nShare:'Share backup',greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
   qIntro:'Questions that come up while you read, gathered here to answer later. Select words in the text and tap ? in the colour bar, or tap \u201c+ Question\u201d for the pages that are open. Verses with an open question carry a small ? by their number.',
   qNoneOpen:'No open questions.',qNoneDone:'No answered questions yet.',qHere:'On these pages',qPsalms:'Psalms',
   qAskPh:'Your question\u2026',qAnswerPh:'The answer, when you find it\u2026',qMarkDone:'Answered \u2713',qReopen:'Open again',
   qAnsweredOn:'answered {d}',qDelete:'Delete this question',qDelConfirm:'Delete this question and its answer?',mkAsk:'Ask a question about this'});
-Object.assign(UI.af,{drAbout:'Opsioneel: hou jou notas, preke, merke, paleise, vrae en leesregister in jou eie Google Drive, om dit op jou foon en rekenaar te gebruik. Niks word elders heen gestuur nie.',drOn:'Gekoppel. Sinkroniseer bring in wat op jou ander toestelle verander het en stoor hierdie toestel se veranderinge in jou Drive (vouer \u201cBybel-app\u201d).',drConnect:'Koppel Google Drive',drSync:'Sinkroniseer nou',drOff:'Ontkoppel',drOffQ:'Ontkoppel Google Drive? Jou l\u00eaers bly in jou Drive; hierdie toestel sinkroniseer net nie meer nie.',drLast:'Laas gesinkroniseer {t}',drBusy:'Besig om te sinkroniseer\u2026',drDone:'Gesinkroniseer {t} \u00b7 {n} verandering(e) ingebring',drFail:'Sinkronisering het nie geslaag nie ({e}). Probeer later weer.',drOffline:'Geen verbinding met Google nie; probeer weer as jy aanlyn is.',drDenied:'Google het nie gekoppel nie (die aanmelding is geweier of toegemaak). Terwyl Bybel-app nog deur Google getoets word, kan net genooide Google-rekeninge Drive-sinkronisering gebruik; alles anders werk soos gewoonlik.',drPrivacy:'Privaatheid',drTerms:'Diensbepalings',qSmaller:'Kleiner letters',qBigger:'Groter letters',qTheme:'Lig of donker',qCols:'Een of twee kolomme per bladsy',qXref:'Kruisverwysings',qStrongs:'Strong-nommers: tik op \u2019n woord vir die Hebreeus of Grieks',trDown:'Word afgelaai die eerste keer dat dit gekies word',nShare:'Deel rugsteun',greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
+Object.assign(UI.af,{pzTitle:'Kleur die Hebreeus en Grieks',pz_off:'Af',pz_pos:'Woordsoort',pz_stem:'Stam / diatese',pz_tense:'Tyd / vorm',pz_mood:'Modus',pzLabels:'Persoon & getal',pzKey:'Sleutel',pzPick:'Kies \u2019n kleur',pzWavy:'golwende lyn',pzDotted:'stippellyn',pzAll:'Wys alles',pzReset:'Verstekkleure',pzHelp:'Tik op \u2019n naam om net daardie woorde te sien; tik op \u2019n kleur om jou eie te kies.',pzNt:'In die Nuwe Testament dra net Heb/Byz en Heb/NA27 hul ontleding.',drAbout:'Opsioneel: hou jou notas, preke, merke, paleise, vrae en leesregister in jou eie Google Drive, om dit op jou foon en rekenaar te gebruik. Niks word elders heen gestuur nie.',drOn:'Gekoppel. Sinkroniseer bring in wat op jou ander toestelle verander het en stoor hierdie toestel se veranderinge in jou Drive (vouer \u201cBybel-app\u201d).',drConnect:'Koppel Google Drive',drSync:'Sinkroniseer nou',drOff:'Ontkoppel',drOffQ:'Ontkoppel Google Drive? Jou l\u00eaers bly in jou Drive; hierdie toestel sinkroniseer net nie meer nie.',drLast:'Laas gesinkroniseer {t}',drBusy:'Besig om te sinkroniseer\u2026',drDone:'Gesinkroniseer {t} \u00b7 {n} verandering(e) ingebring',drFail:'Sinkronisering het nie geslaag nie ({e}). Probeer later weer.',drOffline:'Geen verbinding met Google nie; probeer weer as jy aanlyn is.',drDenied:'Google het nie gekoppel nie (die aanmelding is geweier of toegemaak). Terwyl Bybel-app nog deur Google getoets word, kan net genooide Google-rekeninge Drive-sinkronisering gebruik; alles anders werk soos gewoonlik.',drPrivacy:'Privaatheid',drTerms:'Diensbepalings',qSmaller:'Kleiner letters',qBigger:'Groter letters',qTheme:'Lig of donker',qCols:'Een of twee kolomme per bladsy',qXref:'Kruisverwysings',qStrongs:'Strong-nommers: tik op \u2019n woord vir die Hebreeus of Grieks',trDown:'Word afgelaai die eerste keer dat dit gekies word',nShare:'Deel rugsteun',greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
   qIntro:'Vrae wat opkom terwyl jy lees, hier bymekaar om later te beantwoord. Kies woorde in die teks en tik ? in die kleurbalk, of tik \u201c+ Vraag\u201d vir die bladsye wat oop is. Verse met \u2019n oop vraag dra \u2019n klein ? by hul nommer.',
   qNoneOpen:'Geen oop vrae nie.',qNoneDone:'Nog geen beantwoorde vrae nie.',qHere:'Op hierdie bladsye',qPsalms:'Psalms',
   qAskPh:'Jou vraag\u2026',qAnswerPh:'Die antwoord, wanneer jy dit kry\u2026',qMarkDone:'Beantwoord \u2713',qReopen:'Weer oop',
@@ -1148,7 +1172,7 @@ Object.assign(UI.af,{pTab:'Paleis',pIntro:'\u2019n Geheuepaleis, een A5-vel per 
 
 /* ---------------- settings ---------------- */
 const KEY='bybel-leser-v1';
-const DEF={paper:'white',parLay:'facing',chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
+const DEF={pz:'off',pzLab:false,pzOnly:'',pzCol:{},paper:'white',parLay:'facing',chapNo:'off',wordOrder:'en',strongs:'off',swapAs:'word',teamim:'on',gilt:'plain',thumbs:'on',cover:'book',contrast:'normal',par:'off',theme:'auto',scale:1,verses:'on',chapters:'on',headings:'on',cols:2,layout:'lines',gap:'off',
            xref:'off',status:'on',tr:'aov',lang:'en',folio:'both',notesTab:'n',notesOpen:false,notesPinned:false,notesLines:true,notesTool:'type',penColor:'ink',penSize:2.4};
 let S=Object.assign({},DEF), POS=null, CAL={};
 let firstRun=true;
@@ -1246,9 +1270,9 @@ function rowHTML(t,r,xs){
   if(!NUM[t]||!NUM[t].t) return '';
   const s=NUM[t].t[r]; if(!s) return '';
   const mk=MARKS[t]&&MARKS[t][r], a0=firstX?firstX[r]:0, a1=firstX?firstX[r+1]:0, hasX=xs&&a0<a1;
-  const sw=swapsFor(t,r), pal=palRow(t,r);
+  const sw=swapsFor(t,r), pal=palRow(t,r), pz=pzRow(t,r);
   let inner;
-  if(!hasX&&!mk&&!sw&&!pal) inner=fmt(t,s,true);
+  if(!hasX&&!mk&&!sw&&!pal&&!pz) inner=fmt(t,s,true);
   else {
     const n=s.length, ax=new Int32Array(n).fill(-1), mc=new Array(n).fill(''), loose=[], sc=new Int32Array(n).fill(-1); var runs=null;
     if(sw){ const re=/\S+/g; let m, w=0; const at=[];
@@ -1281,14 +1305,19 @@ function rowHTML(t,r,xs){
         wst[a]=1; if(kn!==undefined) wk.fill(kn||-2,a,z);
         if(pal.base>=0){ wp.fill(pal.base+w,a,z); const f=/[\p{L}\p{N}]/u.exec(m[0]); const cut=a+(f?f.index+f[0].length:m[0].length); wf.fill(1,a,cut); wf.fill(2,cut,z); if(cut<z) wst[cut]=0; }
         w++; } }
+    // parsing colours: each word its colour key and person-number label
+    const zk=new Array(n).fill(''), zl=new Array(n).fill('');
+    if(pz){ const re=/\S+/g; let m, w=0;
+      while((m=re.exec(s))){ const o=pz[w]; if(o&&(o.k||o.l)){ zk.fill(o.k||'',m.index,m.index+m[0].length); zl.fill(o.l||'',m.index,m.index+m[0].length); wst[m.index]=1; } w++; } }
     let out='', i=0;
     let done=new Set();
-    while(i<n){ let j=i+1; while(j<n&&ax[j]===ax[i]&&mc[j]===mc[i]&&sc[j]===sc[i]&&wk[j]===wk[i]&&wp[j]===wp[i]&&wf[j]===wf[i]&&!wst[j]) j++;
+    while(i<n){ let j=i+1; while(j<n&&ax[j]===ax[i]&&mc[j]===mc[i]&&sc[j]===sc[i]&&wk[j]===wk[i]&&wp[j]===wp[i]&&wf[j]===wf[i]&&zk[j]===zk[i]&&zl[j]===zl[i]&&!wst[j]) j++;
       let seg;
       if(sc[i]>=0){ const ru=runs[sc[i]]; if(done.has(sc[i])){ i=j; continue; } done.add(sc[i]); const g0=sw[ru.parts[0]];
         seg=ru.parts.length===1?'<span class="orw" data-g="'+g0.g+'" lang="'+g0.lang+'"'+(g0.lang==='he'?' dir="rtl"':'')+'>'+esc(g0.text)+'</span>'
           :'<span class="orw orun" lang="'+g0.lang+'"'+(g0.lang==='he'?' dir="rtl"':'')+'>'+ru.parts.map(k=>'<span class="orp" data-g="'+sw[k].g+'">'+esc(sw[k].text)+'</span>').join(' ')+'</span>'; }
       else seg=fmt(t,s.slice(i,j),false);
+      if(pz&&sc[i]<0&&(zk[i]||zl[i])) seg='<span class="pz'+(zk[i]?' pz-'+zk[i]:'')+'"'+(zl[i]&&wst[i]?' data-l="'+zl[i]+'"':'')+'>'+seg+'</span>';
       if(pal&&sc[i]<0&&(wk[i]||wp[i]>=0)){ const cl=[]; if(wk[i]) cl.push('kw'); if(wp[i]>=0){ cl.push('pw',wf[i]===1?'pf':'pr'); if(wp[i]<PR.n) cl.push('on'); }
         seg='<span class="'+cl.join(' ')+'"'+(wp[i]>=0?' data-pw="'+wp[i]+'"':'')+(wk[i]>0&&pal.nums&&wst[i]?' data-n="'+wk[i]+'"':'')+'>'+seg+'</span>'; }
       if(mc[i]) seg='<span class="'+markCls(mc[i])+'">'+seg+'</span>';
@@ -1765,7 +1794,7 @@ async function setSetting(k,v){
   if(k==='cols') v=+v;
   if(S[k]===v) return;
   S[k]=v; persist();
-  if(k==='theme'){ document.documentElement.dataset.theme=v; nBody.querySelectorAll('.sheet').forEach(drawSheet); }
+  if(k==='theme'){ document.documentElement.dataset.theme=v; nBody.querySelectorAll('.sheet').forEach(drawSheet); if(typeof pzSheet==='function') pzSheet(); }
   else if(k==='lang'){ L=UI[v]; document.documentElement.lang=v; show(CUR.spread,0); updateBack(); labelChrome(); labelNotes(); labelMarkbar(); renderNotes(true); drawPalbar(); }
   else if(k==='folio'){ updateFolios(); scheduleCounts(); }
   else if(k==='chapNo'){ updateFolios(); if(CUR.G) show(CUR.spread,0); }
@@ -3508,6 +3537,7 @@ function updateTop(){
   trbtn.querySelector('span').textContent=BIB[S.tr].label+(parWanted()?' + '+BIB[S.par].label:'');
   trbtn.title=L.tr+(parWanted()?' \u00b7 '+L.par:''); trbtn.setAttribute('aria-label',trbtn.title);
   const q=(k,on,tip)=>{ const b=quick.querySelector('[data-q='+k+']'); if(on!=null) b.setAttribute('aria-pressed',on); b.title=tip; b.setAttribute('aria-label',tip); };
+  const pb=$('#pzbtn'); if(pb){ pb.setAttribute('aria-pressed',S.pz!=='off'); pb.title=L.pzTitle; pb.setAttribute('aria-label',L.pzTitle); }
   q('smaller',null,L.qSmaller); q('bigger',null,L.qBigger); q('theme',isDarkNow(),L.qTheme); q('cols',S.cols===2,L.qCols); q('xref',S.xref==='on',L.qXref); q('strongs',S.strongs==='on',L.qStrongs);
   if(trmenu.classList.contains('on')) drawTrMenu();
 }
@@ -3518,6 +3548,11 @@ function drawTrMenu(){
   let h='<h4>'+esc(L.tr)+'</h4>'+CAT.bibles.map(b=>item('tr',b.id,b.label,short(b),b.id===S.tr)).join('');
   h+='<div class="tsep"></div><h4>'+esc(L.par)+'</h4>'+item('par','off',L.off,'',!parWanted())+CAT.bibles.filter(b=>b.id!==S.tr).map(b=>item('par',b.id,b.label,short(b),S.par===b.id)).join('');
   if(parWanted()&&!(isPhone()&&!isLand())) h+='<h4>'+esc(L.parLay)+'</h4><div class="tlay"><button type="button" data-lay="facing" aria-pressed="'+(S.parLay!=='stacked')+'">'+esc(L.plFacing)+'</button><button type="button" data-lay="stacked" aria-pressed="'+(S.parLay==='stacked')+'">'+esc(L.plStacked)+'</button></div>';
+  // colouring the Hebrew and Greek by their parsing
+  const ntPlain=CUR.b>=39&&(S.tr==='orig'||S.tr==='sbl')&&!(parWanted()&&(S.par==='byz'||S.par==='na'));
+  h+='<div class="tsep"></div><h4>'+esc(L.pzTitle)+'</h4><div class="tpz">'+['off','pos','stem','tense','mood'].map(m=>'<button type="button" data-pz="'+m+'" aria-pressed="'+(S.pz===m)+'">'+esc(L['pz_'+m])+'</button>').join('')+'</div>'+
+    '<div class="tpz"><button type="button" data-pzlab="1" aria-pressed="'+!!S.pzLab+'">'+esc(L.pzLabels)+'</button>'+(S.pz!=='off'?'<button type="button" data-pzkey="1">'+esc(L.pzKey)+'</button>':'')+'</div>'+
+    (ntPlain&&(S.pz!=='off'||S.pzLab)?'<p class="tpznote">'+esc(L.pzNt)+'</p>':'');
   trmenu.innerHTML=h;
   const r=trbtn.getBoundingClientRect(), w=trmenu.offsetWidth;
   trmenu.style.top=(r.bottom+6)+'px'; trmenu.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left))+'px';
@@ -3528,6 +3563,10 @@ trmenu.addEventListener('click',async e=>{ e.stopPropagation(); const b=e.target
   if(b.dataset.tr){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); await setSetting('tr',b.dataset.tr); }
   else if(b.dataset.par){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); await setSetting('par',b.dataset.par); }
   else if(b.dataset.lay){ await setSetting('parLay',b.dataset.lay); }
+  // the key opens on its own and the menu steps aside, so the coloured page stays in view
+  else if(b.dataset.pz){ await pzSet('pz',b.dataset.pz); if(S.pz!=='off'){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); drawPzKey(); } else $('#pzkey').classList.remove('on'); }
+  else if(b.dataset.pzlab){ await pzSet('pzLab',!S.pzLab); }
+  else if(b.dataset.pzkey){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); drawPzKey(); return; }
   updateTop(); if(setEl.classList.contains('on')) buildSettings(); });
 document.addEventListener('click',e=>{ if(trmenu.classList.contains('on')&&!e.target.closest('#trmenu,#trbtn')){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); } });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&trmenu.classList.contains('on')){ trmenu.classList.remove('on'); trbtn.setAttribute('aria-expanded',false); } });
@@ -3569,6 +3608,100 @@ setEl.addEventListener('click',async e=>{ const b=e.target.closest('[data-drv]')
   if(b.dataset.drv==='connect'){ try{ await GDrive.connect(); await driveSync(); }catch(x){ const s=setEl.querySelector('.drst'); if(s) s.textContent=driveErr(x); } }
   else if(b.dataset.drv==='sync') driveSync();
   else if(b.dataset.drv==='off'){ if(confirm(L.drOffQ)){ GDrive.disconnect(); buildSettings(); } } },true);
+/* ---------------- colouring the Hebrew and Greek by their parsing ----------------
+   A quiet layer over the original-language text (Hebrew OT in every Heb/… text; Greek NT in Heb/Byz and Heb/NA27,
+   whose words carry their parsing): colour by word type, by stem (Hebrew) / voice (Greek), by tense or verb form,
+   or by mood; and, apart from that, small person-number labels above the verbs (3ms, 2pl). Colours only: the page
+   never moves. The Hebrew stems by family: simple (Qal, Niphal), intensive (Piel, Pual, Hitpael), causative (Hiphil,
+   Hophal) — one hue a family; active dark, passive light, reflexive with a wavy line. Tap an entry of the key to see
+   only those words; each colour can be set by hand. */
+const PZ_HSTEM={q:'sa',N:'sp',Q:'sp',p:'ia',o:'ia',m:'ia',k:'ia',l:'ia',i:'ia',j:'ia',P:'ip',O:'ip',M:'ip',K:'ip',L:'ip',
+  t:'ir',r:'ir',f:'ir',D:'ir',z:'ir',y:'ir',w:'ir',u:'ir',h:'ca',c:'ca',H:'cp',v:'cr'};
+const PZ_ASTEM={q:'sa',Q:'sp',i:'sr',u:'sr',p:'ia',o:'ia',m:'ia',l:'ia',P:'ir',M:'ir',z:'ir',r:'ir',f:'ir',L:'ir',O:'ir',
+  a:'ca',h:'ca',s:'ca',e:'ca',c:'ca',H:'cp',b:'cp',t:'cr',v:'cr',w:'cr',G:'cr'};
+const PZ_HFORM={p:'hp',q:'hq',i:'hi',w:'hw',v:'hv',j:'hj',h:'hj',a:'hn',c:'hn',r:'hr',s:'hr'};
+const PZ_HMOOD={p:'mI',q:'mI',i:'mI',w:'mI',v:'mM',j:'mJ',h:'mJ',a:'mN',c:'mN',r:'mP',s:'mP'};
+const PZ_HPOS={V:'v',N:'n',A:'a',P:'pr',R:'pp',C:'cj',D:'av',T:'pt'};
+// the colours (light pages; on dark pages they are lightened), names, and the style of a stem
+const PZC={
+  pos:[['v','#b3261e'],['n','#1f4fa3'],['np','#5a6aa0'],['a','#2e7d32'],['pr','#7b3fa0'],['pp','#a07800'],['cj','#6f6a62'],['av','#c25400'],['pt','#8a6d5a'],['ar','#8a8378'],['nu','#147a7a']],
+  stem:[['sa','#1d4fa8'],['sp','#86a6dc'],['sr','#1d4fa8','wavy'],['ia','#1e7a3c'],['ip','#86c495'],['ir','#1e7a3c','wavy'],['ca','#b8321f'],['cp','#e8a395'],['cr','#b8321f','wavy'],
+        ['ga','#1d4fa8'],['gm','#1d4fa8','dotted'],['gp','#86a6dc']],
+  tense:[['tP','#1f5fbf'],['tI','#147a7a'],['tF','#7b3fa0'],['tA','#b3261e'],['tR','#2e7d32'],['tL','#7a6a10'],
+         ['hp','#2e7d32'],['hq','#6aa86e'],['hi','#1f5fbf'],['hw','#b3261e'],['hv','#c25400'],['hj','#a07800'],['hn','#7b3fa0'],['hr','#147a7a']],
+  mood:[['mI','#1f5fbf'],['mS','#7b3fa0'],['mO','#147a7a'],['mM','#c25400'],['mJ','#a07800'],['mN','#2e7d32'],['mP','#8a6d5a']]};
+const PZN={en:{v:'verb',n:'noun',np:'proper noun',a:'adjective',pr:'pronoun',pp:'preposition',cj:'conjunction',av:'adverb',pt:'particle',ar:'article',nu:'numeral',
+    sa:'Qal (simple, active)',sp:'Niphal (simple, passive / reflexive)',sr:'simple reflexive (Aramaic)',ia:'Piel (intensive, active)',ip:'Pual (intensive, passive)',ir:'Hitpael (intensive, reflexive)',
+    ca:'Hiphil (causative, active)',cp:'Hophal (causative, passive)',cr:'causative reflexive (Hishtaphel)',ga:'Greek active',gm:'Greek middle',gp:'Greek passive',
+    tP:'present',tI:'imperfect',tF:'future',tA:'aorist',tR:'perfect',tL:'pluperfect',
+    hp:'perfect (qatal)',hq:'weqatal',hi:'imperfect (yiqtol)',hw:'wayyiqtol',hv:'imperative',hj:'jussive / cohortative',hn:'infinitive',hr:'participle',
+    mI:'indicative',mS:'subjunctive',mO:'optative',mM:'imperative',mJ:'jussive / cohortative',mN:'infinitive',mP:'participle'},
+  af:{v:'werkwoord',n:'selfstandige naamwoord',np:'eienaam',a:'byvoeglike naamwoord',pr:'voornaamwoord',pp:'voorsetsel',cj:'voegwoord',av:'bywoord',pt:'partikel',ar:'lidwoord',nu:'telwoord',
+    sa:'Qal (eenvoudig, aktief)',sp:'Nifal (eenvoudig, passief / refleksief)',sr:'eenvoudig refleksief (Aramees)',ia:'Piël (intensief, aktief)',ip:'Pual (intensief, passief)',ir:'Hitpael (intensief, refleksief)',
+    ca:'Hifil (kousatief, aktief)',cp:'Hofal (kousatief, passief)',cr:'kousatief refleksief (Hisjtafel)',ga:'Grieks aktief',gm:'Grieks medium',gp:'Grieks passief',
+    tP:'presens',tI:'imperfektum',tF:'futurum',tA:'aoristus',tR:'perfektum',tL:'plusquamperfektum',
+    hp:'perfektum (qatal)',hq:'weqatal',hi:'imperfektum (jiqtol)',hw:'wajjiqtol',hv:'imperatief',hj:'jussief / kohortatief',hn:'infinitief',hr:'partisipium',
+    mI:'indikatief',mS:'subjunktief',mO:'optatief',mM:'imperatief',mJ:'jussief / kohortatief',mN:'infinitief',mP:'partisipium'}};
+const pzStyle=k=>{ for(const m in PZC) for(const x of PZC[m]) if(x[0]===k) return x; return null; };
+// one word's tag → what it is
+function pzParse(tok){
+  if(!tok) return null; const at=tok.indexOf('/'); const mo=at<0?'':tok.slice(at+1); if(!mo) return null;
+  if(/^[HA][A-Z]/.test(mo)){   // Hebrew / Aramaic (Open Scriptures): the verb part if there is one, else the main word
+    const ar=mo[0]==='A', parts=mo.slice(1).replace(/\+[HA]/g,'/').split('/').filter(Boolean);
+    const p=parts.find(x=>x[0]==='V')||parts.find(x=>/[NAPD]/.test(x[0]))||parts.find(x=>x[0]!=='S'&&x[0]!=='C')||parts[0]; if(!p) return null;
+    const o={pos:p[0]==='N'&&p[1]==='p'?'np':p[0]==='T'&&p[1]==='d'?'ar':PZ_HPOS[p[0]]||'pt'};
+    if(p[0]==='V'){ o.stem=(ar?PZ_ASTEM:PZ_HSTEM)[p[1]]||'sa'; o.tense=PZ_HFORM[p[2]]; o.mood=PZ_HMOOD[p[2]];
+      if(/[123]/.test(p[3]||'')) o.lab=p[3]+(p[4]&&p[4]!=='c'?p[4]:'')+(p[5]==='p'?'pl':p[5]==='d'?'du':'s'); }
+    return o; }
+  // Greek (Robinson)
+  const g=/^([A-Z]+)(?:-([^ ]*))?/.exec(mo); if(!g) return null; const h=g[1], rest=g[2]||'';
+  const o={pos:h==='V'?'v':h==='N'?(rest.startsWith('PRI')?'np':'n'):h==='A'?(rest.startsWith('NUI')?'nu':'a'):h==='T'?'ar':h==='PREP'?'pp':(h==='CONJ'||h==='COND')?'cj':h==='ADV'?'av':/^[PRCDKIXQFS]$/.test(h)?'pr':'pt'};
+  if(h==='V'){ const v=/^(\d?)([PIFARL])([AMPEDONQX])([ISOMNPR])(?:-(\d)([SP]))?/.exec(rest);
+    if(v){ o.tense='t'+v[2]; o.stem={A:'ga',Q:'ga',X:'ga',M:'gm',D:'gm',E:'gm',N:'gm',P:'gp',O:'gp'}[v[3]]; o.mood='m'+(v[4]==='R'?'P':v[4]); if(v[5]) o.lab=v[5]+(v[6]==='P'?'pl':'s'); } }
+  return o;
+}
+// what the typesetter needs for one row: per word its colour key and its label
+function pzRow(t,r){
+  if(S.pz==='off'&&!S.pzLab) return null; if(!ORIGS.has(t)) return null;
+  const tk=tokens(t,r); if(!tk) return null;
+  return tk.map(x=>{ const o=pzParse(x); if(!o) return null; const k=S.pz==='off'?null:o[S.pz]; return {k:k||null, l:S.pzLab?o.lab||'':''}; });
+}
+// the colours as a style sheet: the person's own colours first; lightened on dark pages
+function pzSheet(){
+  let el=$('#pzsheet'); if(!el){ el=document.createElement('style'); el.id='pzsheet'; document.head.appendChild(el); }
+  if(S.pz==='off'){ el.textContent=''; return; }
+  const dark=S.theme==='dark'||(S.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  el.textContent=(PZC[S.pz]||[]).map(([k,c,st])=>{ const col=(S.pzCol&&S.pzCol[k])||c, use=dark?'color-mix(in srgb,'+col+' 58%,#fff)':col;
+    return '.pz-'+k+'{color:'+use+(st?';text-decoration:underline '+st+';text-decoration-thickness:1px;text-underline-offset:.22em':'')+'}'; }).join('\n')+
+    (S.pzOnly?'\n.flowcss.pzonly .rw{color:color-mix(in srgb,var(--ink) 42%,transparent)}\n.flowcss .pz:not(.pz-'+S.pzOnly+'){color:inherit;text-decoration:none}':'');
+}
+async function pzSet(k,v){
+  S[k]=v; if(k==='pz') S.pzOnly=''; persist();
+  if((S.pz!=='off'||S.pzLab)&&!SG.heb) await ensureStrongs();
+  pzSheet(); document.querySelector('#flow')&&flow.classList.toggle('pzonly',!!S.pzOnly);
+  await relayout(true); if(trmenu.classList.contains('on')) drawTrMenu(); if($('#pzkey').classList.contains('on')) drawPzKey();
+}
+// the key: what each colour means; tap one to see only those words; set a colour by hand
+function drawPzKey(){
+  const k=$('#pzkey'); if(S.pz==='off'){ k.classList.remove('on'); return; }
+  // only what applies here: the Hebrew forms and stems in the Old Testament, the Greek tenses and voices in the New
+  const GREEK=new Set(['ga','gm','gp','tP','tI','tF','tA','tR','tL','mS','mO']), HEB=new Set(['sa','sp','sr','ia','ip','ir','ca','cp','cr','hp','hq','hi','hw','hv','hj','hn','hr','mJ']);
+  const nt=CUR.b>=39, names=PZN[S.lang]||PZN.en, list=(PZC[S.pz]||[]).filter(([k])=>nt?!HEB.has(k):!GREEK.has(k));
+  k.innerHTML='<div class="pzh"><b>'+esc(L['pz_'+S.pz])+'</b><button type="button" class="x" data-pzk="close" aria-label="close">\u00d7</button></div>'+
+    list.map(([key,c,st])=>'<div class="pzr'+(S.pzOnly===key?' on':'')+'"><input type="color" data-pzc="'+key+'" value="'+((S.pzCol&&S.pzCol[key])||c)+'" title="'+esc(L.pzPick)+'">'+
+      '<button type="button" data-pzo="'+key+'"><span class="pz pz-'+key+'">'+esc(names[key]||key)+'</span>'+(st?' <small>'+esc(st==='wavy'?L.pzWavy:L.pzDotted)+'</small>':'')+'</button></div>').join('')+
+    '<div class="pza">'+(S.pzOnly?'<button type="button" data-pzk="all">'+esc(L.pzAll)+'</button>':'')+'<button type="button" data-pzk="reset">'+esc(L.pzReset)+'</button></div><p class="pzhelp">'+esc(L.pzHelp)+'</p>';
+  k.classList.add('on');
+}
+$('#pzkey').addEventListener('click',async e=>{ e.stopPropagation(); const b=e.target.closest('[data-pzo],[data-pzk]'); if(!b) return;
+  if(b.dataset.pzo){ S.pzOnly=S.pzOnly===b.dataset.pzo?'':b.dataset.pzo; persist(); pzSheet(); flow.classList.toggle('pzonly',!!S.pzOnly); drawPzKey(); return; }
+  if(b.dataset.pzk==='close') $('#pzkey').classList.remove('on');
+  else if(b.dataset.pzk==='all'){ S.pzOnly=''; persist(); pzSheet(); flow.classList.remove('pzonly'); drawPzKey(); }
+  else if(b.dataset.pzk==='reset'){ S.pzCol={}; persist(); pzSheet(); drawPzKey(); } });
+$('#pzkey').addEventListener('input',e=>{ const c=e.target.closest('[data-pzc]'); if(!c) return; S.pzCol=Object.assign({},S.pzCol,{[c.dataset.pzc]:c.value}); persist(); pzSheet(); });
+document.addEventListener('click',e=>{ const k=$('#pzkey'); if(k.classList.contains('on')&&!e.target.closest('#pzkey,#trmenu,#pzbtn')) k.classList.remove('on'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') $('#pzkey').classList.remove('on'); });
+$('#pzbtn').addEventListener('click',e=>{ e.stopPropagation(); $('#pzkey').classList.contains('on')?$('#pzkey').classList.remove('on'):drawPzKey(); });
 
 /* ---------------- memory palace ----------------
    The A5-sheet method (all of Ephesians was learned this way): a passage is split into rooms of about five verses;
@@ -3891,6 +4024,7 @@ if(firstRun){
   if(k2*z.P<12){ S.cols=1; const k1=await calibrate(S.tr,1,S.layout); S.scale=Math.max(1,15/(k1*z.P)); }
   persist();
 }
+pzSheet(); if((S.pz!=='off'||S.pzLab)&&!SG.heb){ ensureStrongs().then(ok=>{ if(ok) relayout(true); }); }
 await relayout(true);
 updateTop();
 openShelf();

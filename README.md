@@ -171,6 +171,12 @@ The translation is chosen with the button beside the book's name in the top bar 
 reading two side by side). On a computer the top bar also has type size, light or dark, one or two columns,
 cross-references and Strong's numbers, one tap each.
 
+**Colouring the Hebrew and Greek:** in the translation menu, colour the original text by word type, by stem
+(Hebrew: simple blue, intensive green, causative red; active dark, passive light, reflexive with a wavy line) or
+voice (Greek), by tense or verb form, or by mood, and show small person-number labels above the verbs. The key
+explains the colours; tap an entry to see only those words, or tap its colour to choose your own. The Hebrew Old
+Testament works in every Heb/… text; the Greek New Testament in Heb/Byz and Heb/NA27.
+
 Readings, notes, sermons and markings are saved only on the device where they are made.
 Use **Stoor rugsteun** (leesregister), **Save notes backup** (reader) and **Save library backup** (library) to move them between devices.
 **Google Drive (optional):** in the settings (**Aa**) of the Bible and of the library, **Connect Google Drive**, then
