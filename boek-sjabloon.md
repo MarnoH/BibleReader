@@ -20,6 +20,8 @@ subtitle: A subtitle, if the book has one
   > a quotation, printed small
   - a list item, or 1. a numbered item
   ***  on a line by itself: a break (* * *)
+  [[Rom 8:28]]             a Bible reference that opens the Bible there
+  [your words](1 Kor 13)   your own words as the link (book names in English or Afrikaans)
 -->
 
 # The Epistle to the Reader
@@ -50,3 +52,9 @@ After a break the text goes on.
 # Chapter II. Of the Second Matter
 
 The text of the second chapter.
+
+# Chapter III. Of Scripture Proofs
+
+A Bible reference written as [[Rom 8:28]] becomes a link that opens the Bible there.
+So does a reference behind your own words: see [the love chapter](1 Kor 13),
+or [[Psalm 23]], [[Joh 3:16-18]], [[Romeine 5:1]].

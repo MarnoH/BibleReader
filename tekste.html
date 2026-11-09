@@ -41,6 +41,37 @@
     --edgeln:#33302c; --case:#1a1816; --plank:#4b3322; --plank-hi:#664631; --plank-lo:#2c1d12;
   }
 }
+/* marking colours, as in the Bible reader */
+:root{--hy:rgba(255,212,0,.42);--hg:rgba(90,190,110,.36);--hb:rgba(90,160,240,.33);--hp:rgba(240,110,170,.32);--ho:rgba(255,150,40,.36);--hv:rgba(155,95,220,.30);--cr:#b3261e;--cb:#1f4fa3;--cg:#2e7d32;--cy:#a07800;--co:#c25400;--cv:#7b3fa0}
+[data-theme=dark]{--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}
+@media (prefers-color-scheme:dark){[data-theme=auto]{--hy:rgba(240,200,40,.30);--hg:rgba(110,200,120,.26);--hb:rgba(110,170,250,.27);--hp:rgba(245,120,180,.26);--ho:rgba(255,160,60,.28);--hv:rgba(175,125,240,.30);--cr:#ff8a80;--cb:#8ab4f8;--cg:#81c995;--cy:#f2c94c;--co:#ffab61;--cv:#c79bf2}}
+.h-y,.h-g,.h-b,.h-p,.h-o,.h-v{border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.h-y{background:var(--hy)}.h-g{background:var(--hg)}.h-b{background:var(--hb)}.h-p{background:var(--hp)}.h-o{background:var(--ho)}.h-v{background:var(--hv)}
+.c-r{color:var(--cr)}.c-b{color:var(--cb)}.c-g{color:var(--cg)}.c-y{color:var(--cy)}.c-o{color:var(--co)}.c-v{color:var(--cv)}
+#markbar{position:fixed;z-index:90;display:none;align-items:center;gap:4px;padding:5px 6px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;box-shadow:0 12px 30px -10px var(--shadow);flex-wrap:wrap;max-width:calc(100vw - 16px)}
+#markbar.on{display:flex}
+#markbar button{width:28px;height:28px;border-radius:7px;border:1px solid transparent;background:none;cursor:pointer;padding:0;
+  font-family:var(--serif);font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center}
+#markbar button:hover{border-color:var(--line)}
+#markbar [data-h]{background-clip:content-box;padding:4px}
+#markbar [data-h=y]{background-color:var(--hy)}#markbar [data-h=g]{background-color:var(--hg)}#markbar [data-h=b]{background-color:var(--hb)}#markbar [data-h=p]{background-color:var(--hp)}#markbar [data-h=o]{background-color:var(--ho)}#markbar [data-h=v]{background-color:var(--hv)}
+#markbar [data-c=r]{color:var(--cr)}#markbar [data-c=b]{color:var(--cb)}#markbar [data-c=g]{color:var(--cg)}#markbar [data-c=y]{color:var(--cy)}#markbar [data-c=o]{color:var(--co)}#markbar [data-c=v]{color:var(--cv)}
+#markbar [data-x]{color:var(--soft)} #markbar [data-x] svg{width:16px;height:16px}
+.mg{display:flex;align-items:center;gap:4px}
+.msep{width:1px;height:20px;background:var(--line);margin:0 3px}
+body.phone #markbar button{width:36px;height:36px}
+/* on a touch screen the phone's own selection is off (it brings up Copy, Select all and the Google search); words are
+   chosen by holding instead, as in the Bible, with a handle at each end to take in more or fewer words */
+@media (pointer:coarse){ #flow{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none} }
+::highlight(pick){background-color:rgba(70,130,220,.32)}
+.hdl{position:fixed;z-index:89;width:44px;margin-left:-22px;display:none;touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab}
+.hdl.on{display:block}
+.hdl::before{content:"";position:absolute;left:21px;top:0;width:2px;height:var(--lh,20px);background:#3c78d0;border-radius:1px}
+.hdl::after{content:"";position:absolute;left:12px;top:var(--lh,20px);width:20px;height:20px;background:#3c78d0;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+#hA::after{border-radius:50% 0 50% 50%}
+#hB::after{border-radius:0 50% 50% 50%}
+.hdl.drag::after{transform:scale(1.15)}
 [data-contrast=strong]:not([data-theme=dark]){--desk:#b3ada0;--page:#fdfcf8;--page2:#e0dbcf;--ink:#100e0b;--soft:#4a443a;--rule:#b0a99b;--line:#c2bbad;
   --fold:rgba(60,40,15,.45);--fold2:rgba(60,40,15,.15);--sheen:rgba(255,255,255,.7);--edgebg:#fffdf8;--edgeln2:#9e937e;--shadow:rgba(30,20,10,.38)}
 [data-contrast=strong][data-theme=dark]{--desk:#000;--page:#2b2824;--page2:#37332e;--ink:#f5f0e6;--soft:#bcb4a6;--rule:#45403a;--line:#4b4640;

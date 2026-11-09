@@ -267,10 +267,10 @@ body.phone #trbtn{padding:4px 7px;font-size:13px}
 .sep{height:8px}
 .cred{font-size:11.5px;color:var(--faint);margin:12px 0 0;line-height:1.45}
 
-#nav,#find,#smap,#amap{position:absolute;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding:14px;
+#nav,#find,#smap,#amap,#rev{position:absolute;inset:0;z-index:50;display:none;align-items:flex-start;justify-content:center;padding:14px;
   background:color-mix(in srgb,var(--desk) 82%,transparent);backdrop-filter:blur(3px)}
-#nav.on,#find.on,#smap.on,#amap.on{display:flex}
-#nav .box,#find .box,#smap .box,#amap .box{width:100%;max-width:880px;max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);
+#nav.on,#find.on,#smap.on,#amap.on,#rev.on{display:flex}
+#nav .box,#find .box,#smap .box,#amap .box,#rev .box{width:100%;max-width:880px;max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);
   border-radius:12px;padding:14px 20px 18px;box-shadow:0 22px 50px -12px var(--shadow)}
 .navh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .navh b{font-family:var(--serif);font-size:19px;font-weight:600}
@@ -529,7 +529,7 @@ body.land.chrome #top{transform:none}
 body.land #status{min-height:0;padding-top:3px;padding-bottom:3px}
 body.land #set{top:54px;max-height:calc(100% - 60px)}
 body.phone #shelf{padding-top:58px}
-body.phone #nav,body.phone #find,body.phone #smap,body.phone #amap{padding-top:60px}
+body.phone #nav,body.phone #find,body.phone #smap,body.phone #amap,body.phone #rev{padding-top:60px}
 body.phone #set{top:58px;left:8px;right:8px;width:auto;max-width:none;max-height:calc(100% - 66px);padding:10px 12px}
 body.phone #book{filter:none}
 body.phone .flowcss{text-align:left;hyphens:manual}
@@ -790,6 +790,41 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
 
 /* ---------- checking the KJV's links to the Hebrew and Greek ---------- */
 #amap .box{max-width:1000px}
+#rev .box{max-width:1180px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+.rvbody{flex:1;min-height:0;display:grid;grid-template-columns:minmax(240px,300px) 1fr;gap:14px}
+.rvside{display:flex;flex-direction:column;min-height:0}
+.rvside input{width:100%;border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:none;color:var(--ink);font:14px var(--sans)}
+.rvsort{display:flex;gap:4px;margin:6px 0}
+.rvsort button,.rvf button,.rvb button,.rvchips button,.rvmw button{border:1px solid var(--line);background:none;border-radius:7px;padding:3px 8px;cursor:pointer;color:var(--ink);font:12.5px var(--sans)}
+.rvsort button[aria-pressed=true]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.rvlist{flex:1;min-height:0;overflow:auto;border-top:1px solid var(--line)}
+.rvi{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:baseline;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:6px 4px;cursor:pointer;color:var(--ink);font:13px var(--sans)}
+.rvi.on{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.rvi .n{font-weight:600}.rvi .lm{font-family:var(--serif);font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rvi .bd{font-size:11.5px;color:var(--rubric);font-weight:600}.rvi .sub{grid-column:2/4;font-size:11.5px;color:var(--faint)}
+.rvdet{min-height:0;overflow:auto;padding-right:4px}
+.rvdet .sgh{margin-bottom:2px}
+.rvren{font-size:13px;line-height:1.5;margin:2px 0;color:var(--soft)}.rvren b{color:var(--ink);font-weight:600}
+.rvh2{font:600 13px var(--sans);margin:12px 0 4px;color:var(--ink)}
+.rvf{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:5px 6px;border-radius:8px;margin-top:3px}
+.rvf.fl{background:color-mix(in srgb,var(--rubric) 9%,transparent)}
+.rvf .fm{border:0;background:none;padding:0;font:600 15px var(--serif);color:var(--ink);cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.rvf .ct{font-size:12px;color:var(--faint)}.rvf .grow{flex:1}
+.rvl{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:baseline;padding:5px 6px 5px 14px;border-bottom:1px solid var(--line);font-size:13.5px}
+.rvl .ref{font:12px var(--sans);color:var(--faint);white-space:nowrap}.rvl .vt{font-family:var(--serif);line-height:1.45}
+.rvl mark{background:color-mix(in srgb,var(--sel) 22%,transparent);color:inherit;border-radius:3px;padding:0 2px}
+.rvl .gk{grid-column:2/3;font-size:12.5px;color:var(--soft)}.rvl .gk span:lang(grc){font-family:var(--serif);font-size:15px;color:var(--ink)}
+.rvl .rvb{grid-row:1/3;grid-column:3;display:flex;gap:4px;align-self:center}
+.rvl.ok .rvb [data-rvok],.rvl.no .rvb [data-rvno]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.rvl.sus .ref{color:var(--rubric);font-weight:600}
+.rvl.ok{background:color-mix(in srgb,#2e8b57 7%,transparent)}.rvl.no{background:color-mix(in srgb,var(--rubric) 7%,transparent)}
+.rvchips,.rvmw{grid-column:1/4;display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px}
+.rvchips button span:lang(grc){font-family:var(--serif);font-size:14.5px}.rvchips button small{color:var(--faint);margin-left:4px}
+.rvchips button.on,.rvmw button.on{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.rvmore{margin:6px 0 0 14px}
+.rvback{display:none}
+body.phone .rvbody{grid-template-columns:1fr}
+body.phone #rev .box.det .rvside{display:none}body.phone #rev .box:not(.det) .rvdet{display:none}body.phone #rev .box.det .rvback{display:inline-block}
 .av{border-top:1px solid var(--line);padding:10px 0 12px}
 .av .ref{font:600 12.5px var(--sans);color:var(--soft);margin-bottom:6px;font-feature-settings:"lnum"}
 .av .ref i{font-style:normal;color:var(--rubric);margin-left:8px}
@@ -933,6 +968,7 @@ body.phone .ntabs button{padding:4px 5px;font-size:13px}
   <div id="find" role="dialog"><div class="box"></div></div>
   <div id="smap" role="dialog"><div class="box"></div></div>
   <div id="amap" role="dialog"><div class="box"></div></div>
+  <div id="rev" role="dialog"><div class="box"></div></div>
   <section id="shelf" aria-label="Bookshelf"><div class="case"></div><p class="shelfnote"></p></section>
   <div id="palbar" role="toolbar"></div>
   <div id="busy" class="on"><span>…</span></div>
@@ -1147,12 +1183,12 @@ const UI={
 };
 
 // questions
-Object.assign(UI.en,{aovWipBar:'Strong\u2019s numbers in the AOV: the mapping to the Hebrew and Greek is still in progress. Some words are not linked yet, and some may point to the wrong word.',aovWipCard:'AOV mapping still in progress: this link may be missing or wrong. \u201cCheck link\u201d corrects it.',pzTitle:'Colour the Hebrew and Greek',pz_off:'Off',pz_pos:'Word type',pz_stem:'Stem / voice',pz_tense:'Tense / form',pz_mood:'Mood',pzLabels:'Person & number',pzKey:'Key',pzPick:'Choose a colour',pzWavy:'wavy line',pzDotted:'dotted line',pzAll:'Show all',pzReset:'Default colours',pzHelp:'Tap a name to see only those words; tap a colour to choose your own.',pzNt:'In the New Testament only Heb/Byz and Heb/NA27 carry their parsing.',drAbout:'Optional: keep your notes, sermons, marks, palaces, questions and reading register in your own Google Drive, to use them on your phone and computer alike. Nothing is sent anywhere else.',drOn:'Connected. Sync brings in what changed on your other devices and saves this one\u2019s changes to your Drive (folder \u201cBybel-app\u201d).',drConnect:'Connect Google Drive',drSync:'Sync now',drOff:'Disconnect',drOffQ:'Disconnect Google Drive? Your files stay in your Drive; this device simply stops syncing.',drLast:'Last synced {t}',drBusy:'Syncing\u2026',drDone:'Synced {t} \u00b7 {n} change(s) brought in',drFail:'Sync did not succeed ({e}). Try again later.',drOffline:'No connection to Google just now; try again when online.',drDenied:'Google did not connect (the sign-in was refused or closed). While Bybel-app is still being tested by Google, only invited Google accounts can use Drive sync; everything else works as usual.',drPrivacy:'Privacy',drTerms:'Terms of service',qSmaller:'Smaller type',qBigger:'Larger type',qTheme:'Light or dark',qCols:'One or two columns a page',qXref:'Cross-references',qStrongs:"Strong's numbers: tap a word for its Hebrew or Greek",trDown:'Downloaded the first time it is chosen',nShare:'Share backup',greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
+Object.assign(UI.en,{rvTitle:'AOV links by Strong\u2019s number',rvOT:'Old Testament',rvNT:'New Testament',rvHelpOt:'Marked forms are unusual for this number: under 5 % of its links (when it has at least 10), or a small word the Hebrew word does not carry: \u201cen\u201d without the conjunction, a preposition (in, op, vir, van\u2026) without a preposition prefix, a possessive (sy, hulle, my\u2026) on a noun without a pronoun suffix. \u2713 confirms a link; \u2717 unlinks it and shows the verse\u2019s Hebrew words (a word joined by maqqef once per part), so you can tap the right one. Tap \u2713 or \u2717 again to undo. What you confirm or correct is kept when the first draft is redone.',rvOpen:'Review the AOV links by Strong\u2019s number',rvCard:'All AOV links of this number',rvFilter:'Number, Hebrew/Greek or word\u2026',rvSortSus:'Most to check',rvSortFreq:'Most links',rvSortNum:'By number',rvLinks:'{n} links',rvFlag:'{n} to check',rvMiss:'Words without an AOV word ({n})',rvMissHelp:'The BSB renders these words, but no AOV word is linked to them. Tap the AOV word that renders it.',rvOk:'Right',rvNo:'Wrong',rvAllOk:'All right',rvAllNo:'All wrong',rvAllNoQ:'Unlink the {n} unchecked links of \u201c{f}\u201d?',rvNone:'Not linked',rvVerse:'Open the verse in the link tool',rvChecked:'{c} of {n} checked',rvMore:'Show more',rvNoSel:'Choose a number.',rvBack:'Numbers',rvForms:'AOV forms',rvEmpty:'Nothing found.',rvHelp:'Marked forms are unusual for this number: under 5 % of its links (when it has at least 10), or a small word (die, en, van, hy\u2026) on a noun, verb or adjective. \u2713 confirms a link; \u2717 unlinks it and shows the verse\u2019s Greek words, so you can tap the right one. Tap \u2713 or \u2717 again to undo. What you confirm or correct is kept when the first draft is redone.',aovWipBar:'Strong\u2019s numbers in the AOV: the mapping to the Hebrew and Greek is still in progress. Some words are not linked yet, and some may point to the wrong word.',aovWipCard:'AOV mapping still in progress: this link may be missing or wrong. \u201cCheck link\u201d corrects it.',pzTitle:'Colour the Hebrew and Greek',pz_off:'Off',pz_pos:'Word type',pz_stem:'Stem / voice',pz_tense:'Tense / form',pz_mood:'Mood',pzLabels:'Person & number',pzKey:'Key',pzPick:'Choose a colour',pzWavy:'wavy line',pzDotted:'dotted line',pzAll:'Show all',pzReset:'Default colours',pzHelp:'Tap a name to see only those words; tap a colour to choose your own.',pzNt:'In the New Testament only Heb/Byz and Heb/NA27 carry their parsing.',drAbout:'Optional: keep your notes, sermons, marks, palaces, questions and reading register in your own Google Drive, to use them on your phone and computer alike. Nothing is sent anywhere else.',drOn:'Connected. Sync brings in what changed on your other devices and saves this one\u2019s changes to your Drive (folder \u201cBybel-app\u201d).',drConnect:'Connect Google Drive',drSync:'Sync now',drOff:'Disconnect',drOffQ:'Disconnect Google Drive? Your files stay in your Drive; this device simply stops syncing.',drLast:'Last synced {t}',drBusy:'Syncing\u2026',drDone:'Synced {t} \u00b7 {n} change(s) brought in',drFail:'Sync did not succeed ({e}). Try again later.',drOffline:'No connection to Google just now; try again when online.',drDenied:'Google did not connect (the sign-in was refused or closed). While Bybel-app is still being tested by Google, only invited Google accounts can use Drive sync; everything else works as usual.',drPrivacy:'Privacy',drTerms:'Terms of service',qSmaller:'Smaller type',qBigger:'Larger type',qTheme:'Light or dark',qCols:'One or two columns a page',qXref:'Cross-references',qStrongs:"Strong's numbers: tap a word for its Hebrew or Greek",trDown:'Downloaded the first time it is chosen',nShare:'Share backup',greekTexts:'Greek texts',greekTextsTip:'Compare the Greek New Testaments: TR, Byzantine, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Questions',qNew:'Question',qOpen:'Open',qAnswered:'Answered',qAll:'All',
   qIntro:'Questions that come up while you read, gathered here to answer later. Select words in the text and tap ? in the colour bar, or tap \u201c+ Question\u201d for the pages that are open. Verses with an open question carry a small ? by their number.',
   qNoneOpen:'No open questions.',qNoneDone:'No answered questions yet.',qHere:'On these pages',qPsalms:'Psalms',
   qAskPh:'Your question\u2026',qAnswerPh:'The answer, when you find it\u2026',qMarkDone:'Answered \u2713',qReopen:'Open again',
   qAnsweredOn:'answered {d}',qDelete:'Delete this question',qDelConfirm:'Delete this question and its answer?',mkAsk:'Ask a question about this'});
-Object.assign(UI.af,{aovWipBar:'Strong-nommers in die AOV: die koppeling aan die Hebreeus en Grieks word nog uitgewerk. Sommige woorde is nog nie gekoppel nie, en party kan na die verkeerde woord wys.',aovWipCard:'AOV-koppeling word nog uitgewerk: hierdie koppeling kan ontbreek of verkeerd wees. \u201cKontroleer koppeling\u201d stel dit reg.',pzTitle:'Kleur die Hebreeus en Grieks',pz_off:'Af',pz_pos:'Woordsoort',pz_stem:'Stam / diatese',pz_tense:'Tyd / vorm',pz_mood:'Modus',pzLabels:'Persoon & getal',pzKey:'Sleutel',pzPick:'Kies \u2019n kleur',pzWavy:'golwende lyn',pzDotted:'stippellyn',pzAll:'Wys alles',pzReset:'Verstekkleure',pzHelp:'Tik op \u2019n naam om net daardie woorde te sien; tik op \u2019n kleur om jou eie te kies.',pzNt:'In die Nuwe Testament dra net Heb/Byz en Heb/NA27 hul ontleding.',drAbout:'Opsioneel: hou jou notas, preke, merke, paleise, vrae en leesregister in jou eie Google Drive, om dit op jou foon en rekenaar te gebruik. Niks word elders heen gestuur nie.',drOn:'Gekoppel. Sinkroniseer bring in wat op jou ander toestelle verander het en stoor hierdie toestel se veranderinge in jou Drive (vouer \u201cBybel-app\u201d).',drConnect:'Koppel Google Drive',drSync:'Sinkroniseer nou',drOff:'Ontkoppel',drOffQ:'Ontkoppel Google Drive? Jou l\u00eaers bly in jou Drive; hierdie toestel sinkroniseer net nie meer nie.',drLast:'Laas gesinkroniseer {t}',drBusy:'Besig om te sinkroniseer\u2026',drDone:'Gesinkroniseer {t} \u00b7 {n} verandering(e) ingebring',drFail:'Sinkronisering het nie geslaag nie ({e}). Probeer later weer.',drOffline:'Geen verbinding met Google nie; probeer weer as jy aanlyn is.',drDenied:'Google het nie gekoppel nie (die aanmelding is geweier of toegemaak). Terwyl Bybel-app nog deur Google getoets word, kan net genooide Google-rekeninge Drive-sinkronisering gebruik; alles anders werk soos gewoonlik.',drPrivacy:'Privaatheid',drTerms:'Diensbepalings',qSmaller:'Kleiner letters',qBigger:'Groter letters',qTheme:'Lig of donker',qCols:'Een of twee kolomme per bladsy',qXref:'Kruisverwysings',qStrongs:'Strong-nommers: tik op \u2019n woord vir die Hebreeus of Grieks',trDown:'Word afgelaai die eerste keer dat dit gekies word',nShare:'Deel rugsteun',greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
+Object.assign(UI.af,{rvTitle:'AOV-koppelings per Strong-nommer',rvOT:'Ou Testament',rvNT:'Nuwe Testament',rvHelpOt:'Gemerkte vorme is ongewoon vir hierdie nommer: minder as 5 % van sy koppelings (as dit minstens 10 het), of \u2019n klein woordjie wat die Hebreeuse woord nie dra nie: \u201cen\u201d sonder die voegwoord, \u2019n voorsetsel (in, op, vir, van\u2026) sonder \u2019n voorsetselvoorvoegsel, \u2019n besitlike voornaamwoord (sy, hulle, my\u2026) op \u2019n selfstandige naamwoord sonder \u2019n voornaamwoordagtervoegsel. \u2713 bevestig \u2019n koppeling; \u2717 ontkoppel dit en wys die vers se Hebreeuse woorde (\u2019n woord met maqqef een keer per deel), sodat jy die regte een kan tik. Tik \u2713 of \u2717 weer om dit ongedaan te maak. Wat jy bevestig of regstel, bly behou as die eerste konsep oorgedoen word.',rvOpen:'Hersien die AOV-koppelings per Strong-nommer',rvCard:'Al die AOV-koppelings van hierdie nommer',rvFilter:'Nommer, Hebreeus/Grieks of woord\u2026',rvSortSus:'Meeste om na te gaan',rvSortFreq:'Meeste koppelings',rvSortNum:'Volgens nommer',rvLinks:'{n} koppelings',rvFlag:'{n} om na te gaan',rvMiss:'Woorde sonder \u2019n AOV-woord ({n})',rvMissHelp:'Die BSB vertaal hierdie woorde, maar geen AOV-woord is daaraan gekoppel nie. Tik die AOV-woord wat dit vertaal.',rvOk:'Reg',rvNo:'Verkeerd',rvAllOk:'Almal reg',rvAllNo:'Almal verkeerd',rvAllNoQ:'Ontkoppel die {n} ongekontroleerde koppelings van \u201c{f}\u201d?',rvNone:'Nie gekoppel nie',rvVerse:'Maak die vers oop in die koppelinstrument',rvChecked:'{c} van {n} nagegaan',rvMore:'Wys meer',rvNoSel:'Kies \u2019n nommer.',rvBack:'Nommers',rvForms:'AOV-vorme',rvEmpty:'Niks gevind nie.',rvHelp:'Gemerkte vorme is ongewoon vir hierdie nommer: minder as 5 % van sy koppelings (as dit minstens 10 het), of \u2019n klein woordjie (die, en, van, hy\u2026) op \u2019n selfstandige naamwoord, werkwoord of byvoeglike naamwoord. \u2713 bevestig \u2019n koppeling; \u2717 ontkoppel dit en wys die vers se Griekse woorde, sodat jy die regte een kan tik. Tik \u2713 of \u2717 weer om dit ongedaan te maak. Wat jy bevestig of regstel, bly behou as die eerste konsep oorgedoen word.',aovWipBar:'Strong-nommers in die AOV: die koppeling aan die Hebreeus en Grieks word nog uitgewerk. Sommige woorde is nog nie gekoppel nie, en party kan na die verkeerde woord wys.',aovWipCard:'AOV-koppeling word nog uitgewerk: hierdie koppeling kan ontbreek of verkeerd wees. \u201cKontroleer koppeling\u201d stel dit reg.',pzTitle:'Kleur die Hebreeus en Grieks',pz_off:'Af',pz_pos:'Woordsoort',pz_stem:'Stam / diatese',pz_tense:'Tyd / vorm',pz_mood:'Modus',pzLabels:'Persoon & getal',pzKey:'Sleutel',pzPick:'Kies \u2019n kleur',pzWavy:'golwende lyn',pzDotted:'stippellyn',pzAll:'Wys alles',pzReset:'Verstekkleure',pzHelp:'Tik op \u2019n naam om net daardie woorde te sien; tik op \u2019n kleur om jou eie te kies.',pzNt:'In die Nuwe Testament dra net Heb/Byz en Heb/NA27 hul ontleding.',drAbout:'Opsioneel: hou jou notas, preke, merke, paleise, vrae en leesregister in jou eie Google Drive, om dit op jou foon en rekenaar te gebruik. Niks word elders heen gestuur nie.',drOn:'Gekoppel. Sinkroniseer bring in wat op jou ander toestelle verander het en stoor hierdie toestel se veranderinge in jou Drive (vouer \u201cBybel-app\u201d).',drConnect:'Koppel Google Drive',drSync:'Sinkroniseer nou',drOff:'Ontkoppel',drOffQ:'Ontkoppel Google Drive? Jou l\u00eaers bly in jou Drive; hierdie toestel sinkroniseer net nie meer nie.',drLast:'Laas gesinkroniseer {t}',drBusy:'Besig om te sinkroniseer\u2026',drDone:'Gesinkroniseer {t} \u00b7 {n} verandering(e) ingebring',drFail:'Sinkronisering het nie geslaag nie ({e}). Probeer later weer.',drOffline:'Geen verbinding met Google nie; probeer weer as jy aanlyn is.',drDenied:'Google het nie gekoppel nie (die aanmelding is geweier of toegemaak). Terwyl Bybel-app nog deur Google getoets word, kan net genooide Google-rekeninge Drive-sinkronisering gebruik; alles anders werk soos gewoonlik.',drPrivacy:'Privaatheid',drTerms:'Diensbepalings',qSmaller:'Kleiner letters',qBigger:'Groter letters',qTheme:'Lig of donker',qCols:'Een of twee kolomme per bladsy',qXref:'Kruisverwysings',qStrongs:'Strong-nommers: tik op \u2019n woord vir die Hebreeus of Grieks',trDown:'Word afgelaai die eerste keer dat dit gekies word',nShare:'Deel rugsteun',greekTexts:'Griekse tekste',greekTextsTip:'Vergelyk die Griekse Nuwe Testamente: TR, Bisantyns, Nestle 1904, Westcott-Hort, NA27, SBL',qTab:'Vrae',qNew:'Vraag',qOpen:'Oop',qAnswered:'Beantwoord',qAll:'Alles',
   qIntro:'Vrae wat opkom terwyl jy lees, hier bymekaar om later te beantwoord. Kies woorde in die teks en tik ? in die kleurbalk, of tik \u201c+ Vraag\u201d vir die bladsye wat oop is. Verse met \u2019n oop vraag dra \u2019n klein ? by hul nommer.',
   qNoneOpen:'Geen oop vrae nie.',qNoneDone:'Nog geen beantwoorde vrae nie.',qHere:'Op hierdie bladsye',qPsalms:'Psalms',
   qAskPh:'Jou vraag\u2026',qAnswerPh:'Die antwoord, wanneer jy dit kry\u2026',qMarkDone:'Beantwoord \u2713',qReopen:'Weer oop',
@@ -2557,6 +2593,7 @@ document.addEventListener('keydown',e=>{
   if(e.target.closest&&e.target.closest('textarea,input,select,[contenteditable]')){ if(e.key==='Escape'){ if(findEl.classList.contains('on')) closeFind(); else e.target.blur(); } return; }
   if(e.key==='/'&&!shelfOpen()){ e.preventDefault(); openFind(); return; }
   if(e.key==='Escape'&&(findEl.classList.contains('on')||ribMenu.classList.contains('on')||smapEl.classList.contains('on')||amapEl.classList.contains('on'))){ closeFind(); closeRibMenu(); smapEl.classList.remove('on'); if(amapEl.classList.contains('on')) closeAlign(); return; }
+  if(e.key==='Escape'&&revEl.classList.contains('on')){ closeRev(); return; }
   if(e.key==='Escape'){ if(chap.classList.contains('on')){ closeChap(); return; } closePop(); setEl.classList.remove('on'); closeNav(); return; }
   if(shelfOpen()) return;
   if(navEl.classList.contains('on')||e.altKey||e.ctrlKey||e.metaKey) return;
@@ -2615,7 +2652,7 @@ const aovWanted=()=>S.strongs==='on'&&(S.tr==='aov'||S.par==='aov');
 // the AOV's links: made by a word aligner trained on the whole Bible, so a first draft to be corrected by hand
 async function ensureAov(){
   if(SG.aov) return true; if(SG.await_) return SG.await_;
-  SG.await_=(async()=>{ try{ busy(L.sLoading); const a=EMBD&&EMBD.sg&&EMBD.sg.aov?EMBD.sg.aov:await getJSON(CAT.strongs.aov); SG.aov=a.s; busy(null); aovNotice(); return true; }
+  SG.await_=(async()=>{ try{ busy(L.sLoading); const a=EMBD&&EMBD.sg&&EMBD.sg.aov?EMBD.sg.aov:await getJSON(CAT.strongs.aov); SG.aov=a.s; busy(null); await aovKeepApproved(); aovNotice(); return true; }
     catch(e){ console.warn(e); busy(null); SG.await_=null; return false; } })();
   return SG.await_;
 }
@@ -2626,6 +2663,21 @@ function aovNotice(){
   const d=document.createElement('div'); d.id='aovwip'; d.setAttribute('role','status');
   d.innerHTML='<span>'+esc(L.aovWipBar)+'</span><button type="button" aria-label="'+esc(L.close)+'">\u00d7</button>';
   document.body.appendChild(d); const off=()=>d.remove(); d.querySelector('button').onclick=off; setTimeout(off,15000);
+}
+// The first draft was redone: the New Testament in tags-aov.v2, the Old Testament in v3. In verses you approved under the old draft, the old links
+// are kept: once, each word whose link differs is written into FIX with its old link. Needs the old file, so it waits
+// for a connection; until it has run, those verses show the new draft.
+async function aovKeepApproved(){
+  const v=+((CAT.strongs.aov.match(/v(\d+)\.json/)||[])[1]||1); if(EMBD||v<2) return;
+  const M2='bybel-koppel-v2-oorgeneem', M3='bybel-koppel-v3-oorgeneem', d2=!!localStorage.getItem(M2), d3=v<3||!!localStorage.getItem(M3);
+  if(d2&&d3) return;
+  // the New Testament changed in v2, the Old Testament in v3; each is compared with v1 once
+  const rows=Object.keys(APR.aov).map(Number).filter(r=>r>=D.bs[39]?!d2:!d3);
+  if(rows.length){ let old; try{ old=(await getJSON('data/tags-aov.v1.json')).s; }catch(e){ return; }
+    for(const r of rows){ const o=(old[r]||'').split(' '), n=(SG.aov[r]||'').split(' '); if(o.length!==n.length) continue;
+      o.forEach((t,w)=>{ const k='aov:'+r+':'+w; if(k in FIX||t===n[w]) return; FIX[k]=t==='-'?null:t.includes('.')?t:+t; }); }
+    saveFix(); }
+  try{ localStorage.setItem(M2,todayISO()); if(v>=3) localStorage.setItem(M3,todayISO()); }catch(e){}
 }
 // AOV tokens with your corrections: per word, the number of the Hebrew/Greek word it renders, or '-'
 function aovTokens(r){ const t=SG.aov&&SG.aov[r]; if(!t) return null;
@@ -2857,7 +2909,7 @@ function openStrong(t,r,w,anchor){
   if(form||parse) h+='<div class="sgv">'+L.sVerse+': '+(form?'<span class="f" lang="'+(gr.pre==='H'?'he':'grc')+'" dir="'+(gr.pre==='H'?'rtl':'ltr')+'">'+esc(form)+'</span> ':'')+(parse?'<div>'+parse+'</div>':'')+'</div>';
   const inList=!!WORDS.list[main], here=!!WORDS.here[hereKey(t,r,gr.g)], always=!!WORDS.always[main];
   h+='<div class="sga"><button type="button" data-sa="add" class="'+(inList?'on':'')+'">'+(inList?L.sIn:L.sAdd)+'</button>'+
-    (t==='kjv'||t==='aov'?'<button type="button" data-align="'+(t==='aov'?'aov:':'')+r+':'+gr.g+'">'+L.aFix+'</button>':'')+(t==='kjv'||t==='bsb'||t==='aov'?'<button type="button" data-sa="here" class="'+(here?'on':'')+'">'+(here?L.sHereOff:L.sHere)+'</button><button type="button" data-sa="always" class="'+(always?'on':'')+'">'+(always?L.sAlwaysOff:L.sAlways)+'</button>':'')+'</div>';
+    (t==='aov'?'<button type="button" data-rev="'+main+'">'+esc(L.rvCard)+'</button>':'')+(t==='kjv'||t==='aov'?'<button type="button" data-align="'+(t==='aov'?'aov:':'')+r+':'+gr.g+'">'+L.aFix+'</button>':'')+(t==='kjv'||t==='bsb'||t==='aov'?'<button type="button" data-sa="here" class="'+(here?'on':'')+'">'+(here?L.sHereOff:L.sHere)+'</button><button type="button" data-sa="always" class="'+(always?'on':'')+'">'+(always?L.sAlwaysOff:L.sAlways)+'</button>':'')+'</div>';
   if(t==='aov') h+='<p class="sgwip">'+esc(L.aovWipCard)+'</p>';
   SPOP={t,r,g:gr.g,id:main};
   if(inList){ const e=WORDS.list[main]; if(!e.seen.includes(r)){ e.seen.push(r); saveWords(); } }
@@ -2899,9 +2951,9 @@ book.addEventListener('click',e=>{
 /* my words */
 function renderWords(){
   const ids=Object.keys(WORDS.list).sort((a,z)=>(WORDS.list[z].t||'').localeCompare(WORDS.list[a].t||'')||a.localeCompare(z));
-  if(!ids.length){ nBody.innerHTML='<p class="wempty">'+esc(L.wEmpty)+'</p><p><button type="button" class="sgr" data-map="H">'+L.mapOpen+'</button> <button type="button" class="sgr" data-align="page">'+L.aOpen+'</button></p>'; return; }
+  if(!ids.length){ nBody.innerHTML='<p class="wempty">'+esc(L.wEmpty)+'</p><p><button type="button" class="sgr" data-map="H">'+L.mapOpen+'</button> <button type="button" class="sgr" data-align="page">'+L.aOpen+'</button> <button type="button" class="sgr" data-rev="">'+esc(L.rvOpen)+'</button></p>'; return; }
   const ready=!!SG.dict;
-  let h='<div class="wlist"><input class="wfilter" type="search" placeholder="'+esc(L.wFilter)+'"><p class="sgu">'+L.wCount.replace('{n}',ids.length)+' \u00b7 <button type="button" class="sgr" data-map="H">'+L.mapOpen+'</button> <button type="button" class="sgr" data-align="page">'+L.aOpen+'</button></p>';
+  let h='<div class="wlist"><input class="wfilter" type="search" placeholder="'+esc(L.wFilter)+'"><p class="sgu">'+L.wCount.replace('{n}',ids.length)+' \u00b7 <button type="button" class="sgr" data-map="H">'+L.mapOpen+'</button> <button type="button" class="sgr" data-align="page">'+L.aOpen+'</button> <button type="button" class="sgr" data-rev="">'+esc(L.rvOpen)+'</button></p>';
   for(const id of ids){ const e=WORDS.list[id], d=ready&&SG.dict[id]||['','','','','',''], he=id[0]==='H';
     const met=(e.seen||[]).slice(-12).map(r=>'<button type="button" data-wgo="'+r+'">'+esc((bookOf[r]===18?'Ps':bookName(bookOf[r]))+' '+NUM[S.tr].c[r]+':'+NUM[S.tr].v[r])+'</button>').join('');
     h+='<div class="wcard" data-id="'+id+'" data-find="'+esc((id+' '+d[0]+' '+d[1]+' '+d[3]+' '+(e.n||'')).toLowerCase())+'"><div class="sgh"><button type="button" class="sgn lnk" data-conc="'+id+'">'+id+'</button><span class="sgl" lang="'+(he?'he':'grc')+'"'+(he?' dir="rtl"':'')+'>'+esc(d[0])+'</span><span class="sgx">'+esc(d[1])+'</span></div>'+
@@ -3113,7 +3165,7 @@ const fixKey=(t,r,w)=>(t==='aov'?'aov:':'kjvw:')+r+':'+w;
 const hasFix=(t,r)=>Object.keys(FIX).some(k=>k.startsWith(fixKey(t,r,'')));
 function drawAlign(){
   const t=ALN.mode, n=NUM[t], sel=ALN.sel&&ALN.sel.ws.size, done=ALN.rows.filter(r=>APR[t][r]).length, all=Object.keys(APR[t]).length;
-  let h='<div class="navh"><b>'+(t==='aov'?L.aTitleAov:L.aTitle)+'</b><button class="x" type="button" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+
+  let h='<div class="navh"><b>'+(t==='aov'?L.aTitleAov:L.aTitle)+'</b>'+(t==='aov'?'<button type="button" class="sgr" data-rev="">'+esc(L.rvOpen)+'</button>':'')+'<button class="x" type="button" data-act="close" aria-label="'+L.close+'">\u00d7</button></div>'+
     '<p class="sgk" style="margin:0 0 6px">'+esc(t==='aov'?L.aHelpAov:L.aHelp)+' '+esc(L.aBrushHelp)+'</p>'+
     '<div class="atools"><button type="button" class="btn" data-ach="-1">\u2039</button><b class="ach-t">'+esc(bookName(ALN.b,t)+' '+ALN.c)+'</b><button type="button" class="btn" data-ach="1">\u203a</button>'+
     '<span class="msg">'+L.aDone.replace('{a}',done).replace('{b}',ALN.rows.length)+' \u00b7 '+L.aAll.replace('{n}',all)+'</span><span class="grow"></span>'+
@@ -3175,8 +3227,195 @@ amapEl.addEventListener('click',e=>{
       if(j.approved) for(const k of ['kjv','aov']) Object.assign(APR[k],j.approved[k]||{}); saveFix(); saveApr(); alignDirty=true; drawAlign(); }catch(x){ alert('?'); } }; inp.click(); }
 });
 amapEl.addEventListener('keydown',e=>{ if(e.key==='Escape'&&(ALN.brush||ALN.sel)){ ALN.brush=null; ALN.sel=null; drawAlign(); e.stopPropagation(); } },true);
-function closeAlign(){ amapEl.classList.remove('on'); ALN.brush=null; if(alignDirty){ alignDirty=false; relayout(true); } }
+function closeAlign(){ amapEl.classList.remove('on'); ALN.brush=null; if(REV.back){ REV.back=false; REV.snap=null; openRev(REV.id); return; } if(alignDirty){ alignDirty=false; relayout(true); } }
 document.addEventListener('click',e=>{ const m=e.target.closest('[data-align]'); if(!m) return; e.preventDefault(); e.stopPropagation(); openAlign(m.dataset.align); },true);
+/* review the AOV's links grouped by Strong's number, per testament: per number the AOV forms linked to it, the KJV's
+   and BSB's renderings beside them, each link in its verse to confirm (✓, kept in FIX) or reject (✗: unlinked, then the
+   verse's Hebrew/Greek words to pick the right one), and the words the BSB renders but no AOV word is linked to */
+const revEl=$('#rev'), REV={tst:'nt',id:null,q:'',sort:'sus',open:{},more:{},pick:null,G:null,Gtst:null,dirty:true,snap:null,back:false};
+const RV_FW=new Set("die en van in op vir aan met deur na by tot uit oor hy sy hulle ek jy julle ons u hom haar my jou dit wat wie dat want maar as ook nie so".split(' '));
+const RV_CONTENT=new Set(['N','V','Adj']);
+// Old Testament: a small word on a Hebrew noun, verb or adjective is suspect only when the word lacks the prefix or suffix it renders
+const RV_PREP=new Set('in op by met vir aan na tot soos uit'.split(' ')), RV_POSS=new Set('sy haar hulle hul julle jul my jou ons onse u'.split(' '));
+const plainW=w=>w.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\u2019/g,"'").replace(/[^\p{L}\p{N}']/gu,'');
+const cleanPh=w=>w.replace(/[\[\]“”‘’"(),.;:!?¶]/g,'').replace(/\s+/g,' ').trim();
+function phrases(words,tags,keyOf){ const out=[]; let cur=null;
+  for(let i=0;i<words.length;i++){ const t=tags[i]; if(t==='+'&&cur){ cur[1]+=' '+words[i]; continue; } cur=null; const k=keyOf(t); if(k&&k.length){ cur=[k,words[i]]; out.push(cur); } }
+  return out.map(([k,p])=>[k,cleanPh(p)]).filter(x=>x[1]); }
+// the Hebrew or Greek words of row r: {form, nums, parts|null, units:[{q,num,form}], pos, C, R, S}
+function rvSrc(r){
+  if(r>=D.bs[39]) return (SG.grk[r]||'').split('\t').filter(Boolean).map(x=>{ const [f,n,c]=x.split('|'), pos=(c||'').split('-')[0]; return {form:f,nums:[n],parts:null,units:[{q:null,num:n,form:f,pos}],pos}; });
+  const ht=NUM.orig&&NUM.orig.t&&NUM.orig.t[r], tg=SG.heb&&SG.heb[r]; if(!ht||!tg) return [];
+  const tk=tg.split(' ');
+  return ht.split(' ').map((w,i)=>{ const t=tk[i]||'-', k=t.indexOf('/'), nums=(k<0?t:t.slice(0,k)).split(','), m=k<0?'':t.slice(k+1), form=w.replace(/\u05c3$/,'');
+    const segs=m.split(/[\/+]/).filter(Boolean).map(s=>s.replace(/^[HA](?=[A-Z])/,''));
+    const pos=(segs.find(s=>!/^(C|R$|Rd$|Td|S)/.test(s))||'')[0]||'';
+    const ps=form.split('\u05be'), parts=ps.length>1&&ps.length===nums.length?ps.map((f,q)=>({form:f,num:nums[q]})):null;
+    const mp=m.split('+'), units=parts?parts.map((p,q)=>({q,num:p.num,form:p.form,pos:((mp[q]||'').split('/').map(s=>s.replace(/^[HA](?=[A-Z])/,'')).find(s=>s&&!/^(C|R$|Td|S)/.test(s))||'')[0]||''}))
+      :[{q:null,num:(nums.filter(n=>n!=='853')[0]!=null?nums.filter(n=>n!=='853').slice(-1)[0]:nums[0])||'0',form,pos}];
+    return {form,nums,parts,units,pos,C:segs.includes('C'),R:segs.some(s=>s[0]==='R'),S:segs.some(s=>s[0]==='S')}; });
+}
+const rvPre=r=>r<D.bs[39]?'H':'G';
+// the BSB's renderings of row r: per word j (and part q) of rvSrc, its English, and which words it renders at all
+function rvBsb(r,src){
+  const bt=NUM.bsb&&NUM.bsb.t&&NUM.bsb.t[r], bg=SG.bsb&&SG.bsb[r], out={}; if(!bt||!bg) return out;
+  const ph=phrases(bt.split(' '),bg.split(' '),t=>/^\d+$/.test(t)?[+t]:null);
+  if(r>=D.bs[39]){ for(const [k,p] of ph) (out[k[0]+'']||(out[k[0]+'']=[])).push(p); return out; }
+  // Old Testament: the BSB points into its own Hebrew word list, so match by Strong's number, occurrence by occurrence
+  const hs=(SG.hb[r]||'').split(' '), byNum={};
+  for(const [k,p] of ph){ const n=(hs[k[0]]||'').split(':')[0]; if(n&&n!=='0') (byNum[n]||(byNum[n]=[])).push(p); }
+  const seen={};
+  src.forEach((x,j)=>x.units.forEach(u=>{ const n=u.num, c=seen[n]=(seen[n]||0)+1, l=byNum[n]; if(l&&l.length){ const key=u.q==null?j+'':j+'.'+u.q; out[key]=[l[Math.min(c-1,l.length-1)]]; if(c<=l.length) (out[j+'*']=1); } }));
+  return out;
+}
+const rvGloss=(B,j,q)=>((B[q==null?j+'':j+'.'+q]||B[j+'']||[]).join(' \u2026 '));
+const rvRendered=(B,j)=>B[j+'*']||B[j+''];
+const rvKey=(r,w)=>'aov:'+r+':'+w;
+function rvState(l){ const k=rvKey(l.r,l.w); if(k in FIX){ const v=FIX[k]; return v==null?'no':String(v)===l.t?'ok':'mv'; } return APR.aov[l.r]?'ok':''; }
+// how many of a form's unchecked links are suspect, and which (l.sus)
+const RV_AUX=new Set('het is was sal word kan moet wil laat sou mag moes kon wou te om'.split(' '));
+function rvSus(l,f,e){
+  if(REV.tst==='nt'||!'NVA'.includes(e.pos||'-')) return false;
+  return (f==='en'&&!l.C)||(RV_PREP.has(f)&&!l.R)||(RV_POSS.has(f)&&!l.S&&e.pos!=='V');
+}
+function rvFlag(x,e){
+  x.ls.forEach(l=>l.sus=!rvState(l)&&rvSus(l,x.f,e));
+  if(!x.un) return 0;
+  const small=RV_FW.has(x.f)||RV_PREP.has(x.f)||RV_POSS.has(x.f), verbAux=RV_AUX.has(x.f)&&(e.pos==='V'||e.pos==='');
+  if(e.T>=10&&x.share<0.05&&!verbAux&&(REV.tst==='nt'||!small)) return x.un;
+  if(REV.tst==='nt') return RV_FW.has(x.f)&&RV_CONTENT.has(e.pos)?x.un:0;
+  const n=x.ls.filter(l=>l.sus).length; if(n) x.ls.sort((a,b)=>b.sus-a.sus); return n;
+}
+// per testament, once: each row's words and BSB renderings, and the KJV's and BSB's renderings per number
+function rvStatic(){
+  if(REV.st&&REV.st.tst===REV.tst) return REV.st;
+  const ot=REV.tst==='ot', a=ot?0:D.bs[39], b=ot?D.bs[39]:NUM.aov.t.length, rows=[], kjv={}, bsb={};
+  for(let r=a;r<b;r++){
+    const at=NUM.aov.t[r], src=rvSrc(r); if(!at||!src.length) continue;
+    const pre=rvPre(r), B=rvBsb(r,src); rows.push({r,src,B,pre});
+    for(const [key,ls] of Object.entries(B)){ if(key.endsWith('*')) continue; const [js,qs]=key.split('.'), x=src[+js]; if(!x) continue; const u=qs!=null&&x.parts?x.units[+qs]:x.units[x.units.length-1]; if(!u||!u.num||u.num==='0') continue;
+      if(!x.parts||qs!=null){ const o=bsb[pre+u.num]||(bsb[pre+u.num]={}); for(const ph of ls) o[ph]=(o[ph]||0)+1; } }
+    const kt=NUM.kjv.t&&NUM.kjv.t[r], kg=SG.kjv&&SG.kjv[r];
+    if(kt&&kg) for(const [ks,ph] of phrases(kt.split(' '),kg.split(' '),t=>!t||t==='-'||t==='+'?null:t.split('/')[0].split(',').filter(n=>n&&n!=='0')))
+      for(const k of ks){ const o=kjv[pre+k]||(kjv[pre+k]={}); o[ph]=(o[ph]||0)+1; }
+  }
+  return REV.st={tst:REV.tst,rows,kjv,bsb};
+}
+function revBuild(){
+  if(!REV.dirty&&REV.Gtst===REV.tst&&REV.G) return;
+  const st=rvStatic(), G={}, get=(id,pos)=>G[id]||(G[id]={id,forms:{},T:0,miss:[],kjv:st.kjv[id]||{},bsb:st.bsb[id]||{},pos:pos||''});
+  for(const {r,src,B,pre} of st.rows){
+    const W=NUM.aov.t[r].split(' '), p=aovTokens(r), linked=new Set();
+    if(p&&p.length===W.length) p.forEach((t,w)=>{ if(t==='-') return; const [js,qs]=t.split('.'), j=+js, x=src[j]; if(!x) return;
+      const u=qs!=null&&x.parts?x.units[+qs]:x.units[x.units.length-1]; if(!u||u.num==='0'||!u.num) return; linked.add(j);
+      const e=get(pre+u.num,u.pos); const f=plainW(W[w])||W[w]; (e.forms[f]||(e.forms[f]=[])).push({r,w,j,t,C:x.C,R:x.R,S:x.S}); e.T++; });
+    src.forEach((x,j)=>{ if(linked.has(j)||!rvRendered(B,j)) return; const u=x.units[x.units.length-1]; if(u.num&&u.num!=='0') get(pre+u.num,u.pos).miss.push({r,j}); });
+  }
+  for(const e of Object.values(G)){
+    e.F=Object.entries(e.forms).map(([f,ls])=>{ const x={f,ls,un:ls.filter(l=>!rvState(l)).length,share:ls.length/e.T}; x.n=rvFlag(x,e); x.flag=x.n>0; return x; }).sort((a,b)=>b.ls.length-a.ls.length);
+    e.score=e.F.reduce((s,x)=>s+x.n,0); e.checked=e.F.reduce((s,x)=>s+x.ls.length-x.un,0);
+  }
+  REV.G=G; REV.Gtst=REV.tst; REV.dirty=false;
+}
+const rvRow=r=>{ const st=rvStatic(); if(!st.idx){ st.idx={}; st.rows.forEach(x=>st.idx[x.r]=x); } return st.idx[r]||{src:rvSrc(r),B:{}}; };
+const rvRef=r=>(bookOf[r]===18?'Ps':names('aov')[bookOf[r]][1])+' '+NUM.aov.c[r]+':'+NUM.aov.v[r];
+const rvTop=(o,n=6)=>Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([p,c])=>'<b>'+esc(p)+'</b>\u00a0('+c+')').join(', ')||'\u2014';
+const rvLang=()=>REV.tst==='ot'?' lang="he" dir="rtl"':' lang="grc"';
+function drawRevList(){
+  const q=REV.q.trim().toLowerCase().replace(/^[gh]/,''), qp=plainW(REV.q);
+  let ids=Object.keys(REV.G).filter(id=>{ const e=REV.G[id]; if(!e.T&&!e.miss.length) return false; if(!q) return true; const d=SG.dict[id]||[];
+    return /^\d+$/.test(q)?id.slice(1).startsWith(q):((d[0]||'').normalize('NFD').replace(/[\u0300-\u036f\u0591-\u05c7]/g,'').toLowerCase().includes(qp)||(d[1]||'').toLowerCase().includes(qp)||!!e.forms[qp]); });
+  const num=id=>parseInt(id.slice(1))||0;
+  ids.sort(REV.sort==='num'?(a,b)=>num(a)-num(b):REV.sort==='freq'?(a,b)=>REV.G[b].T-REV.G[a].T:(a,b)=>REV.G[b].score-REV.G[a].score||REV.G[b].T-REV.G[a].T);
+  const shown=ids.slice(0,400);
+  revEl.querySelector('.rvlist').innerHTML=shown.length?shown.map(id=>{ const e=REV.G[id], d=SG.dict[id]||[];
+    return '<button type="button" class="rvi'+(id===REV.id?' on':'')+'" data-rvid="'+id+'"><span class="n">'+id+'</span><span class="lm"'+rvLang()+'>'+esc(d[0]||'')+'</span><span class="bd">'+(e.score?esc(L.rvFlag.replace('{n}',e.score)):'')+'</span>'+
+      '<span class="sub">'+esc(L.rvLinks.replace('{n}',e.T))+' \u00b7 '+esc(L.rvChecked.replace('{c}',e.checked).replace('{n}',e.T))+(e.miss.length?' \u00b7 \u2205 '+e.miss.length:'')+'</span></button>'; }).join('')
+    :'<p class="sgk">'+esc(L.rvEmpty)+'</p>';
+}
+function rvSnip(r,w){ const W=NUM.aov.t[r].split(' '), a=Math.max(0,w-6), b=Math.min(W.length,w+7);
+  return (a>0?'\u2026 ':'')+W.slice(a,b).map((x,i)=>a+i===w?'<mark>'+esc(x)+'</mark>':esc(x)).join(' ')+(b<W.length?' \u2026':''); }
+// the verse's Hebrew/Greek words as choices; a maqqef word gives one choice per part
+function rvChoices(r,src,B){ const out=[]; src.forEach((x,j)=>{ if(x.parts) x.parts.forEach((p,q)=>out.push({v:j+'.'+q,form:p.form,gl:rvGloss(B,j,q)})); else out.push({v:j+'',form:x.form,gl:rvGloss(B,j,null)}); }); return out; }
+function rvLine(l){
+  const st=rvState(l), {src,B}=rvRow(l.r), [js,qs]=l.t.split('.'), x=src[+js]||{form:''}, k=rvKey(l.r,l.w);
+  const form=qs!=null&&x.parts?x.parts[+qs].form:x.form;
+  let h='<div class="rvl '+st+(l.sus?' sus':'')+'" data-rvk="'+l.r+':'+l.w+'"><span class="ref">'+esc(rvRef(l.r))+'</span><span class="vt">'+rvSnip(l.r,l.w)+'</span>'+
+    '<span class="rvb"><button type="button" data-rvok title="'+esc(L.rvOk)+'">\u2713</button><button type="button" data-rvno title="'+esc(L.rvNo)+'">\u2717</button><button type="button" data-rvv title="'+esc(L.rvVerse)+'">\u22ef</button></span>'+
+    '<span class="gk"><span'+rvLang()+'>'+esc(form)+'</span> '+esc(rvGloss(B,+js,qs!=null?+qs:null))+'</span>';
+  if(REV.pick===k){ const cur=k in FIX?(FIX[k]==null?null:String(FIX[k])):l.t;
+    h+='<div class="rvchips">'+rvChoices(l.r,src,B).map(c=>'<button type="button" data-rvj="'+c.v+'" class="'+(cur===c.v?'on':'')+'"><span'+rvLang()+'>'+esc(c.form)+'</span><small>'+esc(c.gl)+'</small></button>').join('')+
+      '<button type="button" data-rvj="-" class="'+(cur==null?'on':'')+'">'+esc(L.rvNone)+'</button></div>'; }
+  return h+'</div>';
+}
+function rvMissLine(m,i){ const {src,B}=rvRow(m.r), x=src[m.j], W=NUM.aov.t[m.r].split(' '), p=aovTokens(m.r)||[];
+  return '<div class="rvl" data-rvm="'+i+'"><span class="ref">'+esc(rvRef(m.r))+'</span><span class="gk" style="grid-column:2/4"><span'+rvLang()+'>'+esc(x.form)+'</span> '+esc(rvGloss(B,m.j,null)||(B[m.j+'.0']||[]).join(' '))+'</span>'+
+    '<div class="rvmw">'+W.map((w,k)=>'<button type="button" data-rvw="'+k+'" class="'+(p[k]!=null&&p[k]!=='-'&&+p[k].split('.')[0]===m.j?'on':'')+'">'+esc(w)+'</button>').join('')+'</div></div>'; }
+function drawRevDetail(){
+  const det=revEl.querySelector('.rvdet'), box=revEl.querySelector('.box'); box.classList.toggle('det',!!REV.id);
+  if(!REV.id||!REV.G[REV.id]){ det.innerHTML='<p class="sgk">'+esc(L.rvNoSel)+'</p>'; return; }
+  if(!REV.snap||REV.snap.id!==REV.id){ const e=REV.G[REV.id]; REV.snap={id:REV.id,F:e.F,miss:e.miss.slice(),T:e.T,kjv:e.kjv,bsb:e.bsb}; }
+  const s=REV.snap, d=SG.dict[s.id]||[];
+  let h='<button type="button" class="sgr rvback" data-rvback>\u2190 '+esc(L.rvBack)+'</button>'+
+    '<div class="sgh"><button type="button" class="sgn lnk" data-conc="'+s.id+'">'+s.id+'</button><span class="sgl"'+rvLang()+'>'+esc(d[0]||'')+'</span><span class="sgx">'+esc([d[1],d[2]].filter(Boolean).join(' \u00b7 '))+'</span></div>'+
+    (d[3]?'<div class="sgd">'+esc(d[3].length>220?d[3].slice(0,220)+'\u2026':d[3])+'</div>':'')+
+    '<p class="rvren">KJV: '+rvTop(s.kjv)+'</p><p class="rvren">BSB: '+rvTop(s.bsb)+'</p>'+
+    '<div class="rvh2">'+esc(L.rvForms)+' \u00b7 '+esc(L.rvLinks.replace('{n}',s.T))+'</div><p class="sgk" style="margin:0 0 4px">'+esc(REV.tst==='ot'?L.rvHelpOt:L.rvHelp)+'</p>';
+  for(const x of s.F){ const done=x.ls.filter(l=>rvState(l)).length;
+    h+='<div class="rvf'+(x.flag?' fl':'')+'"><button type="button" class="fm" data-rvf="'+esc(x.f)+'">'+esc(x.f)+'</button><span class="ct">'+x.ls.length+' \u00b7 '+(x.share*100).toFixed(x.share<0.1?1:0)+' % \u00b7 '+esc(L.rvChecked.replace('{c}',done).replace('{n}',x.ls.length))+'</span><span class="grow"></span>'+
+      '<button type="button" data-rvall="ok" data-f="'+esc(x.f)+'">\u2713 '+esc(L.rvAllOk)+'</button><button type="button" data-rvall="no" data-f="'+esc(x.f)+'">\u2717 '+esc(L.rvAllNo)+'</button></div>';
+    if(REV.open[x.f]){ const n=REV.more[x.f]||40; h+=x.ls.slice(0,n).map(rvLine).join(''); if(x.ls.length>n) h+='<button type="button" class="sgr rvmore" data-rvmore="'+esc(x.f)+'">'+esc(L.rvMore)+' ('+(x.ls.length-n)+')</button>'; }
+  }
+  if(s.miss.length){ const n=REV.more['\u2205']||40;
+    h+='<div class="rvh2">'+esc(L.rvMiss.replace('{n}',s.miss.length))+'</div><p class="sgk" style="margin:0 0 4px">'+esc(L.rvMissHelp)+'</p>'+s.miss.slice(0,n).map(rvMissLine).join('')+
+      (s.miss.length>n?'<button type="button" class="sgr rvmore" data-rvmore="\u2205">'+esc(L.rvMore)+' ('+(s.miss.length-n)+')</button>':''); }
+  const top=det.scrollTop; det.innerHTML=h; det.scrollTop=top;
+}
+async function openRev(id){
+  if(S.strongs!=='on'){ S.strongs='on'; persist(); document.body.classList.add('sg'); }
+  if(id) REV.tst=id[0]==='H'?'ot':'nt';
+  if(!await ensureStrongs()||!await ensureAov()||!await ensureTr('aov')||!await ensureTr('bsb')||!await ensureBsb()||!await ensureTr('kjv')||(REV.tst==='ot'&&!await ensureTr('orig'))){ busy(null); return; }
+  busy(null); closePop(); revBuild();
+  if(id){ REV.id=id; REV.q=''; REV.open={}; REV.more={}; }
+  REV.snap=null;
+  revEl.querySelector('.box').innerHTML='<div class="navh"><b>'+esc(L.rvTitle)+'</b><button class="x" type="button" data-act="close" aria-label="'+esc(L.close)+'">\u00d7</button></div>'+
+    '<div class="rvbody"><div class="rvside"><div class="rvsort">'+[['ot',L.rvOT],['nt',L.rvNT]].map(([k,t])=>'<button type="button" data-rvtst="'+k+'" aria-pressed="'+(REV.tst===k)+'">'+esc(t)+'</button>').join('')+'</div>'+
+    '<input type="search" class="rvq" placeholder="'+esc(L.rvFilter)+'" value="'+esc(REV.q)+'">'+
+    '<div class="rvsort">'+[['sus',L.rvSortSus],['freq',L.rvSortFreq],['num',L.rvSortNum]].map(([k,t])=>'<button type="button" data-rvsort="'+k+'" aria-pressed="'+(REV.sort===k)+'">'+esc(t)+'</button>').join('')+'</div>'+
+    '<div class="rvlist"></div></div><div class="rvdet"></div></div>';
+  revEl.classList.add('on'); drawRevList(); drawRevDetail();
+}
+function closeRev(){ revEl.classList.remove('on'); REV.pick=null; if(alignDirty){ alignDirty=false; relayout(true); } }
+const rvChanged=()=>{ saveFix(); alignDirty=true; REV.dirty=true; };
+const rvVal=t=>t.includes('.')?t:+t;
+function rvFind(rw){ const [r,w]=rw.split(':').map(Number); for(const x of REV.snap.F) for(const l of x.ls) if(l.r===r&&l.w===w) return l; return null; }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-rev]'); if(!b) return; e.preventDefault(); e.stopPropagation(); if(amapEl.classList.contains('on')) amapEl.classList.remove('on'); openRev(b.dataset.rev||null); },true);
+revEl.addEventListener('input',e=>{ if(e.target.classList.contains('rvq')){ REV.q=e.target.value; drawRevList(); } });
+revEl.addEventListener('click',async e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.act==='close'){ closeRev(); return; }
+  if(b.dataset.rvtst){ if(REV.tst===b.dataset.rvtst) return; REV.tst=b.dataset.rvtst; REV.id=null; REV.snap=null; REV.q=''; await openRev(null); return; }
+  if(b.dataset.rvsort){ REV.sort=b.dataset.rvsort; revEl.querySelectorAll('[data-rvsort]').forEach(x=>x.setAttribute('aria-pressed',x===b)); drawRevList(); return; }
+  if(b.dataset.rvid){ revBuild(); REV.id=b.dataset.rvid; REV.snap=null; REV.open={}; REV.more={}; REV.pick=null; drawRevList(); drawRevDetail(); revEl.querySelector('.rvdet').scrollTop=0; return; }
+  if('rvback' in b.dataset){ revBuild(); REV.id=null; REV.snap=null; drawRevList(); drawRevDetail(); return; }
+  if(b.dataset.rvf!=null){ const f=b.dataset.rvf; REV.open[f]=!REV.open[f]; drawRevDetail(); return; }
+  if(b.dataset.rvmore!=null){ const f=b.dataset.rvmore; REV.more[f]=(REV.more[f]||40)+100; drawRevDetail(); return; }
+  if(b.dataset.rvall){ const x=REV.snap.F.find(y=>y.f===b.dataset.f); if(!x) return; const todo=x.ls.filter(l=>!rvState(l)); if(!todo.length) return;
+    if(b.dataset.rvall==='no'&&!confirm(L.rvAllNoQ.replace('{n}',todo.length).replace('{f}',x.f))) return;
+    for(const l of todo) FIX[rvKey(l.r,l.w)]=b.dataset.rvall==='ok'?rvVal(l.t):null;
+    rvChanged(); REV.open[x.f]=true; drawRevDetail(); return; }
+  const line=b.closest('[data-rvk]');
+  if(line){ const l=rvFind(line.dataset.rvk); if(!l) return; const k=rvKey(l.r,l.w), st=rvState(l);
+    if('rvok' in b.dataset){ if(st==='ok'&&k in FIX) delete FIX[k]; else FIX[k]=rvVal(l.t); REV.pick=null; rvChanged(); drawRevDetail(); return; }
+    if('rvno' in b.dataset){ if(st==='no'||st==='mv'){ delete FIX[k]; REV.pick=null; } else { FIX[k]=null; REV.pick=k; } rvChanged(); drawRevDetail(); return; }
+    if(b.dataset.rvj!=null){ FIX[k]=b.dataset.rvj==='-'?null:rvVal(b.dataset.rvj); REV.pick=null; rvChanged(); drawRevDetail(); return; }
+    if('rvv' in b.dataset){ REV.back=true; revEl.classList.remove('on'); openAlign('aov:'+l.r+':'+l.w); return; }
+  }
+  const ml=b.closest('[data-rvm]');
+  if(ml&&b.dataset.rvw!=null){ const m=REV.snap.miss[+ml.dataset.rvm], k=rvKey(m.r,+b.dataset.rvw), p=aovTokens(m.r)||[], cur=p[+b.dataset.rvw];
+    if(cur!=null&&cur!=='-'&&+cur.split('.')[0]===m.j) FIX[k]=null; else FIX[k]=m.j;
+    rvChanged(); drawRevDetail(); return; }
+});
 
 
 /* ---------------- two translations side by side ----------------

@@ -10,7 +10,7 @@
   "defs": "data/defs.v1.json",
   "bsb": "data/tags-bsb.v1.json",
   "hbsb": "data/tags-hbsb.v1.json",
-  "aov": "data/tags-aov.v1.json"
+  "aov": "data/tags-aov.v3.json"
  },
  "bibles": [
   {

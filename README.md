@@ -27,7 +27,10 @@ data/tags-grk.v1.json Greek words with Strong's numbers and parsing (BSB interli
 data/defs.v1.json     BDB outlines and short definitions (BSB interlinear)
 data/tags-bsb.v1.json each BSB word linked to the Hebrew or Greek word it renders
 data/tags-hbsb.v1.json Strong's numbers and parsing of the BSB's Hebrew words
-data/tags-aov.v1.json first-draft links of each AOV word to the Hebrew or Greek (machine alignment, to be corrected)
+data/tags-aov.v3.json links of each AOV word to the Hebrew or Greek (machine alignment, to be corrected): New
+                      Testament from build/align_nt.py, Old Testament from build/align_ot.py (run in that order:
+                      align_nt.py writes tags-aov.v2.json, which align_ot.py reads; both need: pip install eflomal)
+data/tags-aov.v1.json the first draft, kept so that verses approved under it keep their links (read once)
 boeke.html            the library: other Christian books on their own shelves
 data/library.json     the books in the online library
 data/books/           one file per online book
@@ -181,6 +184,15 @@ The palette button in the top bar (on a phone too, whenever a Heb/… text is on
 nothing is coloured, it turns the colouring on in the way you used last and opens the key; otherwise it opens or
 closes the key. The key has the ways of colouring at its top (Off, Word type, Stem / voice, Tense / form, Mood,
 Person & number). On a keyboard, **K** turns the colouring off, and on again in the way used last.
+
+**Reviewing the AOV links by Strong's number:** open *Review the AOV links by Strong's number* (in the AOV link tool,
+in My words, or on an AOV word card: *All AOV links of this number*). Choose the Old or New Testament; its Strong's numbers are listed,
+most to check first; per number you see the AOV forms linked to it (in the Old Testament a
+word joined by maqqef counts per part) with the KJV's and BSB's renderings beside them,
+and each link in its verse. ✓ confirms a link, ✗ unlinks it and shows the verse's Greek words to choose the right one;
+"All right" and "All wrong" do this for a whole form. Hebrew or Greek words the BSB renders but no AOV word is linked to are
+listed under the number too, to link by tapping the AOV word. What is confirmed or corrected is stored with the other
+link corrections (and exported with them), so it is kept when the first draft is redone.
 
 Readings, notes, sermons and markings are saved only on the device where they are made.
 Use **Stoor rugsteun** (leesregister), **Save notes backup** (reader) and **Save library backup** (library) to move them between devices.
