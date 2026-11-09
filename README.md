@@ -194,6 +194,14 @@ and each link in its verse. ✓ confirms a link, ✗ unlinks it and shows the ve
 listed under the number too, to link by tapping the AOV word. What is confirmed or corrected is stored with the other
 link corrections (and exported with them), so it is kept when the first draft is redone.
 
+**Who sees the link tools:** the link tool ("Check link", "Check the links on these pages") and the review by
+Strong's number appear only on a device that is connected to Google Drive and has synced with it at least once. The
+app's Google project is in testing, so only accounts added as its testers can sign in: those are the people who help
+fix the links. Everyone else sees the links and the notice that the mapping is in progress, but not the tools.
+Disconnecting Google Drive hides the tools again on that device.
+Link corrections and approved verses are part of the Google Drive sync (in bybel-notas.json): each correction and
+approval carries the time it was last changed, removals included, and when two devices meet the later change wins.
+
 Readings, notes, sermons and markings are saved only on the device where they are made.
 Use **Stoor rugsteun** (leesregister), **Save notes backup** (reader) and **Save library backup** (library) to move them between devices.
 **Google Drive (optional):** in the settings (**Aa**) of the Bible and of the library, **Connect Google Drive**, then
