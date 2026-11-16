@@ -337,6 +337,7 @@ body.phone .flow{text-align:left;hyphens:manual}
 .swatches button{width:24px;height:24px;border-radius:4px;border:2px solid var(--panel);box-shadow:0 0 0 1px var(--line);cursor:pointer;background:var(--c)}
 .swatches button[aria-pressed=true]{box-shadow:0 0 0 2px var(--ink)}
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tbp{margin:4px 0 10px;line-height:1.5}.tblist{display:flex;flex-direction:column;gap:6px;align-items:stretch}.tblist .btn{text-align:left}
 .lic{font-size:12px;color:var(--faint);margin-top:10px;line-height:1.45}
 select.sel{font:inherit;color:var(--ink);background:var(--page);border:1px solid var(--line);border-radius:7px;padding:5px 8px}
 table.lg{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -542,6 +543,12 @@ let ST={s:Object.assign({},DEF),pos:{},far:{},time:{},cloth:{},shelf:{},last:nul
 try{ const p=JSON.parse(localStorage.getItem(KEY)||'null'); if(p){ Object.assign(ST,p); ST.s=Object.assign({},DEF,p.s||{}); } }catch(e){}
 try{ const b=JSON.parse(localStorage.getItem('bybel-leser-v1')||'null'); if(b&&b.s&&!localStorage.getItem(KEY)){ ST.s.theme=b.s.theme||'auto'; ST.s.lang=b.s.lang||'en'; ST.s.contrast=b.s.contrast||'normal'; ST.s.paper=b.s.paper||'white'; } }catch(e){}
 let saveT=0; const persist=()=>{ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ localStorage.setItem(KEY,JSON.stringify(ST)); }catch(e){} },300); };
+Object.assign(UI.en,{tbTitle:'Put \u201c{x}\u201d in a book',tbChoose:'Choose one of your books to add it to as a chapter, or start a new book:',tbNoOwn:'You have no books of your own yet: start one for it.',
+  tbNewTitle:'Title of a new book',tbDefault:'Topics',tbNew:'New book',tbReplace:'Replace it',tbAdd:'Add a new chapter',
+  tbChanged:'The chapter \u201c{c}\u201d in \u201c{b}\u201d was changed in the book since this topic was put there. Replace it with the topic as it is now, or add the topic as a new chapter?'});
+Object.assign(UI.af,{tbTitle:'Sit \u201c{x}\u201d in \u2019n boek',tbChoose:'Kies een van jou boeke om dit as \u2019n hoofstuk by te voeg, of begin \u2019n nuwe boek:',tbNoOwn:'Jy het nog geen eie boeke nie: begin een daarvoor.',
+  tbNewTitle:'Titel van \u2019n nuwe boek',tbDefault:'Temas',tbNew:'Nuwe boek',tbReplace:'Vervang dit',tbAdd:'Voeg \u2019n nuwe hoofstuk by',
+  tbChanged:'Die hoofstuk \u201c{c}\u201d in \u201c{b}\u201d is in die boek verander sedert hierdie tema daar ingesit is. Vervang dit met die tema soos dit nou is, of voeg die tema as \u2019n nuwe hoofstuk by?'});
 let L=UI[ST.s.lang]||UI.en;
 document.documentElement.dataset.theme=ST.s.theme; document.documentElement.dataset.contrast=ST.s.contrast; document.documentElement.dataset.paper=ST.s.paper; document.documentElement.lang=ST.s.lang;
 const busy=m=>{ const b=$('#busy'); if(m){ b.firstElementChild.textContent=m; b.classList.add('on'); } else b.classList.remove('on'); };
@@ -1749,9 +1756,61 @@ let rzT=0,lastStage='';
 new ResizeObserver(()=>{ const st=$('#stage'), key=st.clientWidth+'x'+st.clientHeight; if(key===lastStage) return; lastStage=key;
   clearTimeout(rzT); rzT=setTimeout(()=>{ document.body.classList.toggle('phone',isPhone()); if(CUR.bk) relayout(); if(shelfOpen()) buildShelf(); },120); }).observe($('#stage'));
 
+/* ---------------- a topic from the Bible, put in one of your books ----------------
+   The Bible reader hands over a topic (as Markdown) under TJOB and comes here. A topic that is already in a book
+   replaces its chapter there; if that chapter was changed in the book since, you choose: replace it, or add the topic
+   as a new chapter. A topic not yet in a book (or whose book or chapter is gone) goes into the book you choose, or a
+   new one. Where it went is handed back under TBOOK, with a fingerprint of the chapter as put in, so that the next time
+   a change made in the book can be noticed. */
+const TJOB='bybel-onderwerp-na-boek', TBOOK='bybel-onderwerp-boek-v1';
+const mdHash=s=>{ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36)+':'+s.length; };
+let TOPICJOB=null;
+async function takeTopic(){
+  let job=null; try{ job=JSON.parse(localStorage.getItem(TJOB)||'null'); }catch(e){}
+  if(location.hash==='#onderwerp') history.replaceState(null,'',location.pathname+location.search);
+  if(!job||!job.md||Date.now()-(job.at||0)>30*60e3){ if(job) try{ localStorage.removeItem(TJOB); }catch(e){} return; }
+  TOPICJOB=job; await bibleNames();
+  const own=MINE.filter(m=>m.own), l=job.link, meta=l&&own.find(m=>m.id===l.bid);
+  if(meta){ const bk=await loadBook(Object.assign({},meta,{src:'mine'})), pg=bk&&bk.pages&&bk.pages.find(p=>p.id===l.pid);
+    if(pg){ if(mdHash(pg.md||'')===l.h) return putTopic(meta,'replace');
+      openPanel($('#info'),head(L.tbTitle.replace('{x}',job.name))+'<p class="tbp">'+esc(L.tbChanged.replace('{c}',pageLabel(pg.md)).replace('{b}',meta.title))+'</p>'+
+        '<div class="acts"><button class="btn main" type="button" data-tb="replace" data-id="'+meta.id+'">'+esc(L.tbReplace)+'</button><button class="btn" type="button" data-tb="add" data-id="'+meta.id+'">'+esc(L.tbAdd)+'</button><button class="btn" type="button" data-tb="cancel">'+esc(L.pdfCancel)+'</button></div>');
+      return; } }
+  openPanel($('#info'),head(L.tbTitle.replace('{x}',job.name))+'<p class="tbp">'+esc(own.length?L.tbChoose:L.tbNoOwn)+'</p>'+
+    '<div class="tblist">'+own.map(m=>'<button type="button" class="btn" data-tb="add" data-id="'+m.id+'">'+esc(m.title)+'</button>').join('')+'</div>'+
+    '<div class="pf" style="margin:12px 0"><label>'+esc(L.tbNewTitle)+'<input id="tbt" value="'+esc(L.tbDefault)+'"></label></div>'+
+    '<div class="acts"><button class="btn main" type="button" data-tb="new">'+esc(L.tbNew)+'</button><button class="btn" type="button" data-tb="cancel">'+esc(L.pdfCancel)+'</button></div>');
+}
+// how: 'replace' the chapter it is linked to, or 'add' it as a new chapter; no meta: in a new book
+async function putTopic(meta,how){
+  const job=TOPICJOB; if(!job) return; let bk, pg;
+  if(!meta){ const title=(($('#tbt')||{}).value||'').trim()||L.tbDefault;
+    bk={v:1,id:'own-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),own:true,title,short:title,subtitle:'',author:'',year:String(new Date().getFullYear()),shelf:'other',
+      lang:ST.s.lang==='af'?'af':'en',source:L.ownSource,license:L.ownLicense,pages:[],b:[],words:0};
+    pg={id:pid(),md:job.md}; bk.pages.push(pg); await saveOwn(bk,{},null); }
+  else { bk=await loadBook(Object.assign({},meta,{src:'mine'})); if(!bk||!bk.pages) return;
+    const old=buildOwn(bk);
+    pg=how==='replace'&&job.link&&job.link.bid===bk.id?bk.pages.find(p=>p.id===job.link.pid):null;
+    if(pg) pg.md=job.md; else { pg={id:pid(),md:job.md}; bk.pages.push(pg); }
+    await saveOwn(bk,old,null); }
+  let back={}; try{ back=JSON.parse(localStorage.getItem(TBOOK)||'{}')||{}; }catch(e){}
+  back[job.id]={bid:bk.id,pid:pg.id,h:mdHash(job.md),title:bk.title,at:new Date().toISOString()};
+  try{ localStorage.setItem(TBOOK,JSON.stringify(back)); localStorage.removeItem(TJOB); }catch(e){}
+  TOPICJOB=null; closePanels();
+  const m=MINE.find(x=>x.id===bk.id), lay=buildOwn(bk);
+  await openBook(Object.assign({},m,{src:'mine'}),lay[pg.id]?lay[pg.id][0]:0);
+}
+$('#info').addEventListener('click',e=>{
+  if(TOPICJOB&&e.target.closest('[data-act=close]')){ try{ localStorage.removeItem(TJOB); }catch(x){} TOPICJOB=null; return; }
+  const b=e.target.closest('[data-tb]'); if(!b) return; e.stopPropagation();
+  const a=b.dataset.tb; if(a==='cancel'){ try{ localStorage.removeItem(TJOB); }catch(x){} TOPICJOB=null; closePanels(); return; }
+  if(a==='new'){ putTopic(null,'add'); return; }
+  const meta=MINE.find(m=>m.id===b.dataset.id); if(meta) putTopic(meta,a);
+},true);
+
 /* ---------------- open ---------------- */
 document.body.classList.toggle('phone',isPhone());
-label(); openShelf(); busy(null);
+label(); openShelf(); busy(null); takeTopic();
 window.__lib={ST,CUR,catalogue,openBook,openShelf,idbAll,goBlock};
 })();
 </script>

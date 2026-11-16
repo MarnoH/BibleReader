@@ -174,6 +174,21 @@ The translation is chosen with the button beside the book's name in the top bar 
 reading two side by side). On a computer the top bar also has type size, light or dark, one or two columns,
 cross-references and Strong's numbers, one tap each.
 
+**Topics (Temas):** select words and tap the tag in the selection bar to add them to one or more topics (or type a new
+one). A piece is kept either as these words in this translation (other translations count the whole verse), or by its
+Strong's links (each translation with links shows its own words for the same Hebrew/Greek words, else the whole verse).
+A verse in a topic has a gold dot after its number, with the number of topics when two or more; tap it to see them.
+The Topics tab of the notes panel lists each topic's passages (Bible order, or as gathered) beside what you write about
+it, and while a topic is open its words have a faint gold background on the page. "Put in a book" makes the topic a
+chapter of one of your books in the library (or a new book) and keeps the two linked: putting it in again replaces that
+chapter, or, if the chapter was changed in the book since, asks whether to replace it or add a new chapter. Topics are
+kept with the notes (backup file and Google Drive; per topic the later change wins). The dots can be switched off in the
+settings.
+
+**Copying a verse:** tap its small verse number (or the large chapter number, for verse 1). The verse is copied in the
+translation it is printed in, beside it its reference in that translation's own book name and numbering and the
+translation's name, e.g. "Johannes 3:16 (AOV)". Side by side, the number on each side copies that side's verse.
+
 **Colouring the Hebrew and Greek:** in the translation menu, colour the original text by word type, by stem
 (Hebrew: simple blue, intensive green, causative red; active dark, passive light, reflexive with a wavy line) or
 voice (Greek), by tense or verb form, or by mood, and show small person-number labels above the verbs. The key
