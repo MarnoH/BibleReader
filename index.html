@@ -4170,6 +4170,32 @@ async function driveSync(){
 }
 // Google's refusal (e.g. an account not among the app's testers) or a closed sign-in window, said plainly
 const driveErr=e=>/offline|Failed to fetch/i.test(e.message)?L.drOffline:/access_denied|denied|popup_closed|popup_failed|closed/i.test(e.message)?L.drDenied:L.drFail.replace('{e}',e.message);
+/* Corrections to a Bible text (build/aov_fixes.json → a new edition of the text file). A word put in or taken out
+   moves the words after it, so what is kept per word on this device moves with them, once per edit: marks, link
+   corrections (with their times) and topic pieces. v is the edition of the text that has the edit; r its row; words
+   from "at" on move by n (n<0: the n words before "at" were taken out). */
+const TEXT_EDITS=[{v:2,t:'aov',r:30620,at:24,n:1}];   // 2 Pet 2:8: "oor" was missing
+function textEdits(){
+  let done={}; try{ done=JSON.parse(localStorage.getItem('bybel-teksreg-v1')||'{}')||{}; }catch(e){}
+  let n=0;
+  for(const e of TEXT_EDITS){ const k=e.t+'.v'+e.v+':'+e.r+':'+e.at; if(done[k]) continue;
+    const v=+(((BIB[e.t]&&BIB[e.t].file)||'').match(/v(\d+)\.json/)||[,1])[1]; if(v<e.v) continue;
+    const nw=w=>w>=e.at?w+e.n:(e.n<0&&w>=e.at+e.n?null:w);
+    const M=MARKS[e.t]&&MARKS[e.t][e.r];
+    if(M){ const o={}; for(const w in M){ const x=nw(+w); if(x!=null) o[x]=M[w]; } MARKS[e.t][e.r]=o; }
+    if(e.t==='aov'){ const pre='aov:'+e.r+':', F={}, T={};
+      for(const k2 in FIX){ if(!k2.startsWith(pre)){ F[k2]=FIX[k2]; continue; } const x=nw(+k2.slice(pre.length)); if(x!=null) F[pre+x]=FIX[k2]; }
+      for(const k2 in FIXT){ if(!k2.startsWith('f|'+pre)){ T[k2]=FIXT[k2]; continue; } const x=nw(+k2.slice(pre.length+2)); if(x!=null) T['f|'+pre+x]=FIXT[k2]; }
+      for(const k2 in FIX) delete FIX[k2]; Object.assign(FIX,F); FIXT=T; FIXS=JSON.parse(JSON.stringify(FIX)); }
+    for(const tp of topics()) for(const it of tp.items) if(it.t===e.t) for(const sg of it.segs) if(sg.r===e.r){ sg.a=nw(sg.a)??(e.at+e.n); sg.b=nw(sg.b)??Math.max(sg.a,e.at+e.n-1); }
+    done[k]=todayISO(); n++; }
+  if(!n) return;
+  saveMarks(); try{ localStorage.setItem(FKEY,JSON.stringify(FIX)); }catch(e){} saveFixT(); saveTop(); TV++;
+  try{ localStorage.setItem('bybel-teksreg-v1',JSON.stringify(done)); }catch(e){}
+  if(CUR.b>=0&&CUR.V&&CUR.V.length) relayout(true);
+}
+textEdits();
+
 /* Fixing the Strong's links (the link tool, the review by Strong's number, "Check link" on a word card) is only for
    people helping with the mapping: shown on a device that is connected to Google Drive and has synced with it at least
    once. The app's Google project is in testing, so only accounts added as its testers can sign in. Everyone else

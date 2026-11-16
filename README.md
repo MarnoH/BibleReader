@@ -27,9 +27,12 @@ data/tags-grk.v1.json Greek words with Strong's numbers and parsing (BSB interli
 data/defs.v1.json     BDB outlines and short definitions (BSB interlinear)
 data/tags-bsb.v1.json each BSB word linked to the Hebrew or Greek word it renders
 data/tags-hbsb.v1.json Strong's numbers and parsing of the BSB's Hebrew words
-data/tags-aov.v3.json links of each AOV word to the Hebrew or Greek (machine alignment, to be corrected): New
+data/tags-aov.v3.json links of each AOV word (before the text corrections) to the Hebrew or Greek (machine alignment, to be corrected): New
                       Testament from build/align_nt.py, Old Testament from build/align_ot.py (run in that order:
                       align_nt.py writes tags-aov.v2.json, which align_ot.py reads; both need: pip install eflomal)
+data/aov.v2.json      the AOV text with the corrections in build/aov_fixes.json (made by build_data2.py; aov.v1.json is
+                      the text as the source reads, which the alignment scripts use)
+data/tags-aov.v4.json the links with those corrections carried through (build/fix_aov.py, after align_ot.py, from v3)
 data/tags-aov.v1.json the first draft, kept so that verses approved under it keep their links (read once)
 boeke.html            the library: other Christian books on their own shelves
 data/library.json     the books in the online library
@@ -184,6 +187,12 @@ chapter of one of your books in the library (or a new book) and keeps the two li
 chapter, or, if the chapter was changed in the book since, asks whether to replace it or add a new chapter. Topics are
 kept with the notes (backup file and Google Drive; per topic the later change wins). The dots can be switched off in the
 settings.
+
+**Correcting the AOV text:** add the verse to build/aov_fixes.json (its row, the text as it reads and as it must read),
+then make a new edition: build_data2.py writes aov.v2.json (the next correction: v3), fix_aov.py carries it into the
+links (tags-aov.v4.json → v5), and the reader's TEXT_EDITS list gets the word edit fix_aov.py prints, so that marks,
+link corrections and topic pieces in that verse move to the new word positions on each device, once. Point
+data/catalog.json and sw.js at the new file names.
 
 **Copying a verse:** tap its small verse number (or the large chapter number, for verse 1). The verse is copied in the
 translation it is printed in, beside it its reference in that translation's own book name and numbering and the
