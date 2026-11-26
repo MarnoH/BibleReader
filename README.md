@@ -33,6 +33,24 @@ data/tags-aov.v3.json links of each AOV word (before the text corrections) to th
 data/aov.v2.json      the AOV text with the corrections in build/aov_fixes.json (made by build_data2.py; aov.v1.json is
                       the text as the source reads, which the alignment scripts use)
 data/tags-aov.v4.json the links with those corrections carried through (build/fix_aov.py, after align_ot.py, from v3)
+data/tags-aov.v5.json v4 plus the Afrikaans verb groups (build/aov_verbs.py, after fix_aov.py): an unlinked "het" goes
+                      to the verb of its clause (the ge-… participle first), an unlinked subject pronoun (ek, jy, u,
+                      hy, sy, ons, julle, hulle) to the verb of its clause that carries that person and number, or to
+                      the Hebrew/Greek pronoun if that stands on its own; links already there are not changed
+data/tags-aov.v6.json v5 plus "van" in the Old Testament (build/aov_van.py, after aov_verbs.py): an unlinked "van" goes
+                      to the absolute of a Hebrew construct chain, i.e. to the Hebrew word of the noun after it when
+                      that word directly follows one in the construct state; links already there are not changed
+data/tags-aov.v7.json v6 plus (build/aov_neg_inf.py, after aov_van.py) the double negation: an unlinked "nie" takes the
+                      link of the negating word before it in its sentence part (nie, geen, niks, nooit, niemand…), or
+                      the Hebrew/Greek negation if no AOV word renders it yet; and the infinitive: "te" takes the link
+                      of the verb right after it (before "word"/"wees": the one before it), "om" that of its "te";
+                      links already there are not changed
+data/tags-aov.v8.json v7 plus (build/aov_small.py, after aov_neg_inf.py) the small words that render something inside a
+                      Hebrew/Greek word: object and possessive pronouns go to the word with the matching suffix
+                      (Greek: the pronoun), prepositions to the next word when it has a preposition prefix (Greek: the
+                      fitting case), "die" and "'n" to their noun, sal/sou/laat/kan/moet/mag/wil/kon/wou/moes to the
+                      verb of their clause, and is/was/word/wees to a passive verb of their clause; links already there
+                      are not changed
 data/tags-aov.v1.json the first draft, kept so that verses approved under it keep their links (read once)
 boeke.html            the library: other Christian books on their own shelves
 data/library.json     the books in the online library

@@ -875,6 +875,7 @@ body.phone #rev .box.det .rvside{display:none}body.phone #rev .box:not(.det) .rv
 .ach.free{opacity:.55}
 .atools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 10px}
 .atools .msg{font-size:13px;color:var(--soft)}
+.atools.asel{margin:-4px 0 12px}
 .ach-t{font-family:var(--serif);font-size:17px;min-width:7em;text-align:center}
 .avg{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;align-items:start}
 .avg .aor{margin-top:0}
@@ -2711,7 +2712,7 @@ const aovWanted=()=>S.strongs==='on'&&(S.tr==='aov'||S.par==='aov');
 // the AOV's links: made by a word aligner trained on the whole Bible, so a first draft to be corrected by hand
 async function ensureAov(){
   if(SG.aov) return true; if(SG.await_) return SG.await_;
-  SG.await_=(async()=>{ try{ busy(L.sLoading); const a=EMBD&&EMBD.sg&&EMBD.sg.aov?EMBD.sg.aov:await getJSON(CAT.strongs.aov); SG.aov=a.s; busy(null); await aovKeepApproved(); aovNotice(); return true; }
+  SG.await_=(async()=>{ try{ busy(L.sLoading); const a=EMBD&&EMBD.sg&&EMBD.sg.aov?EMBD.sg.aov:await getJSON(CAT.strongs.aov); SG.aov=a.s; busy(null); await aovKeepApproved(); await aovKeepApproved5(); aovNotice(); return true; }
     catch(e){ console.warn(e); busy(null); SG.await_=null; return false; } })();
   return SG.await_;
 }
@@ -2737,6 +2738,20 @@ async function aovKeepApproved(){
       o.forEach((t,w)=>{ const k='aov:'+r+':'+w; if(k in FIX||t===n[w]) return; FIX[k]=t==='-'?null:t.includes('.')?t:+t; }); }
     saveFix(); }
   try{ localStorage.setItem(M2,todayISO()); if(v>=3) localStorage.setItem(M3,todayISO()); }catch(e){}
+}
+// Later drafts only add links where there were none: v5 "het" and subject pronouns (ek, hy, hulle…) with their verb,
+// v6 "van" with the absolute of a Hebrew construct chain. Verses you approved keep what you approved: once per step,
+// each word whose link the step changed gets the link it had before (here: none) as your correction.
+const AOV_STEPS=[{v:5,prev:'data/tags-aov.v4.json'},{v:6,prev:'data/tags-aov.v5.json'},{v:7,prev:'data/tags-aov.v6.json'},{v:8,prev:'data/tags-aov.v7.json'}];   // v8: pronoun suffixes, prepositions, articles, sal/laat/kan… and passive is/word   // v7: the second "nie", and "om … te" with the infinitive
+async function aovKeepApproved5(){
+  const v=+((CAT.strongs.aov.match(/v(\d+)\.json/)||[])[1]||1); if(EMBD) return;
+  for(const st of AOV_STEPS){ const M='bybel-koppel-v'+st.v+'-oorgeneem'; if(v<st.v||localStorage.getItem(M)) continue;
+    const rows=Object.keys(APR.aov).map(Number);
+    if(rows.length){ let old; try{ old=(await getJSON(st.prev)).s; }catch(e){ return; }
+      for(const r of rows){ const o=(old[r]||'').split(' '), n=(SG.aov[r]||'').split(' '); if(o.length!==n.length) continue;
+        o.forEach((t,w)=>{ const k='aov:'+r+':'+w; if(k in FIX||t===n[w]) return; FIX[k]=t==='-'?null:t.includes('.')?t:+t; }); }
+      saveFix(); }
+    try{ localStorage.setItem(M,todayISO()); }catch(e){} }
 }
 // AOV tokens with your corrections: per word, the number of the Hebrew/Greek word it renders, or '-'
 function aovTokens(r){ const t=SG.aov&&SG.aov[r]; if(!t) return null;
@@ -3263,7 +3278,10 @@ function drawAlign(){
   if(ALN.brush){ const x=srcWords(ALN.brush.rr)[ALN.brush.j]; const f=x?(ALN.brush.p!=null&&x.parts?x.parts[ALN.brush.p].form:x.form):'';
     h+='<p class="atools msg abrush">'+L.aBrush.replace('{w}','<b lang="'+(ALN.brush.rr<D.bs[39]?'he':'grc')+'">'+esc(f)+'</b>')+' <button type="button" class="btn" data-aa="unbrush">'+L.aBrushOff+'</button></p>'; }
   else if(sel){ const w=(n.t[ALN.sel.r]||'').split(' '); h+='<p class="atools msg">'+esc(L.aPick.replace('{w}',[...ALN.sel.ws].sort((a,b)=>a-b).map(i=>w[i]).join(' ').replace(/[\[\]]/g,'')))+'</p>'; }
-  h+=ALN.rows.map(r=>verseHTML(t,r)).join('')+
+  // the buttons for the selected words also right under their verse, where you are working (the bar at the top can be
+  // scrolled out of sight)
+  const selBar=r=>sel&&r===ALN.sel.r?'<div class="atools asel"><button type="button" class="btn" data-aa="none">'+L.aNone+'</button><button type="button" class="btn" data-aa="auto">'+L.aAuto+'</button></div>':'';
+  h+=ALN.rows.map(r=>verseHTML(t,r)+selBar(r)).join('')+
     '<div class="atools" style="justify-content:center;margin-top:14px"><button type="button" class="btn" data-ach="-1">\u2039 '+L.aPrevCh+'</button><button type="button" class="btn" data-ach="1">'+L.aNextCh+' \u203a</button></div>';
   const box=amapEl.querySelector('.box'), top=box.scrollTop; box.innerHTML=h; box.scrollTop=top;
 }
